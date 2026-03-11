@@ -81,7 +81,7 @@ void ProgressWindow::render() {
 
     // Performance Plots
     if (ImPlot::BeginPlot("Performance Metrics", ImVec2(-1, 200))) {
-        ImPlot::SetupAxes("Time", "Value", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_None);
+        ImPlot::SetupAxes("Time", "Value", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_AutoFit);
         ImPlot::SetupAxisLimits(ImAxis_X1, 0, 100, ImGuiCond_Always);
         
         std::vector<float> x(100);
