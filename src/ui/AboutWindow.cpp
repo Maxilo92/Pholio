@@ -1,16 +1,19 @@
+#include "core/Config.hpp"
 #include "AboutWindow.hpp"
+#include <string>
 
 namespace ui {
 
 void AboutWindow::render(bool* p_open) {
     if (!*p_open) return;
 
+    std::string title = "About " + std::string(core::PROJECT_NAME);
     ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("About PhotoSorter", p_open, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::TextColored(ImVec4(0.2f, 0.7f, 1.0f, 1.0f), "PhotoSorter C++");
+    if (ImGui::Begin(title.c_str(), p_open, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::TextColored(ImVec4(0.2f, 0.7f, 1.0f, 1.0f), "%s", core::PROJECT_NAME.data());
         ImGui::Separator();
         
-        ImGui::Text("Version: 0.1.0");
+        ImGui::Text("Version: %s", core::PROJECT_VERSION.data());
         ImGui::Text("Author: Maximilian");
         ImGui::Text("A powerful and efficient tool for organizing your media library.");
         

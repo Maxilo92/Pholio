@@ -62,9 +62,9 @@ void Worker::run() {
         m_logWindow.info("Target: " + settings.targetPath.string());
 
         setStatus("Scanning...");
-        Scanner scanner(settings.sourcePath);
+        Scanner scanner(settings.sourcePath, m_logWindow);
         auto tasks = scanner.scan();
-        
+
         m_totalFiles = static_cast<int>(tasks.size());
         m_logWindow.info("Found " + std::to_string(m_totalFiles) + " files to process.");
 
@@ -75,9 +75,9 @@ void Worker::run() {
             return;
         }
 
-        MediaAnalyzer analyzer;
+        MediaAnalyzer analyzer(m_logWindow);
         StructureAnalyzer structAnalyzer(settings.targetPath);
-        Sorter sorter(settings.verificationLevel);
+        Sorter sorter(m_logWindow, settings.verificationLevel);
 
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;

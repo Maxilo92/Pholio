@@ -56,42 +56,68 @@ void DashboardWindow::renderFolderSelection() {
     auto settings = core::ConfigManager::getInstance().getSettings();
     bool changed = false;
 
-    ImGui::Text("Source Folder:");
-    char sourceBuf[1024];
-    std::string sourceStr = settings.sourcePath.string();
-    std::strncpy(sourceBuf, sourceStr.c_str(), sizeof(sourceBuf));
-    if (ImGui::InputText("##Source", sourceBuf, sizeof(sourceBuf))) {
-        settings.sourcePath = sourceBuf;
-        changed = true;
-    }
-    if (ImGui::BeginPopupContextItem("SourceContextMenu")) {
-        if (ImGui::MenuItem("Open in Finder/Explorer")) {
-            openFolderInExplorer(settings.sourcePath);
-        }
-        ImGui::EndPopup();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Browse...##Source")) {
-        m_shouldBrowseSource = true;
-    }
+    if (ImGui::BeginTable("FolderSelection", 3, ImGuiTableFlags_SizingStretchProp)) {
+        ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 100.0f);
+        ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed, 80.0f);
 
-    ImGui::Text("Target Folder:");
-    char targetBuf[1024];
-    std::string targetStr = settings.targetPath.string();
-    std::strncpy(targetBuf, targetStr.c_str(), sizeof(targetBuf));
-    if (ImGui::InputText("##Target", targetBuf, sizeof(targetBuf))) {
-        settings.targetPath = targetBuf;
-        changed = true;
-    }
-    if (ImGui::BeginPopupContextItem("TargetContextMenu")) {
-        if (ImGui::MenuItem("Open in Finder/Explorer")) {
-            openFolderInExplorer(settings.targetPath);
+        // Source Folder
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Source:");
+        
+        ImGui::TableSetColumnIndex(1);
+        char sourceBuf[1024];
+        std::string sourceStr = settings.sourcePath.string();
+        std::strncpy(sourceBuf, sourceStr.c_str(), sizeof(sourceBuf));
+        ImGui::PushItemWidth(-FLT_MIN);
+        if (ImGui::InputText("##Source", sourceBuf, sizeof(sourceBuf))) {
+            settings.sourcePath = sourceBuf;
+            changed = true;
         }
-        ImGui::EndPopup();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Browse...##Target")) {
-        m_shouldBrowseTarget = true;
+        ImGui::PopItemWidth();
+        if (ImGui::BeginPopupContextItem("SourceContextMenu")) {
+            if (ImGui::MenuItem("Open in Finder/Explorer")) {
+                openFolderInExplorer(settings.sourcePath);
+            }
+            ImGui::EndPopup();
+        }
+
+        ImGui::TableSetColumnIndex(2);
+        if (ImGui::Button("Browse...##Source")) {
+            m_shouldBrowseSource = true;
+        }
+
+        // Target Folder
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Target:");
+        
+        ImGui::TableSetColumnIndex(1);
+        char targetBuf[1024];
+        std::string targetStr = settings.targetPath.string();
+        std::strncpy(targetBuf, targetStr.c_str(), sizeof(targetBuf));
+        ImGui::PushItemWidth(-FLT_MIN);
+        if (ImGui::InputText("##Target", targetBuf, sizeof(targetBuf))) {
+            settings.targetPath = targetBuf;
+            changed = true;
+        }
+        ImGui::PopItemWidth();
+        if (ImGui::BeginPopupContextItem("TargetContextMenu")) {
+            if (ImGui::MenuItem("Open in Finder/Explorer")) {
+                openFolderInExplorer(settings.targetPath);
+            }
+            ImGui::EndPopup();
+        }
+
+        ImGui::TableSetColumnIndex(2);
+        if (ImGui::Button("Browse...##Target")) {
+            m_shouldBrowseTarget = true;
+        }
+
+        ImGui::EndTable();
     }
 
     if (changed) {
@@ -101,40 +127,68 @@ void DashboardWindow::renderFolderSelection() {
 
 void DashboardWindow::renderControls() {
     bool isRunning = m_worker.isRunning();
+    float buttonHeight = 60.0f;
 
+    ImGui::Spacing();
     if (isRunning) {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-        if (ImGui::Button("STOP PROCESS", ImVec2(-1, 50))) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.0f, 0.0f, 1.0f));
+        if (ImGui::Button("STOP PROCESS", ImVec2(-1, buttonHeight))) {
             m_worker.stop();
         }
-        ImGui::PopStyleColor();
+        ImGui::PopStyleColor(3);
     } else {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-        if (ImGui::Button("START SORTING", ImVec2(-1, 50))) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.0f, 0.4f, 0.0f, 1.0f));
+        if (ImGui::Button("START SORTING", ImVec2(-1, buttonHeight))) {
             m_worker.start();
         }
-        ImGui::PopStyleColor();
+        ImGui::PopStyleColor(3);
     }
+    ImGui::Spacing();
 }
 
 void DashboardWindow::renderStatus() {
     float progress = m_worker.getProgress();
     std::string status = m_worker.getStatusMessage();
+    bool isRunning = m_worker.isRunning();
 
-    ImGui::Text("Status: %s", status.c_str());
-    ImGui::ProgressBar(progress, ImVec2(-1, 0));
+    ImGui::BeginGroup();
+    ImGui::Text("Overall Progress:");
+    ImGui::SameLine(ImGui::GetWindowWidth() - 100);
+    ImGui::Text("%.1f%%", progress * 100.0f);
+    
+    ImGui::ProgressBar(progress, ImVec2(-1, 15), "");
+    ImGui::EndGroup();
 
-    if (m_worker.isRunning() || progress > 0.0f) {
-        ImGui::Text("Files: %d / %d", m_worker.getProcessedFiles(), m_worker.getTotalFiles());
-        ImGui::Text("Speed: %.2f files/sec", m_worker.getFilesPerSecond());
-        
-        // Simple ETA calculation
-        int remaining = m_worker.getTotalFiles() - m_worker.getProcessedFiles();
-        if (remaining > 0 && m_worker.getFilesPerSecond() > 0.1f) {
-            int etaSeconds = static_cast<int>(remaining / m_worker.getFilesPerSecond());
-            ImGui::Text("ETA: %d min %d sec", etaSeconds / 60, etaSeconds % 60);
+    ImGui::Spacing();
+    
+    if (ImGui::BeginChild("StatusDetails", ImVec2(0, 0), true)) {
+        ImGui::Columns(2, "StatusColumns", false);
+        ImGui::SetColumnWidth(0, 150.0f);
+
+        ImGui::Text("Current Status:"); ImGui::NextColumn();
+        ImGui::Text("%s", status.c_str()); ImGui::NextColumn();
+
+        if (isRunning || progress > 0.0f) {
+            ImGui::Text("Files Processed:"); ImGui::NextColumn();
+            ImGui::Text("%d / %d", m_worker.getProcessedFiles(), m_worker.getTotalFiles()); ImGui::NextColumn();
+
+            ImGui::Text("Processing Speed:"); ImGui::NextColumn();
+            ImGui::Text("%.2f files/sec", m_worker.getFilesPerSecond()); ImGui::NextColumn();
+
+            int remaining = m_worker.getTotalFiles() - m_worker.getProcessedFiles();
+            if (remaining > 0 && m_worker.getFilesPerSecond() > 0.1f) {
+                int etaSeconds = static_cast<int>(remaining / m_worker.getFilesPerSecond());
+                ImGui::Text("Estimated Time:"); ImGui::NextColumn();
+                ImGui::Text("%d min %d sec", etaSeconds / 60, etaSeconds % 60); ImGui::NextColumn();
+            }
         }
+        ImGui::Columns(1);
     }
+    ImGui::EndChild();
 }
 
 std::string DashboardWindow::browseFolder(const std::string& defaultPath) {

@@ -18,19 +18,29 @@ const std::set<std::string> Scanner::s_sidecarExtensions = {
     ".xmp", ".xml"
 };
 
-Scanner::Scanner(fs::path sourceDir) : m_sourceDir(std::move(sourceDir)) {}
+Scanner::Scanner(fs::path sourceDir, ui::LogWindow& logWindow) 
+    : core::Loggable(logWindow), m_sourceDir(std::move(sourceDir)) {}
 
 std::vector<MediaTask> Scanner::scan() {
     std::vector<MediaTask> tasks;
-    if (!fs::exists(m_sourceDir) || !fs::is_directory(m_sourceDir)) {
+    if (!fs::exists(m_sourceDir)) {
+        error("Source directory does not exist: " + m_sourceDir.string());
         return tasks;
     }
+    if (!fs::is_directory(m_sourceDir)) {
+        error("Source path is not a directory: " + m_sourceDir.string());
+        return tasks;
+    }
+
+    info("Scanning for media in: " + m_sourceDir.string());
 
     for (const auto& entry : fs::recursive_directory_iterator(m_sourceDir)) {
         if (entry.is_regular_file()) {
             processEntry(entry, tasks);
         }
     }
+    
+    info("Scan complete. Validated " + std::to_string(tasks.size()) + " media items.");
     return tasks;
 }
 

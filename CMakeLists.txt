@@ -3,10 +3,16 @@ cmake_minimum_required(VERSION 3.20)
 file(READ "VERSION" PROJECT_VERSION_FILE)
 string(STRIP "${PROJECT_VERSION_FILE}" PROJECT_VERSION_STR)
 
-project(PhotoSorter VERSION ${PROJECT_VERSION_STR} LANGUAGES CXX)
+project(VerwaltungV5 VERSION ${PROJECT_VERSION_STR} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Configure version header
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/Config.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/generated/core/Config.hpp
+)
 
 # Find packages
 find_package(exiv2 CONFIG REQUIRED)
@@ -27,7 +33,7 @@ find_package(Stb REQUIRED)
 find_package(xxHash CONFIG REQUIRED)
 
 # Executable
-add_executable(PhotoSorter 
+add_executable(VerwaltungV5 
     src/main.cpp
     src/engine/Scanner.cpp
     src/engine/MediaAnalyzer.cpp
@@ -53,7 +59,7 @@ add_executable(PhotoSorter
 )
 
 # Link dependencies
-target_link_libraries(PhotoSorter PRIVATE
+target_link_libraries(VerwaltungV5 PRIVATE
     Exiv2::exiv2lib
     ${AVFORMAT_LIBRARIES}
     ${AVCODEC_LIBRARIES}
@@ -68,14 +74,16 @@ target_link_libraries(PhotoSorter PRIVATE
 )
 
 # stb is header-only and doesn't always provide a target in older vcpkg versions
-target_include_directories(PhotoSorter PRIVATE ${Stb_INCLUDE_DIR})
+target_include_directories(VerwaltungV5 PRIVATE ${Stb_INCLUDE_DIR})
 
-# Add include directories for FFmpeg
-target_include_directories(PhotoSorter PRIVATE
+# Add include directories for FFmpeg and generated headers
+target_include_directories(VerwaltungV5 PRIVATE
     ${AVFORMAT_INCLUDE_DIRS}
     ${AVCODEC_INCLUDE_DIRS}
     ${AVUTIL_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
 
 # Output build system status
-message(STATUS "PhotoSorter version ${PROJECT_VERSION_STR} build system initialized")
+message(STATUS "VerwaltungV5 version ${PROJECT_VERSION_STR} build system initialized")

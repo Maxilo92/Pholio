@@ -1,6 +1,6 @@
 {
-  "name": "photosorter-cpp",
-  "version-string": "0.1.0",
+  "name": "verwaltung-v5",
+  "version-string": "0.3.0",
   "dependencies": [
     "exiv2",
     {

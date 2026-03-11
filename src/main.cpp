@@ -5,6 +5,7 @@
 #include <imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
 #include "core/ConfigManager.hpp"
+#include "core/Config.hpp"
 #include "ui/AppWindow.hpp"
 
 static void glfw_error_callback(int error, const char* description) {
@@ -12,7 +13,7 @@ static void glfw_error_callback(int error, const char* description) {
 }
 
 int main(int, char**) {
-    std::cout << "PhotoSorter Starting..." << std::endl;
+    std::cout << core::PROJECT_NAME << " v" << core::PROJECT_VERSION << " Starting..." << std::endl;
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -35,7 +36,8 @@ int main(int, char**) {
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "PhotoSorter C++", NULL, NULL);
+    std::string windowTitle = std::string(core::PROJECT_NAME) + " v" + std::string(core::PROJECT_VERSION);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, windowTitle.c_str(), NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -74,9 +76,21 @@ int main(int, char**) {
 
     std::cout << "Application initialized. GUI Ready." << std::endl;
 
+    int exitCode = 0;
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+
+        // Check for restart requests
+        if (appWindow.shouldRestart()) {
+            if (appWindow.shouldRebuild()) {
+                exitCode = 43; // Restart and rebuild
+            } else {
+                exitCode = 42; // Restart only
+            }
+            break;
+        }
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -95,7 +109,7 @@ int main(int, char**) {
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    	
+
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
@@ -119,6 +133,14 @@ int main(int, char**) {
     glfwDestroyWindow(window);
     glfwTerminate();
 
+    if (exitCode == 42) {
+        std::cout << "Restarting application..." << std::endl;
+        return 42;
+    } else if (exitCode == 43) {
+        std::cout << "Rebuilding and restarting application..." << std::endl;
+        return 43;
+    }
+
     std::cout << "PhotoSorter Finished" << std::endl;
     return 0;
-}
+    }

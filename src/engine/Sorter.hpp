@@ -2,6 +2,7 @@
 
 #include "Types.hpp"
 #include "Verifier.hpp"
+#include "core/Loggable.hpp"
 #include <filesystem>
 
 namespace engine {
@@ -11,9 +12,9 @@ enum class OperationMode {
     Move
 };
 
-class Sorter {
+class Sorter : public core::Loggable {
 public:
-    explicit Sorter(VerificationLevel level = VerificationLevel::Full);
+    explicit Sorter(ui::LogWindow& logWindow, VerificationLevel level = VerificationLevel::Full);
 
     /**
      * @brief Processes a media task: copies or moves the file to the target path,

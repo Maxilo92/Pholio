@@ -16,74 +16,98 @@ void SettingsWindow::render() {
     }
 
     if (ImGui::Begin("Settings")) {
-        // Paths
-        char sourceBuf[1024];
-        std::string sourceStr = settings.sourcePath.string();
-        std::strncpy(sourceBuf, sourceStr.c_str(), sizeof(sourceBuf));
-        sourceBuf[sizeof(sourceBuf) - 1] = '\0';
-        if (ImGui::InputText("Source Directory", sourceBuf, sizeof(sourceBuf))) {
-            settings.sourcePath = sourceBuf;
-        }
-        ImGui::SetItemTooltip("The directory where your unorganized photos and videos are located.");
-        
-        ImGui::SameLine();
-        if (ImGui::Button("Browse...##SourceSet")) {
-            m_shouldBrowseSource = true;
+        if (ImGui::CollapsingHeader("Directories", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::BeginTable("DirectorySettings", 3, ImGuiTableFlags_SizingStretchProp)) {
+                ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f);
+                ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
+                ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed, 80.0f);
+
+                // Source
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("Source Path:");
+                ImGui::TableSetColumnIndex(1);
+                char sourceBuf[1024];
+                std::strncpy(sourceBuf, settings.sourcePath.string().c_str(), sizeof(sourceBuf));
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::InputText("##SourceSet", sourceBuf, sizeof(sourceBuf))) {
+                    settings.sourcePath = sourceBuf;
+                }
+                ImGui::PopItemWidth();
+                ImGui::TableSetColumnIndex(2);
+                if (ImGui::Button("Browse...##SourceSet")) m_shouldBrowseSource = true;
+
+                // Target
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("Target Path:");
+                ImGui::TableSetColumnIndex(1);
+                char targetBuf[1024];
+                std::strncpy(targetBuf, settings.targetPath.string().c_str(), sizeof(targetBuf));
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::InputText("##TargetSet", targetBuf, sizeof(targetBuf))) {
+                    settings.targetPath = targetBuf;
+                }
+                ImGui::PopItemWidth();
+                ImGui::TableSetColumnIndex(2);
+                if (ImGui::Button("Browse...##TargetSet")) m_shouldBrowseTarget = true;
+
+                ImGui::EndTable();
+            }
         }
 
-        char targetBuf[1024];
-        std::string targetStr = settings.targetPath.string();
-        std::strncpy(targetBuf, targetStr.c_str(), sizeof(targetBuf));
-        targetBuf[sizeof(targetBuf) - 1] = '\0';
-        if (ImGui::InputText("Target Directory", targetBuf, sizeof(targetBuf))) {
-            settings.targetPath = targetBuf;
-        }
-        ImGui::SetItemTooltip("The root directory where the organized library will be created.");
+        if (ImGui::CollapsingHeader("Engine Behavior", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::BeginTable("EngineSettings", 2, ImGuiTableFlags_SizingStretchProp)) {
+                ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 150.0f);
+                ImGui::TableSetupColumn("Control", ImGuiTableColumnFlags_WidthStretch);
 
-        ImGui::SameLine();
-        if (ImGui::Button("Browse...##TargetSet")) {
-            m_shouldBrowseTarget = true;
+                // Op Mode
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("Operation Mode:");
+                ImGui::TableSetColumnIndex(1);
+                int opMode = static_cast<int>(settings.operationMode);
+                const char* opModes[] = { "Copy (Safe)", "Move (Efficient)" };
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::Combo("##OpMode", &opMode, opModes, 2)) {
+                    settings.operationMode = static_cast<engine::OperationMode>(opMode);
+                }
+                ImGui::PopItemWidth();
+
+                // Verif Level
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("Verification:");
+                ImGui::TableSetColumnIndex(1);
+                int verLevel = static_cast<int>(settings.verificationLevel);
+                const char* verLevels[] = { "None (Fastest)", "Size Only", "Partial Hash", "Full Hash (Safest)" };
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::Combo("##VerLevel", &verLevel, verLevels, 4)) {
+                    settings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
+                }
+                ImGui::PopItemWidth();
+
+                ImGui::EndTable();
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Dry Run (Simulation Mode)", &settings.dryRun);
+            ImGui::Checkbox("Auto-Start on selection", &settings.autoStart);
         }
 
         ImGui::Separator();
+        ImGui::Spacing();
 
-        // Operation Mode
-        int opMode = static_cast<int>(settings.operationMode);
-        const char* opModes[] = { "Copy", "Move" };
-        if (ImGui::Combo("Operation Mode", &opMode, opModes, 2)) {
-            settings.operationMode = static_cast<engine::OperationMode>(opMode);
-        }
-        ImGui::SetItemTooltip("Copy: Keep original files.\nMove: Transfer files to new location (deletes originals).");
-
-        // Verification Level
-        int verLevel = static_cast<int>(settings.verificationLevel);
-        const char* verLevels[] = { "None", "SizeOnly", "Partial", "Full" };
-        if (ImGui::Combo("Verification Level", &verLevel, verLevels, 4)) {
-            settings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
-        }
-        ImGui::SetItemTooltip("None: No check.\nSizeOnly: Check file size.\nPartial: Check first 1MB hash.\nFull: Check entire file hash.");
-
-        ImGui::Separator();
-
-        ImGui::Checkbox("Dry Run", &settings.dryRun);
-        ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
-        
-        ImGui::Checkbox("Auto Start", &settings.autoStart);
-        ImGui::SetItemTooltip("Automatically start the sorting process when a valid source and target are selected.");
-
-        ImGui::Separator();
-
-        if (ImGui::Button("Save Settings")) {
+        if (ImGui::Button("SAVE ALL SETTINGS", ImVec2(150, 40))) {
             core::ConfigManager::getInstance().setSettings(settings);
             core::ConfigManager::getInstance().save();
         }
-        ImGui::SetItemTooltip("Apply and persist these settings to disk.");
-        
         ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
+        if (ImGui::Button("DISCARD CHANGES", ImVec2(150, 40))) {
             settings = core::ConfigManager::getInstance().getSettings();
         }
-        ImGui::SetItemTooltip("Discard changes and reload last saved settings.");
     }
     ImGui::End();
 

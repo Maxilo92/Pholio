@@ -37,11 +37,18 @@ public:
     void clear();
 
     void setupFileLogging(const std::filesystem::path& logDir);
+    void openLogFolder() const;
 
 private:
+    std::filesystem::path m_logDir;
     std::vector<LogEntry> m_logs;
     std::mutex m_mutex;
     bool m_autoScroll = true;
+    bool m_filterInfo = true;
+    bool m_filterWarning = true;
+    bool m_filterError = true;
+    bool m_filterSuccess = true;
+    char m_filterBuffer[128] = "";
     std::ofstream m_fileStream;
     
     static std::string getTimestamp();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "../core/Loggable.hpp"
 #include <vector>
 #include <filesystem>
 #include <set>
@@ -8,9 +9,9 @@
 
 namespace engine {
 
-class Scanner {
+class Scanner : public core::Loggable {
 public:
-    explicit Scanner(std::filesystem::path sourceDir);
+    explicit Scanner(std::filesystem::path sourceDir, ui::LogWindow& logWindow);
 
     [[nodiscard]] std::vector<MediaTask> scan();
 

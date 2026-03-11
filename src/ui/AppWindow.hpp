@@ -36,6 +36,13 @@ private:
     bool m_showLogs = true;
     bool m_showAbout = false;
     bool m_firstRun = true;
+
+    bool m_shouldRestart = false;
+    bool m_shouldRebuild = false;
+
+public:
+    bool shouldRestart() const { return m_shouldRestart; }
+    bool shouldRebuild() const { return m_shouldRebuild; }
 };
 
 } // namespace ui

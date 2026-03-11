@@ -2,6 +2,7 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <cstdlib>
 
 namespace ui {
 
@@ -16,6 +17,7 @@ LogWindow::~LogWindow() {
 }
 
 void LogWindow::setupFileLogging(const std::filesystem::path& logDir) {
+    m_logDir = logDir;
     if (!std::filesystem::exists(logDir)) {
         std::filesystem::create_directories(logDir);
     }
@@ -36,7 +38,21 @@ void LogWindow::setupFileLogging(const std::filesystem::path& logDir) {
     
     if (m_fileStream.is_open()) {
         m_fileStream << "--- Log Session Started: " << std::put_time(&tm_buf, "%Y-%m-%d %H:%M:%S") << " ---" << std::endl;
+        m_fileStream.flush();
     }
+}
+
+void LogWindow::openLogFolder() const {
+    if (m_logDir.empty() || !std::filesystem::exists(m_logDir)) return;
+
+#ifdef _WIN32
+    std::string command = "explorer \"" + m_logDir.string() + "\"";
+#elif __APPLE__
+    std::string command = "open \"" + m_logDir.string() + "\"";
+#else
+    std::string command = "xdg-open \"" + m_logDir.string() + "\"";
+#endif
+    std::system(command.c_str());
 }
 
 void LogWindow::log(LogLevel level, const std::string& message) {
@@ -70,15 +86,47 @@ void LogWindow::render() {
         return;
     }
 
+    // Top Row: Primary Actions
     if (ImGui::Button("Clear")) clear();
     ImGui::SameLine();
+    if (ImGui::Button("Open Log Folder")) openLogFolder();
+    ImGui::SameLine();
     ImGui::Checkbox("Auto-scroll", &m_autoScroll);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(200);
+    if (ImGui::InputText("Search", m_filterBuffer, sizeof(m_filterBuffer))) {
+        // Search happens in loop
+    }
+    ImGui::PopItemWidth();
+
+    // Second Row: Filter Toggles
+    ImGui::Text("Filter:");
+    ImGui::SameLine();
+    ImGui::Checkbox("Info", &m_filterInfo);
+    ImGui::SameLine();
+    ImGui::Checkbox("Warn", &m_filterWarning);
+    ImGui::SameLine();
+    ImGui::Checkbox("Error", &m_filterError);
+    ImGui::SameLine();
+    ImGui::Checkbox("Success", &m_filterSuccess);
+
     ImGui::Separator();
 
     ImGui::BeginChild("ScrollingRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
     std::lock_guard<std::mutex> lock(m_mutex);
+    
     for (const auto& entry : m_logs) {
+        // Apply level filters
+        if (entry.level == LogLevel::Info && !m_filterInfo) continue;
+        if (entry.level == LogLevel::Warning && !m_filterWarning) continue;
+        if (entry.level == LogLevel::Error && !m_filterError) continue;
+        if (entry.level == LogLevel::Success && !m_filterSuccess) continue;
+
+        // Apply text filter
+        if (m_filterBuffer[0] != '\0' && entry.message.find(m_filterBuffer) == std::string::npos)
+            continue;
+
         ImGui::TextDisabled("[%s]", entry.timestamp.c_str());
         ImGui::SameLine();
         ImGui::PushStyleColor(ImGuiCol_Text, getLevelColor(entry.level));

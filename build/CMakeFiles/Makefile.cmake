@@ -10,6 +10,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Users/maximilian/Documents/Code/Verwaltung V5/CMakeLists.txt"
   "CMakeFiles/4.2.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.2.3/CMakeSystem.cmake"
+  "/Users/maximilian/Documents/Code/Verwaltung V5/src/core/Config.hpp.in"
   "/Users/maximilian/Documents/Code/Verwaltung V5/vcpkg.json"
   "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake"
   "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake"
@@ -92,10 +93,11 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
+  "generated/core/Config.hpp"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/PhotoSorter.dir/DependInfo.cmake"
+  "CMakeFiles/VerwaltungV5.dir/DependInfo.cmake"
   )

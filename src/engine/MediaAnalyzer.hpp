@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Types.hpp"
+#include "core/Loggable.hpp"
 #include <filesystem>
 #include <chrono>
 
 namespace engine {
 
-class MediaAnalyzer {
+class MediaAnalyzer : public core::Loggable {
 public:
-    MediaAnalyzer() = default;
+    explicit MediaAnalyzer(ui::LogWindow& logWindow);
 
     bool analyze(MediaMetadata& metadata);
 

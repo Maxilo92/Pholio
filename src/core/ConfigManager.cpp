@@ -1,4 +1,5 @@
 #include "ConfigManager.hpp"
+#include "core/Config.hpp"
 #include <fstream>
 #include <iostream>
 #include <mutex>
@@ -52,12 +53,12 @@ std::filesystem::path ConfigManager::getConfigPath() const {
 #ifdef _WIN32
     const char* appData = std::getenv("APPDATA");
     if (appData) {
-        return std::filesystem::path(appData) / "PhotoSorter" / "settings.json";
+        return std::filesystem::path(appData) / std::string(PROJECT_NAME) / "settings.json";
     }
 #else
     const char* home = std::getenv("HOME");
     if (home) {
-        return std::filesystem::path(home) / ".config" / "PhotoSorter" / "settings.json";
+        return std::filesystem::path(home) / ".config" / std::string(PROJECT_NAME) / "settings.json";
     }
 #endif
     return std::filesystem::current_path() / "settings.json";

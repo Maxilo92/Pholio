@@ -13,6 +13,9 @@ namespace engine {
 
 namespace fs = std::filesystem;
 
+MediaAnalyzer::MediaAnalyzer(ui::LogWindow& logWindow) 
+    : core::Loggable(logWindow) {}
+
 bool MediaAnalyzer::analyze(MediaMetadata& metadata) {
     bool success = false;
     if (metadata.type == MediaType::Image) {
@@ -23,6 +26,7 @@ bool MediaAnalyzer::analyze(MediaMetadata& metadata) {
 
     // Fallback to file modification time if metadata extraction failed or date is missing
     if (!success || metadata.creationTime == std::chrono::system_clock::time_point{}) {
+        warn("Metadata extraction failed or incomplete for: " + metadata.path.filename().string() + ". Falling back to file system timestamp.");
         metadata.creationTime = getFileModificationTime(metadata.path);
     }
 
@@ -60,12 +64,18 @@ std::chrono::system_clock::time_point parseExifDate(const std::string& dateStr) 
 bool MediaAnalyzer::analyzeImage(MediaMetadata& metadata) {
     try {
         auto image = Exiv2::ImageFactory::open(metadata.path.string());
-        if (!image) return false;
+        if (!image) {
+            error("Exiv2: Could not open image: " + metadata.path.string());
+            return false;
+        }
 
         image->readMetadata();
         Exiv2::ExifData& exifData = image->exifData();
 
-        if (exifData.empty()) return false;
+        if (exifData.empty()) {
+            warn("Exiv2: No EXIF data found in: " + metadata.path.filename().string());
+            return false;
+        }
 
         // Try various EXIF date tags
         const char* dateTags[] = {
@@ -84,7 +94,7 @@ bool MediaAnalyzer::analyzeImage(MediaMetadata& metadata) {
             }
         }
     } catch (const std::exception& e) {
-        // Log error if needed: std::cerr << "Exiv2 error: " << e.what() << std::endl;
+        error("Exiv2 exception for " + metadata.path.filename().string() + ": " + e.what());
         return false;
     }
     return false;
@@ -93,6 +103,7 @@ bool MediaAnalyzer::analyzeImage(MediaMetadata& metadata) {
 bool MediaAnalyzer::analyzeVideo(MediaMetadata& metadata) {
     AVFormatContext* formatCtx = nullptr;
     if (avformat_open_input(&formatCtx, metadata.path.string().c_str(), nullptr, nullptr) != 0) {
+        error("FFmpeg: Could not open video: " + metadata.path.string());
         return false;
     }
 
@@ -104,7 +115,11 @@ bool MediaAnalyzer::analyzeVideo(MediaMetadata& metadata) {
             if (metadata.creationTime != std::chrono::system_clock::time_point{}) {
                 found = true;
             }
+        } else {
+            warn("FFmpeg: No creation_time tag found in: " + metadata.path.filename().string());
         }
+    } else {
+        error("FFmpeg: Could not find stream info for: " + metadata.path.filename().string());
     }
 
     avformat_close_input(&formatCtx);
