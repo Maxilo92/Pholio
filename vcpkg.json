@@ -1,8 +1,15 @@
 {
   "name": "verwaltung-v5",
-  "version-string": "0.3.0",
+  "version-string": "0.5.0",
   "dependencies": [
-    "exiv2",
+    {
+      "name": "exiv2",
+      "features": [
+        "xmp",
+        "bmff",
+        "png"
+      ]
+    },
     {
       "name": "imgui",
       "features": [
