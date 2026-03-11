@@ -2,7 +2,7 @@
 
 # Configuration
 CONFIG="Release"
-BINARY="./build/PhotoSorter"
+BINARY="./build/VerwaltungV5"
 
 # Initial Build if binary doesn't exist
 if [ ! -f "$BINARY" ]; then
@@ -11,7 +11,7 @@ if [ ! -f "$BINARY" ]; then
 fi
 
 while true; do
-    echo "Starting PhotoSorter..."
+    echo "Starting VerwaltungV5..."
     $BINARY
     EXIT_CODE=$?
     

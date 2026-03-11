@@ -30,7 +30,7 @@ def find_vcpkg():
     return None
 
 def main():
-    parser = argparse.ArgumentParser(description="Build script for PhotoSorter C++")
+    parser = argparse.ArgumentParser(description="Build script for VerwaltungV5")
     parser.add_argument("--config", choices=["Debug", "Release"], default="Release", help="Build configuration")
     parser.add_argument("--vcpkg-root", help="Path to vcpkg installation")
     parser.add_argument("--clean", action="store_true", help="Remove build directory before building")
@@ -71,7 +71,7 @@ def main():
         cmake_configure.append(f"-DVCPKG_INSTALLED_DIR={args.install_dir}")
     elif " " in str(project_root):
         # Default to a space-free temp directory if the project path contains spaces
-        temp_install = Path("/tmp/vcpkg_installed_photosorter")
+        temp_install = Path("/tmp/vcpkg_installed_verwaltungv5")
         print(f"Warning: Project path contains spaces. Using {temp_install} for vcpkg dependencies.")
         cmake_configure.append(f"-DVCPKG_INSTALLED_DIR={temp_install}")
 
@@ -92,7 +92,7 @@ def main():
 
     print("\n" + "="*40)
     print(f"Build successful! (Configuration: {args.config})")
-    print(f"Executable: {build_dir / 'PhotoSorter'}")
+    print(f"Executable: {build_dir / 'VerwaltungV5'}")
     print("="*40)
 
 if __name__ == "__main__":
