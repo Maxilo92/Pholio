@@ -28,11 +28,7 @@ void SettingsWindow::render() {
         
         ImGui::SameLine();
         if (ImGui::Button("Browse...##SourceSet")) {
-            nfdchar_t *outPath = NULL;
-            if (NFD_PickFolder(&outPath, sourceStr.c_str()) == NFD_OKAY) {
-                settings.sourcePath = outPath;
-                NFD_FreePath(outPath);
-            }
+            m_shouldBrowseSource = true;
         }
 
         char targetBuf[1024];
@@ -46,11 +42,7 @@ void SettingsWindow::render() {
 
         ImGui::SameLine();
         if (ImGui::Button("Browse...##TargetSet")) {
-            nfdchar_t *outPath = NULL;
-            if (NFD_PickFolder(&outPath, targetStr.c_str()) == NFD_OKAY) {
-                settings.targetPath = outPath;
-                NFD_FreePath(outPath);
-            }
+            m_shouldBrowseTarget = true;
         }
 
         ImGui::Separator();
@@ -94,6 +86,24 @@ void SettingsWindow::render() {
         ImGui::SetItemTooltip("Discard changes and reload last saved settings.");
     }
     ImGui::End();
+
+    // Deferred browsing
+    if (m_shouldBrowseSource || m_shouldBrowseTarget) {
+        nfdchar_t *outPath = NULL;
+        std::string defaultPath = m_shouldBrowseSource ? settings.sourcePath.string() : settings.targetPath.string();
+        
+        if (NFD_PickFolder(&outPath, defaultPath.c_str()) == NFD_OKAY) {
+            if (m_shouldBrowseSource) {
+                settings.sourcePath = outPath;
+            } else {
+                settings.targetPath = outPath;
+            }
+            NFD_FreePath(outPath);
+        }
+        
+        m_shouldBrowseSource = false;
+        m_shouldBrowseTarget = false;
+    }
 }
 
 } // namespace ui

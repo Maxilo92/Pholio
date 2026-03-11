@@ -7,6 +7,7 @@ The following packages are already installed:
     implot:x64-osx@0.17
   * inih[core,cpp]:x64-osx@62
   * libiconv:x64-osx@1.18#3
+    nativefiledialog-extended:x64-osx@1.3.0
     nlohmann-json:x64-osx@3.12.0#2
     stb:x64-osx@2024-07-29#1
   * vcpkg-cmake:x64-osx@2024-04-23
@@ -14,42 +15,6 @@ The following packages are already installed:
   * vcpkg-cmake-get-vars:x64-osx@2025-05-29
   * vcpkg-tool-meson:x64-osx@1.9.0#3
     xxhash:x64-osx@0.8.3
-The following packages will be built and installed:
-    nativefiledialog-extended:x64-osx@1.3.0
-Restored 0 package(s) from /Users/maximilian/.cache/vcpkg/archives in 517 us. Use --debug to see more details.
-Installing 1/1 nativefiledialog-extended:x64-osx@1.3.0...
-nativefiledialog-extended:x64-osx@1.3.0 package ABI: 33a11b41b04cbfaab54680770d83bb2b573323221891ec82ae8f234bbf2d1385
-Building nativefiledialog-extended:x64-osx@1.3.0...
-/Users/maximilian/vcpkg/triplets/community/x64-osx.cmake: info: loaded community triplet from here. Community triplets are not built in the curated registry and are thus less likely to succeed.
-Downloading https://github.com/btzy/nativefiledialog-extended/archive/v1.3.0.tar.gz -> btzy-nativefiledialog-extended-v1.3.0.tar.gz
-Successfully downloaded btzy-nativefiledialog-extended-v1.3.0.tar.gz
--- Extracting source /Users/maximilian/vcpkg/downloads/btzy-nativefiledialog-extended-v1.3.0.tar.gz
--- Using source at /Users/maximilian/vcpkg/buildtrees/nativefiledialog-extended/src/v1.3.0-f8c9e1bd15.clean
--- Configuring x64-osx
-CMake Warning at /tmp/vcpkg_installed_photosorter/x64-osx/share/vcpkg-cmake/vcpkg_cmake_configure.cmake:344 (message):
-  The following variables are not used in CMakeLists.txt:
-
-      NFD_PORTAL
-
-  Please recheck them and remove the unnecessary options from the
-  `vcpkg_cmake_configure` call.
-
-  If these options should still be passed for whatever reason, please use the
-  `MAYBE_UNUSED_VARIABLES` argument.
-Call Stack (most recent call first):
-  ports/nativefiledialog-extended/portfile.cmake:9 (vcpkg_cmake_configure)
-  scripts/ports.cmake:206 (include)
-
-
--- Building x64-osx-dbg
--- Building x64-osx-rel
--- Installing: /Users/maximilian/vcpkg/packages/nativefiledialog-extended_x64-osx/share/nativefiledialog-extended/copyright
--- Performing post-build validation
-Starting submission of nativefiledialog-extended:x64-osx@1.3.0 to 1 binary cache(s) in the background
-Elapsed time to handle nativefiledialog-extended:x64-osx: 7.8 s
-Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
-Packages installed in this vcpkg installation declare the following licenses:
-Zlib
 exiv2 provides CMake targets:
 
   # this is heuristically generated, and may not be correct
@@ -118,6 +83,4 @@ xxhash provides pkg-config modules:
   # extremely fast hash algorithm
   libxxhash
 
-Waiting for 1 remaining binary cache submissions...
-Completed submission of nativefiledialog-extended:x64-osx@1.3.0 to 1 binary cache(s) in 37.8 ms (1/1)
-All requested installations completed successfully in: 7.8 s
+All requested installations completed successfully in: 430 us

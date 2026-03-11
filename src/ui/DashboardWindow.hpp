@@ -19,6 +19,9 @@ private:
     
     std::string browseFolder(const std::string& defaultPath);
     void openFolderInExplorer(const std::filesystem::path& path);
+
+    bool m_shouldBrowseSource = false;
+    bool m_shouldBrowseTarget = false;
 };
 
 } // namespace ui

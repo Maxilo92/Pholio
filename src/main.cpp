@@ -39,6 +39,7 @@ int main(int, char**) {
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
+    glfwFocusWindow(window); // Ensure window has focus on macOS
     glfwSwapInterval(1); // Enable vsync
 
     // Load configuration

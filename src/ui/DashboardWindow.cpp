@@ -21,6 +21,35 @@ void DashboardWindow::render() {
         renderStatus();
     }
     ImGui::End();
+
+    // Handle deferred browsing outside of the main ImGui rendering logic
+    // to prevent focus/interactivity issues on macOS
+    if (m_shouldBrowseSource || m_shouldBrowseTarget) {
+        auto settings = core::ConfigManager::getInstance().getSettings();
+        bool changed = false;
+
+        if (m_shouldBrowseSource) {
+            std::string path = browseFolder(settings.sourcePath.string());
+            if (!path.empty()) {
+                settings.sourcePath = path;
+                changed = true;
+            }
+            m_shouldBrowseSource = false;
+        } else if (m_shouldBrowseTarget) {
+            std::string path = browseFolder(settings.targetPath.string());
+            if (!path.empty()) {
+                settings.targetPath = path;
+                changed = true;
+            }
+            m_shouldBrowseTarget = false;
+        }
+
+        if (changed) {
+            core::ConfigManager::getInstance().setSettings(settings);
+            // Optional: Save immediately if desired
+            // core::ConfigManager::getInstance().save();
+        }
+    }
 }
 
 void DashboardWindow::renderFolderSelection() {
@@ -43,11 +72,7 @@ void DashboardWindow::renderFolderSelection() {
     }
     ImGui::SameLine();
     if (ImGui::Button("Browse...##Source")) {
-        std::string path = browseFolder(sourceStr);
-        if (!path.empty()) {
-            settings.sourcePath = path;
-            changed = true;
-        }
+        m_shouldBrowseSource = true;
     }
 
     ImGui::Text("Target Folder:");
@@ -66,11 +91,7 @@ void DashboardWindow::renderFolderSelection() {
     }
     ImGui::SameLine();
     if (ImGui::Button("Browse...##Target")) {
-        std::string path = browseFolder(targetStr);
-        if (!path.empty()) {
-            settings.targetPath = path;
-            changed = true;
-        }
+        m_shouldBrowseTarget = true;
     }
 
     if (changed) {
