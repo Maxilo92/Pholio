@@ -61,6 +61,22 @@ void Worker::run() {
         m_logWindow.info("Source: " + settings.sourcePath.string());
         m_logWindow.info("Target: " + settings.targetPath.string());
 
+        // 1. Validate Paths
+        if (!std::filesystem::exists(settings.sourcePath)) {
+            m_logWindow.error("Source directory does not exist: " + settings.sourcePath.string());
+            setStatus("Error: Source not found");
+            m_isRunning = false;
+            return;
+        }
+
+        if (settings.targetPath.empty()) {
+            m_logWindow.error("Target directory not specified.");
+            setStatus("Error: No target");
+            m_isRunning = false;
+            return;
+        }
+
+        // 2. Initial Scan to calculate required space
         setStatus("Scanning...");
         Scanner scanner(settings.sourcePath, m_logWindow);
         auto tasks = scanner.scan();
@@ -82,6 +98,28 @@ void Worker::run() {
             return;
         }
 
+        // 3. Check Disk Space
+        // We check the parent path if target doesn't exist yet
+        std::filesystem::path checkPath = settings.targetPath;
+        while (!checkPath.empty() && !std::filesystem::exists(checkPath)) {
+            checkPath = checkPath.parent_path();
+        }
+        if (checkPath.empty()) checkPath = std::filesystem::current_path();
+
+        std::error_code space_ec;
+        auto spaceInfo = std::filesystem::space(checkPath, space_ec);
+        if (!space_ec) {
+            if (spaceInfo.available < totalBytes) {
+                m_logWindow.error("Not enough disk space on target! Required: " + 
+                                 std::to_string(totalBytes / (1024 * 1024)) + " MB, Available: " + 
+                                 std::to_string(spaceInfo.available / (1024 * 1024)) + " MB");
+                setStatus("Error: Disk Full");
+                m_isRunning = false;
+                return;
+            }
+        }
+
+        // 4. Start Processing
         MediaAnalyzer analyzer(m_logWindow);
         StructureAnalyzer structAnalyzer(settings.targetPath);
         Sorter sorter(m_logWindow, settings.verificationLevel);
@@ -136,6 +174,15 @@ void Worker::run() {
             setStatus("Completed");
         }
 
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::string errorMsg = e.what();
+        if (e.code() == std::errc::no_space_on_device) {
+            m_logWindow.error("CRITICAL: Disk full during processing!");
+            setStatus("Error: Disk Full");
+        } else {
+            m_logWindow.error("Filesystem Error: " + errorMsg);
+            setStatus("Error: Filesystem");
+        }
     } catch (const std::exception& e) {
         m_logWindow.error("Critical error in worker thread: " + std::string(e.what()));
         setStatus("Error: " + std::string(e.what()));

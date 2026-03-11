@@ -86,4 +86,4 @@ xxhash provides pkg-config modules:
   # extremely fast hash algorithm
   libxxhash
 
-All requested installations completed successfully in: 664 us
+All requested installations completed successfully in: 408 us

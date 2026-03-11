@@ -170,7 +170,12 @@ void DashboardWindow::renderStatus() {
         ImGui::SetColumnWidth(0, 150.0f);
 
         ImGui::Text("Current Status:"); ImGui::NextColumn();
-        ImGui::Text("%s", status.c_str()); ImGui::NextColumn();
+        if (status.find("Error") != std::string::npos || status.find("Full") != std::string::npos) {
+            ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%s", status.c_str());
+        } else {
+            ImGui::Text("%s", status.c_str());
+        }
+        ImGui::NextColumn();
 
         if (isRunning || progress > 0.0f) {
             ImGui::Text("Data Processed:"); ImGui::NextColumn();

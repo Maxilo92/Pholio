@@ -24,7 +24,11 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
     // We always copy first to ensure source is safe until verified
     // Using copy_options::overwrite_existing for retries/resumption
     if (!fs::copy_file(task.metadata.path, task.targetPath, fs::copy_options::overwrite_existing, ec)) {
-        task.statusMessage = "Copy failed: " + ec.message();
+        if (ec == std::errc::no_space_on_device) {
+            task.statusMessage = "Disk Full";
+        } else {
+            task.statusMessage = "Copy failed: " + ec.message();
+        }
         error("Sorter: File copy failed from " + task.metadata.path.string() + " to " + task.targetPath.string() + " Error: " + ec.message());
         return false;
     }
