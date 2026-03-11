@@ -19,6 +19,7 @@ private:
     void renderControls();
     void renderStatus();
     void renderPreview();
+    void renderErrorPopup();
     
     std::string browseFolder(const std::string& defaultPath);
     void openFolderInExplorer(const std::filesystem::path& path);
@@ -28,6 +29,10 @@ private:
 
     Texture m_previewTexture;
     std::filesystem::path m_lastLoadedPath;
+
+    std::string m_lastErrorMessage;
+    bool m_showErrorPopup = false;
+    bool m_workerWasRunning = false;
 };
 
 } // namespace ui

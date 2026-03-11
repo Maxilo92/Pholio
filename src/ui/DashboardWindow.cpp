@@ -14,12 +14,22 @@ DashboardWindow::DashboardWindow(engine::Worker& worker) : m_worker(worker) {
 
 void DashboardWindow::render() {
     auto settings = core::ConfigManager::getInstance().getSettings();
+    std::string status = m_worker.getStatusMessage();
+    bool isRunning = m_worker.isRunning();
+
+    // Error detection logic
+    if (m_workerWasRunning && !isRunning) {
+        if (status.find("Error") != std::string::npos || status.find("Full") != std::string::npos) {
+            m_lastErrorMessage = status;
+            m_showErrorPopup = true;
+        }
+    }
+    m_workerWasRunning = isRunning;
 
     if (ImGui::Begin("Dashboard")) {
         renderFolderSelection();
         ImGui::Separator();
         
-        // Preview Toggle
         bool showPreview = settings.showPreview;
         if (ImGui::Checkbox("Show Image Preview during processing", &showPreview)) {
             settings.showPreview = showPreview;
@@ -38,6 +48,8 @@ void DashboardWindow::render() {
         }
     }
     ImGui::End();
+
+    renderErrorPopup();
 
     // Handle deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
@@ -64,6 +76,28 @@ void DashboardWindow::render() {
             core::ConfigManager::getInstance().setSettings(currentSettings);
             core::ConfigManager::getInstance().save();
         }
+    }
+}
+
+void DashboardWindow::renderErrorPopup() {
+    if (m_showErrorPopup) {
+        ImGui::OpenPopup("Critical Error");
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Critical Error", &m_showErrorPopup, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "An error occurred during processing:");
+        ImGui::Spacing();
+        ImGui::TextWrapped("%s", m_lastErrorMessage.c_str());
+        ImGui::Separator();
+
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            m_showErrorPopup = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
 }
 
@@ -238,7 +272,6 @@ void DashboardWindow::renderPreview() {
         float displayWidth = windowWidth;
         float displayHeight = displayWidth * aspectRatio;
         
-        // Limit height
         float maxHeight = 300.0f;
         if (displayHeight > maxHeight) {
             displayHeight = maxHeight;
