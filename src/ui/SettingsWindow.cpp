@@ -40,6 +40,7 @@ void SettingsWindow::render() {
                     m_editedSettings.sourcePath = sourceBuf;
                     m_isDirty = true;
                 }
+                ImGui::SetItemTooltip("The directory where your unorganized photos and videos are located.");
                 ImGui::PopItemWidth();
                 ImGui::TableSetColumnIndex(2);
                 if (ImGui::Button("Browse...##SourceSet")) m_shouldBrowseSource = true;
@@ -57,6 +58,7 @@ void SettingsWindow::render() {
                     m_editedSettings.targetPath = targetBuf;
                     m_isDirty = true;
                 }
+                ImGui::SetItemTooltip("The root directory where the organized library will be created.");
                 ImGui::PopItemWidth();
                 ImGui::TableSetColumnIndex(2);
                 if (ImGui::Button("Browse...##TargetSet")) m_shouldBrowseTarget = true;
@@ -82,6 +84,7 @@ void SettingsWindow::render() {
                     m_editedSettings.operationMode = static_cast<engine::OperationMode>(opMode);
                     m_isDirty = true;
                 }
+                ImGui::SetItemTooltip("Copy: Keep original files.\nMove: Transfer files to new location (deletes originals).");
                 ImGui::PopItemWidth();
 
                 // Verif Level
@@ -96,6 +99,7 @@ void SettingsWindow::render() {
                     m_editedSettings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
                     m_isDirty = true;
                 }
+                ImGui::SetItemTooltip("None: No check.\nSizeOnly: Check file size.\nPartial: Check first 1MB hash.\nFull: Check entire file hash.");
                 ImGui::PopItemWidth();
 
                 ImGui::EndTable();
@@ -103,7 +107,13 @@ void SettingsWindow::render() {
 
             ImGui::Spacing();
             if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
+            ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
+            
             if (ImGui::Checkbox("Auto-Start on selection", &m_editedSettings.autoStart)) m_isDirty = true;
+            ImGui::SetItemTooltip("Automatically start the sorting process when a valid source and target are selected.");
+
+            if (ImGui::Checkbox("Show Image Preview during processing", &m_editedSettings.showPreview)) m_isDirty = true;
+            ImGui::SetItemTooltip("Enable/Disable the real-time photo preview in the dashboard.");
         }
 
         ImGui::Separator();
@@ -114,11 +124,14 @@ void SettingsWindow::render() {
             config.save();
             m_isDirty = false;
         }
+        ImGui::SetItemTooltip("Apply and persist these settings to disk.");
+
         ImGui::SameLine();
         if (ImGui::Button("DISCARD CHANGES", ImVec2(150, 40))) {
             m_editedSettings = config.getSettings();
             m_isDirty = false;
         }
+        ImGui::SetItemTooltip("Discard changes and reload last saved settings.");
     }
     ImGui::End();
 
