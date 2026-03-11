@@ -24,7 +24,31 @@ AppWindow::AppWindow()
 AppWindow::~AppWindow() = default;
 
 void AppWindow::update() {
-    // Logic updates if needed
+    ImGuiIO& io = ImGui::GetIO();
+    
+    // Platform-aware modifier check
+#ifdef __APPLE__
+    bool ctrl_down = io.ConfigMacOSXBehaviors ? io.KeySuper : io.KeyCtrl;
+#else
+    bool ctrl_down = io.KeyCtrl;
+#endif
+
+    if (ctrl_down) {
+        if (ImGui::IsKeyPressed(ImGuiKey_D)) {
+            m_showDashboard = !m_showDashboard;
+        }
+        if (ImGui::IsKeyPressed(ImGuiKey_S)) {
+            m_showSettings = !m_showSettings;
+        }
+        if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+            if (io.KeyShift) {
+                m_shouldRebuild = true;
+                m_shouldRestart = true;
+            } else {
+                m_shouldRestart = true;
+            }
+        }
+    }
 }
 
 void AppWindow::render() {
@@ -107,17 +131,17 @@ void AppWindow::renderMainDockspace() {
 
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Dashboard", "Ctrl+D", m_showDashboard)) {
+            if (ImGui::MenuItem("Dashboard", STR_CTRL "+D", m_showDashboard)) {
                 m_showDashboard = true;
             }
-            if (ImGui::MenuItem("Settings", "Ctrl+S", m_showSettings)) {
+            if (ImGui::MenuItem("Settings", STR_CTRL "+S", m_showSettings)) {
                 m_showSettings = true;
             }
             ImGui::Separator();
-            if (ImGui::MenuItem("Restart", "Ctrl+R")) {
+            if (ImGui::MenuItem("Restart", STR_CTRL "+R")) {
                 m_shouldRestart = true;
             }
-            if (ImGui::MenuItem("Rebuild & Restart", "Ctrl+Shift+R")) {
+            if (ImGui::MenuItem("Rebuild & Restart", STR_CTRL "+Shift+R")) {
                 m_shouldRebuild = true;
                 m_shouldRestart = true;
             }
@@ -160,7 +184,7 @@ void AppWindow::renderStatusBar() {
 
     if (ImGui::Begin("StatusBar", nullptr, window_flags)) {
         if (ImGui::BeginMenuBar()) {
-            ImGui::Text("PhotoSorter v0.4.3");
+            ImGui::Text("PhotoSorter v0.5.1");
             ImGui::Separator();
             
             bool isRunning = m_worker->isRunning();

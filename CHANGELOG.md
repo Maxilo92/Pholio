@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2026-03-11
+
+### Added
+- **Native macOS Shortcuts**: Shortcuts now use the **Cmd (⌘)** key on macOS and **Ctrl** on other platforms.
+- **Dynamic Shortcut Labels**: Menu bar labels automatically adapt (e.g., "Cmd+S" on Mac, "Ctrl+S" on Windows/Linux).
+- **Advanced Logging & Crash Reporting**: Engine-wide detailed logging, immediate flush to disk, and built-in "Open Log Folder" functionality.
+- **Improved Lifecycle Management**: "Restart" and "Rebuild & Restart" buttons in the File menu, managed by a new `run.sh` wrapper script.
+- **Modernized UI**: Table-based layouts for settings and folder selection, high-quality dark theme, and persistent window docking.
+
 ## [0.5.0] - 2026-03-11
+
 
 ### Added
 - Rebranded the application to **VerwaltungV5**.

@@ -1040,7 +1040,7 @@ CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/StructureAnalyzer.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Sorter.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Verifier.hpp \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/../core/ConfigManager.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/ConfigManager.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/json.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/adl_serializer.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/abi_macros.hpp \
@@ -1141,6 +1141,6 @@ CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/any \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/macro_unscope.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/../core/../engine/Sorter.hpp \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/../core/../engine/Verifier.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../engine/Sorter.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../engine/Verifier.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream

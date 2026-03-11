@@ -465,6 +465,30 @@ src/ui/SettingsWindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.s
 .PHONY : src/ui/SettingsWindow.cpp.s
 
+src/ui/Texture.o: src/ui/Texture.cpp.o
+.PHONY : src/ui/Texture.o
+
+# target to build an object file
+src/ui/Texture.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o
+.PHONY : src/ui/Texture.cpp.o
+
+src/ui/Texture.i: src/ui/Texture.cpp.i
+.PHONY : src/ui/Texture.i
+
+# target to preprocess a source file
+src/ui/Texture.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.i
+.PHONY : src/ui/Texture.cpp.i
+
+src/ui/Texture.s: src/ui/Texture.cpp.s
+.PHONY : src/ui/Texture.s
+
+# target to generate assembly for a file
+src/ui/Texture.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.s
+.PHONY : src/ui/Texture.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -516,6 +540,9 @@ help:
 	@echo "... src/ui/SettingsWindow.o"
 	@echo "... src/ui/SettingsWindow.i"
 	@echo "... src/ui/SettingsWindow.s"
+	@echo "... src/ui/Texture.o"
+	@echo "... src/ui/Texture.i"
+	@echo "... src/ui/Texture.s"
 .PHONY : help
 
 

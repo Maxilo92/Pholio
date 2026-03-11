@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o.d"
   "CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o"
   "CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o.d"
+  "CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o"
+  "CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o.d"
   "VerwaltungV5"
   "VerwaltungV5.pdb"
 )

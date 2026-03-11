@@ -1142,6 +1142,12 @@ CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/DashboardWindow.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp \
+  /usr/local/include/GLFW/glfw3.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/os/availability.h \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/AboutWindow.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui_internal.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/immintrin.h \

@@ -8,6 +8,12 @@
 #include "../engine/Worker.hpp"
 #include <memory>
 
+#ifdef __APPLE__
+#define STR_CTRL "Cmd"
+#else
+#define STR_CTRL "Ctrl"
+#endif
+
 namespace ui {
 
 class AppWindow {

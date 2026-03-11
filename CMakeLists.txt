@@ -54,6 +54,8 @@ add_executable(VerwaltungV5
     src/ui/SettingsWindow.hpp
     src/ui/LogWindow.cpp
     src/ui/LogWindow.hpp
+    src/ui/Texture.cpp
+    src/ui/Texture.hpp
     src/ui/ProgressWindow.cpp
     src/ui/ProgressWindow.hpp
 )

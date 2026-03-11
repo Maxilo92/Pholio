@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <filesystem>
+#include <mutex>
 
 namespace engine {
 
@@ -28,6 +30,7 @@ public:
     float getBytesPerSecond() const { return m_bytesPerSecond; }
     float getProgress() const;
     std::string getStatusMessage() const;
+    std::filesystem::path getCurrentImagePath() const;
 
 private:
     void run();
@@ -49,8 +52,10 @@ private:
     
     mutable std::mutex m_statusMutex;
     std::string m_statusMessage{"Idle"};
+    std::filesystem::path m_currentImagePath;
     
     void setStatus(const std::string& message);
+    void setCurrentImagePath(const std::filesystem::path& path);
 };
 
 } // namespace engine

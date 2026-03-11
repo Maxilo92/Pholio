@@ -7365,11 +7365,11 @@ CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.o: /Users/maximilian/Documents
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stddef.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdint.h \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Sorter.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Verifier.hpp \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/ConfigManager.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/MediaAnalyzer.hpp \
@@ -7431,6 +7431,7 @@ CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.o: /Users/maximilian/Documents
 CMakeFiles/VerwaltungV5.dir/src/main.cpp.o: /Users/maximilian/Documents/Code/Verwaltung\ V5/src/main.cpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl3.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h \
@@ -8532,6 +8533,7 @@ CMakeFiles/VerwaltungV5.dir/src/main.cpp.o: /Users/maximilian/Documents/Code/Ver
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/ProgressWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/SettingsWindow.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui_impl_glfw.h \
@@ -9388,6 +9390,9 @@ CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.o: /Users/maximilian/Document
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h
 
 CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o: /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/AppWindow.cpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl3.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h \
@@ -10337,6 +10342,7 @@ CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o: /Users/maximilian/Documents/
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/malloc/_ptrcheck.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/math.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/nl_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/os/availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread/pthread_impl.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread/qos.h \
@@ -10579,6 +10585,7 @@ CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o: /Users/maximilian/Documents/
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/ProgressWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/SettingsWindow.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui_internal.h \
@@ -10630,6 +10637,9 @@ CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o: /Users/maximilian/Documents/
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
 
 CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.o: /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/DashboardWindow.cpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl3.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h \
@@ -11580,6 +11590,7 @@ CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.o: /Users/maximilian/Docu
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/malloc/_ptrcheck.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/math.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/nl_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/os/availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread/pthread_impl.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/pthread/qos.h \
@@ -11721,6 +11732,7 @@ CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.o: /Users/maximilian/Docu
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Types.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Worker.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/DashboardWindow.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
   /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nfd.h \
@@ -15081,7 +15093,11 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: /Users/maximilian/Docum
 
 /usr/local/include/GLFW/glfw3.h:
 
+/Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h:
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl3.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h:
 

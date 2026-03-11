@@ -22,6 +22,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/LogWindow.cpp" "CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o.d"
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/ProgressWindow.cpp" "CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o.d"
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/SettingsWindow.cpp" "CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o.d"
+  "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/Texture.cpp" "CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

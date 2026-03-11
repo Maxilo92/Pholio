@@ -13,39 +13,55 @@ DashboardWindow::DashboardWindow(engine::Worker& worker) : m_worker(worker) {
 }
 
 void DashboardWindow::render() {
+    auto settings = core::ConfigManager::getInstance().getSettings();
+
     if (ImGui::Begin("Dashboard")) {
         renderFolderSelection();
+        ImGui::Separator();
+        
+        // Preview Toggle
+        bool showPreview = settings.showPreview;
+        if (ImGui::Checkbox("Show Image Preview during processing", &showPreview)) {
+            settings.showPreview = showPreview;
+            core::ConfigManager::getInstance().setSettings(settings);
+            core::ConfigManager::getInstance().save();
+        }
+        
         ImGui::Separator();
         renderControls();
         ImGui::Separator();
         renderStatus();
+        
+        if (settings.showPreview) {
+            ImGui::Separator();
+            renderPreview();
+        }
     }
     ImGui::End();
 
-    // Handle deferred browsing outside of the main ImGui rendering logic
-    // to prevent focus/interactivity issues on macOS
+    // Handle deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
-        auto settings = core::ConfigManager::getInstance().getSettings();
+        auto currentSettings = core::ConfigManager::getInstance().getSettings();
         bool changed = false;
 
         if (m_shouldBrowseSource) {
-            std::string path = browseFolder(settings.sourcePath.string());
+            std::string path = browseFolder(currentSettings.sourcePath.string());
             if (!path.empty()) {
-                settings.sourcePath = path;
+                currentSettings.sourcePath = path;
                 changed = true;
             }
             m_shouldBrowseSource = false;
         } else if (m_shouldBrowseTarget) {
-            std::string path = browseFolder(settings.targetPath.string());
+            std::string path = browseFolder(currentSettings.targetPath.string());
             if (!path.empty()) {
-                settings.targetPath = path;
+                currentSettings.targetPath = path;
                 changed = true;
             }
             m_shouldBrowseTarget = false;
         }
 
         if (changed) {
-            core::ConfigManager::getInstance().setSettings(settings);
+            core::ConfigManager::getInstance().setSettings(currentSettings);
             core::ConfigManager::getInstance().save();
         }
     }
@@ -165,7 +181,7 @@ void DashboardWindow::renderStatus() {
 
     ImGui::Spacing();
     
-    if (ImGui::BeginChild("StatusDetails", ImVec2(0, 0), true)) {
+    if (ImGui::BeginChild("StatusDetails", ImVec2(0, 120), true)) {
         ImGui::Columns(2, "StatusColumns", false);
         ImGui::SetColumnWidth(0, 150.0f);
 
@@ -199,6 +215,42 @@ void DashboardWindow::renderStatus() {
         ImGui::Columns(1);
     }
     ImGui::EndChild();
+}
+
+void DashboardWindow::renderPreview() {
+    auto currentPath = m_worker.getCurrentImagePath();
+    
+    if (!currentPath.empty() && currentPath != m_lastLoadedPath) {
+        if (m_previewTexture.loadFromFile(currentPath)) {
+            m_lastLoadedPath = currentPath;
+        }
+    } else if (currentPath.empty()) {
+        m_previewTexture.release();
+        m_lastLoadedPath = "";
+    }
+
+    if (m_previewTexture.isValid()) {
+        float windowWidth = ImGui::GetContentRegionAvail().x;
+        float texWidth = static_cast<float>(m_previewTexture.getWidth());
+        float texHeight = static_cast<float>(m_previewTexture.getHeight());
+        
+        float aspectRatio = texHeight / texWidth;
+        float displayWidth = windowWidth;
+        float displayHeight = displayWidth * aspectRatio;
+        
+        // Limit height
+        float maxHeight = 300.0f;
+        if (displayHeight > maxHeight) {
+            displayHeight = maxHeight;
+            displayWidth = displayHeight / aspectRatio;
+        }
+
+        ImGui::Text("Current File: %s", currentPath.filename().string().c_str());
+        ImTextureID texID = (ImTextureID)(intptr_t)m_previewTexture.getID();
+        ImGui::Image(texID, ImVec2(displayWidth, displayHeight));
+    } else {
+        ImGui::Text("No preview available");
+    }
 }
 
 std::string DashboardWindow::browseFolder(const std::string& defaultPath) {

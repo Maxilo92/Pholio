@@ -3,7 +3,7 @@
 #include "MediaAnalyzer.hpp"
 #include "StructureAnalyzer.hpp"
 #include "Sorter.hpp"
-#include "../core/ConfigManager.hpp"
+#include "core/ConfigManager.hpp"
 #include <iostream>
 #include <chrono>
 
@@ -26,6 +26,10 @@ void Worker::start() {
     m_totalBytes = 0;
     m_filesPerSecond = 0;
     m_bytesPerSecond = 0;
+    {
+        std::lock_guard<std::mutex> lock(m_statusMutex);
+        m_currentImagePath = "";
+    }
     
     m_thread = std::thread(&Worker::run, this);
 }
@@ -48,9 +52,19 @@ std::string Worker::getStatusMessage() const {
     return m_statusMessage;
 }
 
+std::filesystem::path Worker::getCurrentImagePath() const {
+    std::lock_guard<std::mutex> lock(m_statusMutex);
+    return m_currentImagePath;
+}
+
 void Worker::setStatus(const std::string& message) {
     std::lock_guard<std::mutex> lock(m_statusMutex);
     m_statusMessage = message;
+}
+
+void Worker::setCurrentImagePath(const std::filesystem::path& path) {
+    std::lock_guard<std::mutex> lock(m_statusMutex);
+    m_currentImagePath = path;
 }
 
 void Worker::run() {
@@ -132,10 +146,14 @@ void Worker::run() {
             if (m_shouldStop) {
                 m_logWindow.warn("Processing cancelled by user.");
                 setStatus("Cancelled");
+                setCurrentImagePath("");
                 break;
             }
 
             setStatus("Analyzing: " + task.metadata.path.filename().string());
+            if (settings.showPreview) {
+                setCurrentImagePath(task.metadata.path);
+            }
             
             if (analyzer.analyze(task.metadata)) {
                 task.targetPath = structAnalyzer.generatePath(task.metadata);
@@ -172,6 +190,7 @@ void Worker::run() {
                                std::to_string(m_processedFiles) + "/" + 
                                std::to_string(m_totalFiles) + " files processed.");
             setStatus("Completed");
+            setCurrentImagePath("");
         }
 
     } catch (const std::filesystem::filesystem_error& e) {
@@ -183,9 +202,11 @@ void Worker::run() {
             m_logWindow.error("Filesystem Error: " + errorMsg);
             setStatus("Error: Filesystem");
         }
+        setCurrentImagePath("");
     } catch (const std::exception& e) {
         m_logWindow.error("Critical error in worker thread: " + std::string(e.what()));
         setStatus("Error: " + std::string(e.what()));
+        setCurrentImagePath("");
     }
 
     m_isRunning = false;

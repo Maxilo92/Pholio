@@ -1154,4 +1154,5 @@ CMakeFiles/VerwaltungV5.dir/src/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/DashboardWindow.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/AboutWindow.hpp

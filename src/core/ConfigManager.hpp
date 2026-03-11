@@ -42,16 +42,10 @@ struct AppSettings {
     engine::VerificationLevel verificationLevel = engine::VerificationLevel::Full;
     bool dryRun = false;
     bool autoStart = false;
+    bool showPreview = true;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, 
-        sourcePath, 
-        targetPath, 
-        operationMode, 
-        verificationLevel, 
-        dryRun, 
-        autoStart
-    )
-};
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, dryRun, autoStart, showPreview)
+    };
 
 class ConfigManager {
 public:

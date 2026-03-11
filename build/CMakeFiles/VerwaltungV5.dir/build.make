@@ -254,10 +254,24 @@ CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/LogWindow.cpp" -o CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.s
 
+CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o: CMakeFiles/VerwaltungV5.dir/flags.make
+CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o: /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.cpp
+CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o: CMakeFiles/VerwaltungV5.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o -MF CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o.d -o CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o -c "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/Texture.cpp"
+
+CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/Texture.cpp" > CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.i
+
+CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/Texture.cpp" -o CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.s
+
 CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o: CMakeFiles/VerwaltungV5.dir/flags.make
 CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o: /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/ProgressWindow.cpp
 CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o: CMakeFiles/VerwaltungV5.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o -MF CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o.d -o CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o -c "/Users/maximilian/Documents/Code/Verwaltung V5/src/ui/ProgressWindow.cpp"
 
 CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.i: cmake_force
@@ -283,6 +297,7 @@ VerwaltungV5_OBJECTS = \
 "CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.o" \
 "CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o" \
 "CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o" \
+"CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o" \
 "CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o"
 
 # External object files for target VerwaltungV5
@@ -301,6 +316,7 @@ VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o
+VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/build.make
 VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libexiv2.a
@@ -319,7 +335,7 @@ VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platfo
 VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libINIReader.a
 VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libinih.a
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable VerwaltungV5"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable VerwaltungV5"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/VerwaltungV5.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
