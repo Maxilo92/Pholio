@@ -310,6 +310,10 @@ VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platfo
 VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libimplot.a
 VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libnfd.a
 VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libxxhash.a
+VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libexpat.a
+VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libz.a
+VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libbrotlidec.a
+VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libbrotlicommon.a
 VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libiconv.tbd
 VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libcharset.tbd
 VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libINIReader.a

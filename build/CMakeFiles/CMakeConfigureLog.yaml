@@ -11203,3 +11203,784 @@ events:
         - "/Network/Library/Frameworks"
         - "/System/Library/Frameworks"
 ...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/zlib/vcpkg-cmake-wrapper.cmake:1 (find_path)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:32 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    mode: "path"
+    variable: "ZLIB_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "LAST"
+      SearchAppBundle: "LAST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "zlib.h"
+    candidate_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/include/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/tmp/vcpkg_installed_photosorter/x64-osx/include/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/include/"
+    found: "/tmp/vcpkg_installed_photosorter/x64-osx/include/"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/zlib/vcpkg-cmake-wrapper.cmake:2 (find_library)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:32 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    mode: "library"
+    variable: "ZLIB_LIBRARY_RELEASE"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "LAST"
+      SearchAppBundle: "LAST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "zlib"
+      - "z"
+    candidate_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+    searched_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+    found: "/tmp/vcpkg_installed_photosorter/x64-osx/lib/libz.a"
+    search_context:
+      CMAKE_LIBRARY_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/manual-link"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/manual-link"
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/zlib/vcpkg-cmake-wrapper.cmake:3 (find_library)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:32 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    mode: "library"
+    variable: "ZLIB_LIBRARY_DEBUG"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "LAST"
+      SearchAppBundle: "LAST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "zlibd"
+      - "z"
+    candidate_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+    searched_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+    found: "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/libz.a"
+    search_context:
+      CMAKE_LIBRARY_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/manual-link"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/manual-link"
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:36 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    name: "Brotli"
+    configs:
+      -
+        filename: "unofficial-brotliConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "unofficial-brotli-config.cmake"
+        kind: "cmake"
+    version_request:
+      exact: false
+    settings:
+      required: "required_explicit"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "unofficial-brotli"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/unofficial-brotliConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/unofficial-brotli-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/share/unofficial-brotli/unofficial-brotliConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found:
+      path: "/tmp/vcpkg_installed_photosorter/x64-osx/share/unofficial-brotli/unofficial-brotli-config.cmake"
+      mode: "config"
+      version: ""
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/expat/vcpkg-cmake-wrapper.cmake:12 (find_library)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:52 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    mode: "library"
+    variable: "EXPAT_LIBRARY_DEBUG"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "LAST"
+      SearchAppBundle: "LAST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "expatd"
+      - "expatwd"
+      - "libexpatd"
+      - "libexpatwd"
+      - "expatdMT"
+      - "expatwdMT"
+      - "libexpatdMT"
+      - "libexpatwdMT"
+      - "expatdMT"
+      - "expatwdMT"
+      - "libexpatdMT"
+      - "libexpatwdMT"
+      - "expatdMD"
+      - "expatwdMD"
+      - "libexpatdMD"
+      - "libexpatwdMD"
+      - "expatdMD"
+      - "expatwdMD"
+      - "libexpatdMD"
+      - "libexpatwdMD"
+      - "expatMTdMD"
+      - "expatwMTdMD"
+      - "libexpatMTdMD"
+      - "libexpatwMTdMD"
+      - "expatMTdMD"
+      - "expatwMTdMD"
+      - "libexpatMTdMD"
+      - "libexpatwMTdMD"
+      - "expat"
+      - "expatw"
+      - "libexpat"
+      - "libexpatw"
+      - "expat"
+      - "expatw"
+      - "libexpat"
+      - "libexpatw"
+      - "expatMT"
+      - "expatwMT"
+      - "libexpatMT"
+      - "libexpatwMT"
+      - "expatMT"
+      - "expatwMT"
+      - "libexpatMT"
+      - "libexpatwMT"
+      - "expatMD"
+      - "expatwMD"
+      - "libexpatMD"
+      - "libexpatwMD"
+      - "expatMD"
+      - "expatwMD"
+      - "libexpatMD"
+      - "libexpatwMD"
+      - "expatMTMD"
+      - "expatwMTMD"
+      - "libexpatMTMD"
+      - "libexpatwMTMD"
+      - "expatMTMD"
+      - "expatwMTMD"
+      - "libexpatMTMD"
+      - "libexpatwMTMD"
+    candidate_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/"
+    searched_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/"
+    found: "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/libexpat.a"
+    search_context:
+      CMAKE_LIBRARY_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/manual-link"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/manual-link"
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/expat/vcpkg-cmake-wrapper.cmake:13 (find_library)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:52 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    mode: "library"
+    variable: "EXPAT_LIBRARY_RELEASE"
+    description: "Path to a library."
+    settings:
+      SearchFramework: "LAST"
+      SearchAppBundle: "LAST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "expat"
+      - "expatw"
+      - "libexpat"
+      - "libexpatw"
+      - "expat"
+      - "expatw"
+      - "libexpat"
+      - "libexpatw"
+      - "expatMT"
+      - "expatwMT"
+      - "libexpatMT"
+      - "libexpatwMT"
+      - "expatMT"
+      - "expatwMT"
+      - "libexpatMT"
+      - "libexpatwMT"
+      - "expatMD"
+      - "expatwMD"
+      - "libexpatMD"
+      - "libexpatwMD"
+      - "expatMD"
+      - "expatwMD"
+      - "libexpatMD"
+      - "libexpatwMD"
+      - "expatMTMD"
+      - "expatwMTMD"
+      - "libexpatMTMD"
+      - "libexpatwMTMD"
+      - "expatMTMD"
+      - "expatwMTMD"
+      - "libexpatMTMD"
+      - "libexpatwMTMD"
+    candidate_directories:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/"
+    found: "/tmp/vcpkg_installed_photosorter/x64-osx/lib/libexpat.a"
+    search_context:
+      CMAKE_LIBRARY_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/lib/manual-link"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug/lib/manual-link"
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_SYSTEM_LIBRARY_PATH:
+        - "/usr/lib/X11"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+  -
+    kind: "find_package-v1"
+    backtrace:
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/expat/vcpkg-cmake-wrapper.cmake:16 (_find_package)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:862 (include)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)"
+      - "/usr/local/share/cmake/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)"
+      - "/tmp/vcpkg_installed_photosorter/x64-osx/share/exiv2/exiv2Config.cmake:52 (find_dependency)"
+      - "/Users/maximilian/vcpkg/scripts/buildsystems/vcpkg.cmake:908 (_find_package)"
+      - "CMakeLists.txt:18 (find_package)"
+    name: "EXPAT"
+    configs:
+      -
+        filename: "expatConfig.cmake"
+        kind: "cmake"
+      -
+        filename: "expat-config.cmake"
+        kind: "cmake"
+    version_request:
+      exact: false
+    settings:
+      required: "required_explicit"
+      quiet: false
+      global: false
+      policy_scope: true
+      bypass_provider: false
+      names:
+        - "expat"
+      path_suffixes:
+        - ""
+      paths:
+        CMAKE_FIND_USE_CMAKE_PATH: true
+        CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+        CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+        CMAKE_FIND_USE_INSTALL_PREFIX: true
+        CMAKE_FIND_USE_PACKAGE_ROOT_PATH: true
+        CMAKE_FIND_USE_CMAKE_PACKAGE_REGISTRY: true
+        CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY: true
+        CMAKE_FIND_ROOT_PATH_MODE: "BOTH"
+    candidates:
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/expatConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/expat-config.cmake"
+        mode: "config"
+        reason: "no_exist"
+      -
+        path: "/tmp/vcpkg_installed_photosorter/x64-osx/share/expat/expatConfig.cmake"
+        mode: "config"
+        reason: "no_exist"
+    found:
+      path: "/tmp/vcpkg_installed_photosorter/x64-osx/share/expat/expat-config.cmake"
+      mode: "config"
+      version: "2.7.4"
+    search_context:
+      CMAKE_PREFIX_PATH:
+        - "/tmp/vcpkg_installed_photosorter/x64-osx"
+        - "/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      ENV{PATH}:
+        - "/Users/maximilian/.antigravity/antigravity/bin"
+        - "/Users/maximilian/.nvm/versions/node/v24.11.0/bin"
+        - "/Users/maximilian/scripts"
+        - "/Library/Frameworks/Python.framework/Versions/3.12/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/pkg/env/active/bin"
+        - "/opt/pmk/env/global/bin"
+        - "/Library/Apple/usr/bin"
+        - "/usr/local/share/dotnet"
+        - "~/.dotnet/tools"
+        - "/Users/maximilian/.cargo/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+        - "/Users/maximilian/.local/bin"
+        - "/Users/maximilian/Library/Python/3.12/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/usr/local"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+        - "/sw"
+        - "/opt/local"
+      CMAKE_FIND_ROOT_PATH: "/tmp/vcpkg_installed_photosorter/x64-osx;/tmp/vcpkg_installed_photosorter/x64-osx/debug"
+      CMAKE_SYSTEM_FRAMEWORK_PATH:
+        - "~/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/Network/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+        - "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+        - "/Library/Frameworks"
+        - "/Network/Library/Frameworks"
+        - "/System/Library/Frameworks"
+...

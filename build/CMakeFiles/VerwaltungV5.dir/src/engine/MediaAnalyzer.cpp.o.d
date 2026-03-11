@@ -1060,6 +1060,7 @@ CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o: \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/tiffimage.hpp \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/pgfimage.hpp \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/photoshop.hpp \
+  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/pngimage.hpp \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/preview.hpp \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/psdimage.hpp \
   /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/rafimage.hpp \

@@ -1,1 +1,20 @@
-build/\nvcpkg_installed/\n.DS_Store\n.gemini/\n
+# Build and dependency directories
+build/
+vcpkg_installed/
+bin/
+obj/
+
+# IDE and OS files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# App-specific runtime files
+imgui.ini
+*.log
+settings.json
+
+# Tooling
+.gemini/
