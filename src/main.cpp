@@ -81,6 +81,8 @@ int main(int, char**) {
 
         std::cout << "Application initialized. GUI Ready." << std::endl;
 
+        int exitCode = 0;
+
         // Main loop
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
@@ -93,6 +95,12 @@ int main(int, char**) {
             // Update and Render our UI
             appWindow.update();
             appWindow.render();
+
+            // Check for restart/rebuild requests
+            if (appWindow.shouldRestart()) {
+                exitCode = appWindow.shouldRebuild() ? 43 : 42;
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            }
 
             // Rendering
             ImGui::Render();
@@ -127,7 +135,7 @@ int main(int, char**) {
         glfwTerminate();
 
         std::cout << core::PROJECT_NAME << " Finished" << std::endl;
-        return 0;
+        return exitCode;
     } catch (const std::exception& e) {
         core::CrashHandler::writeCrashReport("Uncaught Exception: " + std::string(e.what()));
         return 1;
