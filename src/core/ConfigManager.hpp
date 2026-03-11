@@ -43,9 +43,10 @@ struct AppSettings {
     bool dryRun = false;
     bool autoStart = false;
     bool showPreview = true;
+    std::string lastVersion = "0.0.0";
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, dryRun, autoStart, showPreview)
-    };
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, dryRun, autoStart, showPreview, lastVersion)
+};
 
 class ConfigManager {
 public:
@@ -65,6 +66,7 @@ public:
     }
 
     std::filesystem::path getLogDirectory() const;
+    std::filesystem::path getCrashesDirectory() const;
 
 private:
     ConfigManager() = default;

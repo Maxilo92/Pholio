@@ -1,6 +1,7 @@
 Detecting compiler hash for triplet x64-osx...
 Compiler found: /usr/bin/c++
 The following packages are already installed:
+    backward-cpp:x64-osx@2023-11-24#1
   * brotli:x64-osx@1.2.0
     exiv2[core,xmp,png,bmff]:x64-osx@0.28.8
   * expat:x64-osx@2.7.4
@@ -18,6 +19,14 @@ The following packages are already installed:
   * vcpkg-tool-meson:x64-osx@1.9.0#3
     xxhash:x64-osx@0.8.3
   * zlib:x64-osx@1.3.1
+backward-cpp provides CMake targets:
+
+  find_package(Backward CONFIG REQUIRED)
+  # To use the header library
+  target_link_libraries(main PRIVATE Backward::Interface)
+  # To use the prebuilt library
+  target_link_libraries(main PRIVATE Backward::Backward)
+
 exiv2 provides CMake targets:
 
   # this is heuristically generated, and may not be correct
@@ -86,4 +95,4 @@ xxhash provides pkg-config modules:
   # extremely fast hash algorithm
   libxxhash
 
-All requested installations completed successfully in: 391 us
+All requested installations completed successfully in: 400 us

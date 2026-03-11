@@ -17,7 +17,7 @@ configure_file(
 # Find packages
 find_package(exiv2 CONFIG REQUIRED)
 
-# Find System FFmpeg (via PkgConfig - much faster on macOS/Linux)
+# Find System FFmpeg (via PkgConfig)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(AVFORMAT REQUIRED libavformat)
 pkg_check_modules(AVCODEC REQUIRED libavcodec)
@@ -27,6 +27,7 @@ find_package(imgui CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(implot CONFIG REQUIRED)
+find_package(Backward CONFIG REQUIRED)
 find_package(nfd CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(Stb REQUIRED)
@@ -35,6 +36,8 @@ find_package(xxHash CONFIG REQUIRED)
 # Executable
 add_executable(VerwaltungV5 
     src/main.cpp
+    src/core/CrashHandler.cpp
+    src/core/CrashHandler.hpp
     src/engine/Scanner.cpp
     src/engine/MediaAnalyzer.cpp
     src/engine/StructureAnalyzer.cpp
@@ -44,6 +47,7 @@ add_executable(VerwaltungV5
     src/engine/Worker.hpp
     src/core/ConfigManager.cpp
     src/core/ConfigManager.hpp
+    src/core/Loggable.hpp
     src/ui/AppWindow.cpp
     src/ui/AppWindow.hpp
     src/ui/DashboardWindow.cpp
@@ -63,6 +67,7 @@ add_executable(VerwaltungV5
 # Link dependencies
 target_link_libraries(VerwaltungV5 PRIVATE
     Exiv2::exiv2lib
+    Backward::Backward
     ${AVFORMAT_LIBRARIES}
     ${AVCODEC_LIBRARIES}
     ${AVUTIL_LIBRARIES}
@@ -75,10 +80,10 @@ target_link_libraries(VerwaltungV5 PRIVATE
     xxHash::xxhash
 )
 
-# stb is header-only and doesn't always provide a target in older vcpkg versions
+# stb is header-only
 target_include_directories(VerwaltungV5 PRIVATE ${Stb_INCLUDE_DIR})
 
-# Add include directories for FFmpeg and generated headers
+# Add include directories
 target_include_directories(VerwaltungV5 PRIVATE
     ${AVFORMAT_INCLUDE_DIRS}
     ${AVCODEC_INCLUDE_DIRS}

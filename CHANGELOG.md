@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2026-03-11
+
+### Fixed
+- **Persistent Window Layout**: Improved docking initialization logic to ensure user-customized layouts are correctly preserved across sessions via `imgui.ini`. Default layout is now only applied if no previous configuration exists or if explicitly reset.
+
 ## [0.5.1] - 2026-03-11
 
 ### Added

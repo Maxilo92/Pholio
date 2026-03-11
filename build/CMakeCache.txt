@@ -14,6 +14,9 @@
 # EXTERNAL cache entries
 ########################
 
+//The directory containing a CMake configuration file for Backward.
+Backward_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/share/backward-cpp
+
 //The directory containing a CMake configuration file for Brotli.
 Brotli_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/share/unofficial-brotli
 
@@ -149,16 +152,16 @@ CMAKE_PROJECT_NAME:STATIC=VerwaltungV5
 CMAKE_PROJECT_SPDX_LICENSE:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION:STATIC=0.5.1
+CMAKE_PROJECT_VERSION:STATIC=0.6.0
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_MAJOR:STATIC=0
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_MINOR:STATIC=5
+CMAKE_PROJECT_VERSION_MINOR:STATIC=6
 
 //Value Computed by CMake
-CMAKE_PROJECT_VERSION_PATCH:STATIC=1
+CMAKE_PROJECT_VERSION_PATCH:STATIC=0
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION_TWEAK:STATIC=
@@ -260,6 +263,51 @@ Iconv_INCLUDE_DIR:PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacO
 //iconv library (if not in the C library)
 Iconv_LIBRARY:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libiconv.tbd
 
+//Path to a file.
+LIBBFD_INCLUDE_DIR:PATH=LIBBFD_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBBFD_LIBRARY:FILEPATH=LIBBFD_LIBRARY-NOTFOUND
+
+//Path to a library.
+LIBBZ2_LIBRARY:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libbz2.tbd
+
+//Path to a file.
+LIBDL_INCLUDE_DIR:PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+
+//Path to a library.
+LIBDL_LIBRARY:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libdl.tbd
+
+//Path to a file.
+LIBDWARF_INCLUDE_DIR:PATH=LIBDWARF_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBDWARF_LIBRARY:FILEPATH=LIBDWARF_LIBRARY-NOTFOUND
+
+//Path to a file.
+LIBDW_INCLUDE_DIR:PATH=LIBDW_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBDW_LIBRARY:FILEPATH=LIBDW_LIBRARY-NOTFOUND
+
+//Path to a file.
+LIBELF_INCLUDE_DIR:PATH=LIBELF_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+LIBELF_LIBRARY:FILEPATH=LIBELF_LIBRARY-NOTFOUND
+
+//Path to a library.
+LIBLZMA_LIBRARY:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/liblzma.tbd
+
+//Path to a library.
+LIBPTHREAD_LIBRARY:FILEPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libpthread.tbd
+
+//Path to a library.
+LIBZSTD_LIBRARY:FILEPATH=/usr/local/lib/libzstd.dylib
+
+//Path to a library.
+LIBZ_LIBRARY:FILEPATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libz.a
+
 //Include for the OpenGL GLU library
 OPENGL_GLU_INCLUDE_DIR:PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework
 
@@ -277,6 +325,30 @@ PKG_CONFIG_ARGN:STRING=
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
+
+//Auto detect backward's stack details dependencies
+STACK_DETAILS_AUTO_DETECT:BOOL=TRUE
+
+//Use backtrace from (e)glibc for symbols resolution
+STACK_DETAILS_BACKTRACE_SYMBOL:BOOL=FALSE
+
+//Use libbfd to read debug info
+STACK_DETAILS_BFD:BOOL=FALSE
+
+//Use libdw to read debug info
+STACK_DETAILS_DW:BOOL=FALSE
+
+//Use libdwarf/libelf to read debug info
+STACK_DETAILS_DWARF:BOOL=FALSE
+
+//Use backtrace from (e)glibc for stack walking
+STACK_WALKING_BACKTRACE:BOOL=FALSE
+
+//Use libunwind for stack walking
+STACK_WALKING_LIBUNWIND:BOOL=FALSE
+
+//Use compiler's unwind API
+STACK_WALKING_UNWIND:BOOL=TRUE
 
 //Path to a file.
 Stb_INCLUDE_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/include
@@ -363,6 +435,9 @@ Z_VCPKG_CL:FILEPATH=Z_VCPKG_CL-NOTFOUND
 //The directory which contains the installed libraries for each
 // triplet
 _VCPKG_INSTALLED_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5
+
+//The directory containing a CMake configuration file for backward.
+backward_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/share/backward-cpp
 
 //The directory containing a CMake configuration file for exiv2.
 exiv2_DIR:PATH=/tmp/vcpkg_installed_verwaltungv5/x64-osx/share/exiv2
@@ -507,6 +582,18 @@ AVUTIL_libavutil_INCLUDEDIR:INTERNAL=
 AVUTIL_libavutil_LIBDIR:INTERNAL=
 AVUTIL_libavutil_PREFIX:INTERNAL=
 AVUTIL_libavutil_VERSION:INTERNAL=
+//ADVANCED property for variable: BACKWARD_DEFINITIONS
+BACKWARD_DEFINITIONS-ADVANCED:INTERNAL=1
+//BACKWARD_DEFINITIONS
+BACKWARD_DEFINITIONS:INTERNAL=BACKWARD_HAS_UNWIND=1;BACKWARD_HAS_LIBUNWIND=0;BACKWARD_HAS_BACKTRACE=0;BACKWARD_HAS_BACKTRACE_SYMBOL=1;BACKWARD_HAS_DW=0;BACKWARD_HAS_BFD=0;BACKWARD_HAS_DWARF=0
+//ADVANCED property for variable: BACKWARD_INCLUDE_DIRS
+BACKWARD_INCLUDE_DIRS-ADVANCED:INTERNAL=1
+//BACKWARD_INCLUDE_DIRS
+BACKWARD_INCLUDE_DIRS:INTERNAL=$<BUILD_INTERFACE:/Users/maximilian/Documents/Code/Verwaltung V5>;$<INSTALL_INTERFACE:>
+//ADVANCED property for variable: BACKWARD_LIBRARIES
+BACKWARD_LIBRARIES-ADVANCED:INTERNAL=1
+//BACKWARD_LIBRARIES
+BACKWARD_LIBRARIES:INTERNAL=
 //ADVANCED property for variable: CHARSET_LIBRARY_DEBUG
 CHARSET_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CHARSET_LIBRARY_RELEASE
@@ -648,6 +735,8 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 EXPAT_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: EXPAT_LIBRARY_RELEASE
 EXPAT_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//Details about finding Backward
+FIND_PACKAGE_MESSAGE_DETAILS_Backward:INTERNAL=[$<BUILD_INTERFACE:/Users/maximilian/Documents/Code/Verwaltung V5>;$<INSTALL_INTERFACE:>][v()]
 //Details about finding Iconv
 FIND_PACKAGE_MESSAGE_DETAILS_Iconv:INTERNAL=[/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libiconv.tbd][/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include][v()]
 //Details about finding OpenGL
@@ -668,6 +757,26 @@ Iconv_INCLUDE_DIR-ADVANCED:INTERNAL=1
 Iconv_IS_BUILT_IN:INTERNAL=
 //ADVANCED property for variable: Iconv_LIBRARY
 Iconv_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBBFD_INCLUDE_DIR
+LIBBFD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBBFD_LIBRARY
+LIBBFD_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDL_INCLUDE_DIR
+LIBDL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDL_LIBRARY
+LIBDL_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDWARF_INCLUDE_DIR
+LIBDWARF_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDWARF_LIBRARY
+LIBDWARF_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDW_INCLUDE_DIR
+LIBDW_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBDW_LIBRARY
+LIBDW_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBELF_INCLUDE_DIR
+LIBELF_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LIBELF_LIBRARY
+LIBELF_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_GLU_INCLUDE_DIR
 OPENGL_GLU_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_INCLUDE_DIR

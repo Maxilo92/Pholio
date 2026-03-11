@@ -2,6 +2,7 @@
   "name": "verwaltung-v5",
   "version-string": "0.5.0",
   "dependencies": [
+    "backward-cpp",
     {
       "name": "exiv2",
       "features": [

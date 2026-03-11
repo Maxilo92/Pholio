@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/core/ConfigManager.cpp" "CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o.d"
+  "/Users/maximilian/Documents/Code/Verwaltung V5/src/core/CrashHandler.cpp" "CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o.d"
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/engine/MediaAnalyzer.cpp" "CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o.d"
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/engine/Scanner.cpp" "CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.o.d"
   "/Users/maximilian/Documents/Code/Verwaltung V5/src/engine/Sorter.cpp" "CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.o" "gcc" "CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.o.d"

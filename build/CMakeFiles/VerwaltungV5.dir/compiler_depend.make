@@ -8521,6 +8521,7 @@ CMakeFiles/VerwaltungV5.dir/src/main.cpp.o: /Users/maximilian/Documents/Code/Ver
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/engine/Verifier.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/ConfigManager.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/CrashHandler.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/ConfigManager.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/LogWindow.hpp \
@@ -16092,6 +16093,8 @@ CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o: /Users/maximilian/Documents/Co
 /usr/local/include/GLFW/glfw3.h:
 
 /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/Texture.hpp:
+
+/Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/CrashHandler.hpp:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h:
 

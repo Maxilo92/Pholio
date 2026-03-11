@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o"
   "CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o.d"
+  "CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o"
+  "CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o.d"
   "CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o"
   "CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o.d"
   "CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.o"

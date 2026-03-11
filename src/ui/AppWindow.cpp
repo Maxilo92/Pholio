@@ -110,11 +110,15 @@ void AppWindow::renderMainDockspace() {
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
     }
 
-    // Initial Layout Setup
-    if (m_firstRun || ImGui::DockBuilderGetNode(dockspace_id) == NULL) {
+    // Initial Layout Setup: Only run if it's explicitly requested (Reset) OR if no node exists yet.
+    // We check if the dock node has children or exists to determine if we should build default.
+    ImGuiDockNode* node = (ImGuiDockNode*)ImGui::DockBuilderGetNode(dockspace_id);
+    bool is_empty = (node == NULL || (node->ChildNodes[0] == NULL && node->ChildNodes[1] == NULL && node->TabBar == NULL));
+
+    if (m_firstRun || is_empty) {
         ImGui::DockBuilderRemoveNode(dockspace_id);
-        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-        ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
+        ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->WorkSize);
         
         ImGuiID dock_main_id = dockspace_id;
         ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.30f, NULL, &dock_main_id);
@@ -184,7 +188,7 @@ void AppWindow::renderStatusBar() {
 
     if (ImGui::Begin("StatusBar", nullptr, window_flags)) {
         if (ImGui::BeginMenuBar()) {
-            ImGui::Text("PhotoSorter v0.5.1");
+            ImGui::Text("PhotoSorter v0.5.2");
             ImGui::Separator();
             
             bool isRunning = m_worker->isRunning();

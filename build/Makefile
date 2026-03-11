@@ -153,6 +153,30 @@ src/core/ConfigManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.s
 .PHONY : src/core/ConfigManager.cpp.s
 
+src/core/CrashHandler.o: src/core/CrashHandler.cpp.o
+.PHONY : src/core/CrashHandler.o
+
+# target to build an object file
+src/core/CrashHandler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o
+.PHONY : src/core/CrashHandler.cpp.o
+
+src/core/CrashHandler.i: src/core/CrashHandler.cpp.i
+.PHONY : src/core/CrashHandler.i
+
+# target to preprocess a source file
+src/core/CrashHandler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.i
+.PHONY : src/core/CrashHandler.cpp.i
+
+src/core/CrashHandler.s: src/core/CrashHandler.cpp.s
+.PHONY : src/core/CrashHandler.s
+
+# target to generate assembly for a file
+src/core/CrashHandler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.s
+.PHONY : src/core/CrashHandler.cpp.s
+
 src/engine/MediaAnalyzer.o: src/engine/MediaAnalyzer.cpp.o
 .PHONY : src/engine/MediaAnalyzer.o
 
@@ -501,6 +525,9 @@ help:
 	@echo "... src/core/ConfigManager.o"
 	@echo "... src/core/ConfigManager.i"
 	@echo "... src/core/ConfigManager.s"
+	@echo "... src/core/CrashHandler.o"
+	@echo "... src/core/CrashHandler.i"
+	@echo "... src/core/CrashHandler.s"
 	@echo "... src/engine/MediaAnalyzer.o"
 	@echo "... src/engine/MediaAnalyzer.i"
 	@echo "... src/engine/MediaAnalyzer.s"

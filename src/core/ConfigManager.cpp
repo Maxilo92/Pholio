@@ -49,6 +49,10 @@ std::filesystem::path ConfigManager::getLogDirectory() const {
     return getConfigPath().parent_path() / "logs";
 }
 
+std::filesystem::path ConfigManager::getCrashesDirectory() const {
+    return getConfigPath().parent_path() / "crashes";
+}
+
 std::filesystem::path ConfigManager::getConfigPath() const {
 #ifdef _WIN32
     const char* appData = std::getenv("APPDATA");

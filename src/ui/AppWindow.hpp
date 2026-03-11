@@ -41,7 +41,7 @@ private:
     bool m_showProgress = false;
     bool m_showLogs = true;
     bool m_showAbout = false;
-    bool m_firstRun = true;
+    bool m_firstRun = false;
 
     bool m_shouldRestart = false;
     bool m_shouldRebuild = false;

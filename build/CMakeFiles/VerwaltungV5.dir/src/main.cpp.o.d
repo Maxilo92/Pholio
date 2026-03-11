@@ -1135,6 +1135,7 @@ CMakeFiles/VerwaltungV5.dir/src/main.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../ui/LogWindow.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/build/generated/core/Config.hpp \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/CrashHandler.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/AppWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/SettingsWindow.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/../core/ConfigManager.hpp \
