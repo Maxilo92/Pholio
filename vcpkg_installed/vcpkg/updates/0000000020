@@ -1,0 +1,8 @@
+Package: ffmpeg-bin2c
+Version: 8.0.1
+Depends: vcpkg-cmake
+Architecture: x64-osx
+Multi-Arch: same
+Abi: 4fa4ce0c3f09af26749b7009120cf5ddb8013796e0681e8f2a2597e72bc860b0
+Description: Host tool bin2c for FFmpeg build
+Status: install ok half-installed

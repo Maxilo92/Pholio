@@ -1,0 +1,9 @@
+Package: inih
+Version: 62
+Depends: vcpkg-tool-meson
+Architecture: x64-osx
+Multi-Arch: same
+Abi: f83fd2b8333a5ad55c9eb76b9f9508400677ba304c345fa04e480c33beadc4f6
+Description: Simple .INI file parser
+Default-Features: cpp
+Status: install ok installed

@@ -1,0 +1,8 @@
+Package: exiv2
+Version: 0.28.8
+Depends: inih, libiconv, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-osx
+Multi-Arch: same
+Abi: 22871bdc8d5666acdc4e43cfb91c678292bfb9222f2ea1c65183f65ec69447a8
+Description: Image metadata library and tools
+Status: install ok installed

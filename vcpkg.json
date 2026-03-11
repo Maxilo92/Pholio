@@ -1,0 +1,21 @@
+{
+  "name": "photosorter-cpp",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "exiv2",
+    {
+      "name": "imgui",
+      "features": [
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    "glfw3",
+    "implot",
+    "nativefiledialog-extended",
+    "nlohmann-json",
+    "stb",
+    "xxhash"
+  ]
+}

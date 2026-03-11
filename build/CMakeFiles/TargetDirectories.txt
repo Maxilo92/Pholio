@@ -1,0 +1,3 @@
+/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/PhotoSorter.dir
+/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/edit_cache.dir
+/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/rebuild_cache.dir
