@@ -1,4 +1,4 @@
-# Implementierungsplan - PhotoSorter
+# Implementierungsplan - Pholio
 
 ## Phase 1: Projekt-Setup & Infrastruktur
 1. CMake Setup mit vcpkg für alle Bibliotheken.

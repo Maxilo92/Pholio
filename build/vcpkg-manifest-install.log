@@ -95,4 +95,4 @@ xxhash provides pkg-config modules:
   # extremely fast hash algorithm
   libxxhash
 
-All requested installations completed successfully in: 400 us
+All requested installations completed successfully in: 823 us

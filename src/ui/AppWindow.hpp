@@ -5,6 +5,7 @@
 #include "LogWindow.hpp"
 #include "DashboardWindow.hpp"
 #include "AboutWindow.hpp"
+#include "ChangelogWindow.hpp"
 #include "../engine/Worker.hpp"
 #include <memory>
 
@@ -28,6 +29,7 @@ private:
     void renderMainDockspace();
     void renderStatusBar();
     void setupStyle();
+    void checkVersionUpdate();
     
     std::unique_ptr<LogWindow> m_logWindow;
     std::unique_ptr<engine::Worker> m_worker;
@@ -35,12 +37,14 @@ private:
     std::unique_ptr<ProgressWindow> m_progressWindow;
     std::unique_ptr<DashboardWindow> m_dashboardWindow;
     std::unique_ptr<AboutWindow> m_aboutWindow;
+    std::unique_ptr<ChangelogWindow> m_changelogWindow;
 
     bool m_showDashboard = true;
     bool m_showSettings = false;
     bool m_showProgress = false;
     bool m_showLogs = true;
     bool m_showAbout = false;
+    bool m_showChangelog = false;
     bool m_firstRun = false;
 
     bool m_shouldRestart = false;

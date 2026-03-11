@@ -12,16 +12,36 @@ AppWindow::AppWindow()
       m_settingsWindow(std::make_unique<SettingsWindow>()),
       m_progressWindow(std::make_unique<ProgressWindow>(*m_worker)),
       m_dashboardWindow(std::make_unique<DashboardWindow>(*m_worker)),
-      m_aboutWindow(std::make_unique<AboutWindow>()) {
+      m_aboutWindow(std::make_unique<AboutWindow>()),
+      m_changelogWindow(std::make_unique<ChangelogWindow>()) {
     
     // Setup file logging
     m_logWindow->setupFileLogging(core::ConfigManager::getInstance().getLogDirectory());
 
     // Apply high-quality style
     setupStyle();
+
+    // Check for version update
+    checkVersionUpdate();
 }
 
 AppWindow::~AppWindow() = default;
+
+void AppWindow::checkVersionUpdate() {
+    auto settings = core::ConfigManager::getInstance().getSettings();
+    std::string currentVersion = core::PROJECT_VERSION;
+
+    if (settings.lastVersion != currentVersion) {
+        if (m_changelogWindow->loadNewEntries(settings.lastVersion)) {
+            m_showChangelog = true;
+        }
+        
+        // Update last version and save
+        settings.lastVersion = currentVersion;
+        core::ConfigManager::getInstance().setSettings(settings);
+        core::ConfigManager::getInstance().save();
+    }
+}
 
 void AppWindow::update() {
     ImGuiIO& io = ImGui::GetIO();
@@ -72,6 +92,10 @@ void AppWindow::render() {
 
     if (m_showAbout) {
         m_aboutWindow->render(&m_showAbout);
+    }
+
+    if (m_showChangelog) {
+        m_changelogWindow->render(&m_showChangelog);
     }
 
     renderStatusBar();
@@ -167,7 +191,14 @@ void AppWindow::renderMainDockspace() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help")) {
-            if (ImGui::MenuItem("About PhotoSorter")) {
+            if (ImGui::MenuItem("What's New")) {
+                auto settings = core::ConfigManager::getInstance().getSettings();
+                // Load all entries since some very old version to show all
+                m_changelogWindow->loadNewEntries("0.0.0");
+                m_showChangelog = true;
+            }
+            std::string aboutLabel = "About " + std::string(core::PROJECT_NAME);
+            if (ImGui::MenuItem(aboutLabel.c_str())) {
                 m_showAbout = true;
             }
             ImGui::EndMenu();
@@ -188,7 +219,7 @@ void AppWindow::renderStatusBar() {
 
     if (ImGui::Begin("StatusBar", nullptr, window_flags)) {
         if (ImGui::BeginMenuBar()) {
-            ImGui::Text("PhotoSorter v0.5.2");
+            ImGui::Text("%s v%s", core::PROJECT_NAME, core::PROJECT_VERSION);
             ImGui::Separator();
             
             bool isRunning = m_worker->isRunning();

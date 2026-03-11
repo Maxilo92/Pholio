@@ -1,6 +1,6 @@
 {
-  "name": "verwaltung-v5",
-  "version-string": "0.5.0",
+  "name": "pholio",
+  "version-string": "1.0.0-alpha",
   "dependencies": [
     "backward-cpp",
     {

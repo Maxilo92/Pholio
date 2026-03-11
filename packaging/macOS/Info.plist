@@ -5,15 +5,15 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
-    <string>PhotoSorter</string>
+    <string>Pholio</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
-    <string>com.photosorter.cpp</string>
+    <string>com.pholio.cpp</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>PhotoSorter</string>
+    <string>Pholio</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -29,6 +29,6 @@
     <key>NSCameraUsageDescription</key>
     <string>This app does not use the camera, but it is required by some frameworks.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>PhotoSorter needs access to your photo library to organize your media files.</string>
+    <string>Pholio needs access to your photo library to organize your media files.</string>
 </dict>
 </plist>

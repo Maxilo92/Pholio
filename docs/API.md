@@ -1,6 +1,6 @@
-# PhotoSorter C++ API Documentation
+# Pholio C++ API Documentation
 
-This document provides a technical overview of the core components and interfaces of the PhotoSorter application.
+This document provides a technical overview of the core components and interfaces of the Pholio application.
 
 ## Namespace: `engine`
 

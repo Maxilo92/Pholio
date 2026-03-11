@@ -2,7 +2,7 @@
 
 # Configuration
 CONFIG="Release"
-BINARY="./build/VerwaltungV5"
+BINARY="./build/Pholio"
 
 # Initial Build if binary doesn't exist
 if [ ! -f "$BINARY" ]; then
@@ -11,8 +11,8 @@ if [ ! -f "$BINARY" ]; then
 fi
 
 while true; do
-    echo "Starting VerwaltungV5..."
-    $BINARY
+    echo "Starting Pholio..."
+    "$BINARY"
     EXIT_CODE=$?
     
     if [ $EXIT_CODE -eq 42 ]; then

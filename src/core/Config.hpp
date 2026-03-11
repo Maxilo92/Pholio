@@ -1,6 +1,6 @@
 #pragma once
 
 namespace core {
-    inline constexpr const char* PROJECT_NAME = "PhotoSorter";
-    inline constexpr const char* PROJECT_VERSION = "0.5.2";
+    inline constexpr const char* PROJECT_NAME = "Pholio";
+    inline constexpr const char* PROJECT_VERSION = "0.6.0";
 }

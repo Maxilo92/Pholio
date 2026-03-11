@@ -1,9 +1,0 @@
-x64-osx/
-x64-osx/manual-tools/
-x64-osx/manual-tools/ffmpeg-bin2c/
-x64-osx/manual-tools/ffmpeg-bin2c/bin2c
-x64-osx/share/
-x64-osx/share/ffmpeg-bin2c/
-x64-osx/share/ffmpeg-bin2c/copyright
-x64-osx/share/ffmpeg-bin2c/vcpkg.spdx.json
-x64-osx/share/ffmpeg-bin2c/vcpkg_abi_info.txt

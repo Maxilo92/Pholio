@@ -1,6 +1,6 @@
-# PhotoSorter C++
+# Pholio C++
 
-**PhotoSorter C++** is a high-performance, desktop-class media organization tool designed for advanced users and photographers on Linux and macOS. It automates the process of organizing large collections of photos and videos into a consistent, date-based hierarchy while ensuring absolute data integrity through its strict "No-Loss Policy."
+**Pholio C++** is a high-performance, desktop-class media organization tool designed for advanced users and photographers on Linux and macOS. It automates the process of organizing large collections of photos and videos into a consistent, date-based hierarchy while ensuring absolute data integrity through its strict "No-Loss Policy."
 
 ## Key Features
 
@@ -57,7 +57,7 @@
 
 4. **Run the application:**
    ```bash
-   ./build/PhotoSorter
+   ./build/Pholio
    ```
 
 ## Usage

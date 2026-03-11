@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named VerwaltungV5
+# Target rules for targets named Pholio
 
 # Build rule for target.
-VerwaltungV5: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 VerwaltungV5
-.PHONY : VerwaltungV5
+Pholio: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Pholio
+.PHONY : Pholio
 
 # fast build rule for target.
-VerwaltungV5/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/build
-.PHONY : VerwaltungV5/fast
+Pholio/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/build
+.PHONY : Pholio/fast
 
 src/core/ConfigManager.o: src/core/ConfigManager.cpp.o
 .PHONY : src/core/ConfigManager.o
 
 # target to build an object file
 src/core/ConfigManager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/ConfigManager.cpp.o
 .PHONY : src/core/ConfigManager.cpp.o
 
 src/core/ConfigManager.i: src/core/ConfigManager.cpp.i
@@ -142,7 +142,7 @@ src/core/ConfigManager.i: src/core/ConfigManager.cpp.i
 
 # target to preprocess a source file
 src/core/ConfigManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/ConfigManager.cpp.i
 .PHONY : src/core/ConfigManager.cpp.i
 
 src/core/ConfigManager.s: src/core/ConfigManager.cpp.s
@@ -150,7 +150,7 @@ src/core/ConfigManager.s: src/core/ConfigManager.cpp.s
 
 # target to generate assembly for a file
 src/core/ConfigManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/ConfigManager.cpp.s
 .PHONY : src/core/ConfigManager.cpp.s
 
 src/core/CrashHandler.o: src/core/CrashHandler.cpp.o
@@ -158,7 +158,7 @@ src/core/CrashHandler.o: src/core/CrashHandler.cpp.o
 
 # target to build an object file
 src/core/CrashHandler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/CrashHandler.cpp.o
 .PHONY : src/core/CrashHandler.cpp.o
 
 src/core/CrashHandler.i: src/core/CrashHandler.cpp.i
@@ -166,7 +166,7 @@ src/core/CrashHandler.i: src/core/CrashHandler.cpp.i
 
 # target to preprocess a source file
 src/core/CrashHandler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/CrashHandler.cpp.i
 .PHONY : src/core/CrashHandler.cpp.i
 
 src/core/CrashHandler.s: src/core/CrashHandler.cpp.s
@@ -174,7 +174,7 @@ src/core/CrashHandler.s: src/core/CrashHandler.cpp.s
 
 # target to generate assembly for a file
 src/core/CrashHandler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/core/CrashHandler.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/core/CrashHandler.cpp.s
 .PHONY : src/core/CrashHandler.cpp.s
 
 src/engine/MediaAnalyzer.o: src/engine/MediaAnalyzer.cpp.o
@@ -182,7 +182,7 @@ src/engine/MediaAnalyzer.o: src/engine/MediaAnalyzer.cpp.o
 
 # target to build an object file
 src/engine/MediaAnalyzer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/MediaAnalyzer.cpp.o
 .PHONY : src/engine/MediaAnalyzer.cpp.o
 
 src/engine/MediaAnalyzer.i: src/engine/MediaAnalyzer.cpp.i
@@ -190,7 +190,7 @@ src/engine/MediaAnalyzer.i: src/engine/MediaAnalyzer.cpp.i
 
 # target to preprocess a source file
 src/engine/MediaAnalyzer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/MediaAnalyzer.cpp.i
 .PHONY : src/engine/MediaAnalyzer.cpp.i
 
 src/engine/MediaAnalyzer.s: src/engine/MediaAnalyzer.cpp.s
@@ -198,7 +198,7 @@ src/engine/MediaAnalyzer.s: src/engine/MediaAnalyzer.cpp.s
 
 # target to generate assembly for a file
 src/engine/MediaAnalyzer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/MediaAnalyzer.cpp.s
 .PHONY : src/engine/MediaAnalyzer.cpp.s
 
 src/engine/Scanner.o: src/engine/Scanner.cpp.o
@@ -206,7 +206,7 @@ src/engine/Scanner.o: src/engine/Scanner.cpp.o
 
 # target to build an object file
 src/engine/Scanner.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Scanner.cpp.o
 .PHONY : src/engine/Scanner.cpp.o
 
 src/engine/Scanner.i: src/engine/Scanner.cpp.i
@@ -214,7 +214,7 @@ src/engine/Scanner.i: src/engine/Scanner.cpp.i
 
 # target to preprocess a source file
 src/engine/Scanner.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Scanner.cpp.i
 .PHONY : src/engine/Scanner.cpp.i
 
 src/engine/Scanner.s: src/engine/Scanner.cpp.s
@@ -222,7 +222,7 @@ src/engine/Scanner.s: src/engine/Scanner.cpp.s
 
 # target to generate assembly for a file
 src/engine/Scanner.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Scanner.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Scanner.cpp.s
 .PHONY : src/engine/Scanner.cpp.s
 
 src/engine/Sorter.o: src/engine/Sorter.cpp.o
@@ -230,7 +230,7 @@ src/engine/Sorter.o: src/engine/Sorter.cpp.o
 
 # target to build an object file
 src/engine/Sorter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Sorter.cpp.o
 .PHONY : src/engine/Sorter.cpp.o
 
 src/engine/Sorter.i: src/engine/Sorter.cpp.i
@@ -238,7 +238,7 @@ src/engine/Sorter.i: src/engine/Sorter.cpp.i
 
 # target to preprocess a source file
 src/engine/Sorter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Sorter.cpp.i
 .PHONY : src/engine/Sorter.cpp.i
 
 src/engine/Sorter.s: src/engine/Sorter.cpp.s
@@ -246,7 +246,7 @@ src/engine/Sorter.s: src/engine/Sorter.cpp.s
 
 # target to generate assembly for a file
 src/engine/Sorter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Sorter.cpp.s
 .PHONY : src/engine/Sorter.cpp.s
 
 src/engine/StructureAnalyzer.o: src/engine/StructureAnalyzer.cpp.o
@@ -254,7 +254,7 @@ src/engine/StructureAnalyzer.o: src/engine/StructureAnalyzer.cpp.o
 
 # target to build an object file
 src/engine/StructureAnalyzer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/StructureAnalyzer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/StructureAnalyzer.cpp.o
 .PHONY : src/engine/StructureAnalyzer.cpp.o
 
 src/engine/StructureAnalyzer.i: src/engine/StructureAnalyzer.cpp.i
@@ -262,7 +262,7 @@ src/engine/StructureAnalyzer.i: src/engine/StructureAnalyzer.cpp.i
 
 # target to preprocess a source file
 src/engine/StructureAnalyzer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/StructureAnalyzer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/StructureAnalyzer.cpp.i
 .PHONY : src/engine/StructureAnalyzer.cpp.i
 
 src/engine/StructureAnalyzer.s: src/engine/StructureAnalyzer.cpp.s
@@ -270,7 +270,7 @@ src/engine/StructureAnalyzer.s: src/engine/StructureAnalyzer.cpp.s
 
 # target to generate assembly for a file
 src/engine/StructureAnalyzer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/StructureAnalyzer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/StructureAnalyzer.cpp.s
 .PHONY : src/engine/StructureAnalyzer.cpp.s
 
 src/engine/Verifier.o: src/engine/Verifier.cpp.o
@@ -278,7 +278,7 @@ src/engine/Verifier.o: src/engine/Verifier.cpp.o
 
 # target to build an object file
 src/engine/Verifier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Verifier.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Verifier.cpp.o
 .PHONY : src/engine/Verifier.cpp.o
 
 src/engine/Verifier.i: src/engine/Verifier.cpp.i
@@ -286,7 +286,7 @@ src/engine/Verifier.i: src/engine/Verifier.cpp.i
 
 # target to preprocess a source file
 src/engine/Verifier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Verifier.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Verifier.cpp.i
 .PHONY : src/engine/Verifier.cpp.i
 
 src/engine/Verifier.s: src/engine/Verifier.cpp.s
@@ -294,7 +294,7 @@ src/engine/Verifier.s: src/engine/Verifier.cpp.s
 
 # target to generate assembly for a file
 src/engine/Verifier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Verifier.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Verifier.cpp.s
 .PHONY : src/engine/Verifier.cpp.s
 
 src/engine/Worker.o: src/engine/Worker.cpp.o
@@ -302,7 +302,7 @@ src/engine/Worker.o: src/engine/Worker.cpp.o
 
 # target to build an object file
 src/engine/Worker.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Worker.cpp.o
 .PHONY : src/engine/Worker.cpp.o
 
 src/engine/Worker.i: src/engine/Worker.cpp.i
@@ -310,7 +310,7 @@ src/engine/Worker.i: src/engine/Worker.cpp.i
 
 # target to preprocess a source file
 src/engine/Worker.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Worker.cpp.i
 .PHONY : src/engine/Worker.cpp.i
 
 src/engine/Worker.s: src/engine/Worker.cpp.s
@@ -318,7 +318,7 @@ src/engine/Worker.s: src/engine/Worker.cpp.s
 
 # target to generate assembly for a file
 src/engine/Worker.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/engine/Worker.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/engine/Worker.cpp.s
 .PHONY : src/engine/Worker.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -326,7 +326,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -334,7 +334,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -342,7 +342,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/ui/AboutWindow.o: src/ui/AboutWindow.cpp.o
@@ -350,7 +350,7 @@ src/ui/AboutWindow.o: src/ui/AboutWindow.cpp.o
 
 # target to build an object file
 src/ui/AboutWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AboutWindow.cpp.o
 .PHONY : src/ui/AboutWindow.cpp.o
 
 src/ui/AboutWindow.i: src/ui/AboutWindow.cpp.i
@@ -358,7 +358,7 @@ src/ui/AboutWindow.i: src/ui/AboutWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/AboutWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AboutWindow.cpp.i
 .PHONY : src/ui/AboutWindow.cpp.i
 
 src/ui/AboutWindow.s: src/ui/AboutWindow.cpp.s
@@ -366,7 +366,7 @@ src/ui/AboutWindow.s: src/ui/AboutWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/AboutWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AboutWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AboutWindow.cpp.s
 .PHONY : src/ui/AboutWindow.cpp.s
 
 src/ui/AppWindow.o: src/ui/AppWindow.cpp.o
@@ -374,7 +374,7 @@ src/ui/AppWindow.o: src/ui/AppWindow.cpp.o
 
 # target to build an object file
 src/ui/AppWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AppWindow.cpp.o
 .PHONY : src/ui/AppWindow.cpp.o
 
 src/ui/AppWindow.i: src/ui/AppWindow.cpp.i
@@ -382,7 +382,7 @@ src/ui/AppWindow.i: src/ui/AppWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/AppWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AppWindow.cpp.i
 .PHONY : src/ui/AppWindow.cpp.i
 
 src/ui/AppWindow.s: src/ui/AppWindow.cpp.s
@@ -390,15 +390,39 @@ src/ui/AppWindow.s: src/ui/AppWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/AppWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/AppWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/AppWindow.cpp.s
 .PHONY : src/ui/AppWindow.cpp.s
+
+src/ui/ChangelogWindow.o: src/ui/ChangelogWindow.cpp.o
+.PHONY : src/ui/ChangelogWindow.o
+
+# target to build an object file
+src/ui/ChangelogWindow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ChangelogWindow.cpp.o
+.PHONY : src/ui/ChangelogWindow.cpp.o
+
+src/ui/ChangelogWindow.i: src/ui/ChangelogWindow.cpp.i
+.PHONY : src/ui/ChangelogWindow.i
+
+# target to preprocess a source file
+src/ui/ChangelogWindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ChangelogWindow.cpp.i
+.PHONY : src/ui/ChangelogWindow.cpp.i
+
+src/ui/ChangelogWindow.s: src/ui/ChangelogWindow.cpp.s
+.PHONY : src/ui/ChangelogWindow.s
+
+# target to generate assembly for a file
+src/ui/ChangelogWindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ChangelogWindow.cpp.s
+.PHONY : src/ui/ChangelogWindow.cpp.s
 
 src/ui/DashboardWindow.o: src/ui/DashboardWindow.cpp.o
 .PHONY : src/ui/DashboardWindow.o
 
 # target to build an object file
 src/ui/DashboardWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/DashboardWindow.cpp.o
 .PHONY : src/ui/DashboardWindow.cpp.o
 
 src/ui/DashboardWindow.i: src/ui/DashboardWindow.cpp.i
@@ -406,7 +430,7 @@ src/ui/DashboardWindow.i: src/ui/DashboardWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/DashboardWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/DashboardWindow.cpp.i
 .PHONY : src/ui/DashboardWindow.cpp.i
 
 src/ui/DashboardWindow.s: src/ui/DashboardWindow.cpp.s
@@ -414,7 +438,7 @@ src/ui/DashboardWindow.s: src/ui/DashboardWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/DashboardWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/DashboardWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/DashboardWindow.cpp.s
 .PHONY : src/ui/DashboardWindow.cpp.s
 
 src/ui/LogWindow.o: src/ui/LogWindow.cpp.o
@@ -422,7 +446,7 @@ src/ui/LogWindow.o: src/ui/LogWindow.cpp.o
 
 # target to build an object file
 src/ui/LogWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/LogWindow.cpp.o
 .PHONY : src/ui/LogWindow.cpp.o
 
 src/ui/LogWindow.i: src/ui/LogWindow.cpp.i
@@ -430,7 +454,7 @@ src/ui/LogWindow.i: src/ui/LogWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/LogWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/LogWindow.cpp.i
 .PHONY : src/ui/LogWindow.cpp.i
 
 src/ui/LogWindow.s: src/ui/LogWindow.cpp.s
@@ -438,7 +462,7 @@ src/ui/LogWindow.s: src/ui/LogWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/LogWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/LogWindow.cpp.s
 .PHONY : src/ui/LogWindow.cpp.s
 
 src/ui/ProgressWindow.o: src/ui/ProgressWindow.cpp.o
@@ -446,7 +470,7 @@ src/ui/ProgressWindow.o: src/ui/ProgressWindow.cpp.o
 
 # target to build an object file
 src/ui/ProgressWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ProgressWindow.cpp.o
 .PHONY : src/ui/ProgressWindow.cpp.o
 
 src/ui/ProgressWindow.i: src/ui/ProgressWindow.cpp.i
@@ -454,7 +478,7 @@ src/ui/ProgressWindow.i: src/ui/ProgressWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/ProgressWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ProgressWindow.cpp.i
 .PHONY : src/ui/ProgressWindow.cpp.i
 
 src/ui/ProgressWindow.s: src/ui/ProgressWindow.cpp.s
@@ -462,7 +486,7 @@ src/ui/ProgressWindow.s: src/ui/ProgressWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/ProgressWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/ProgressWindow.cpp.s
 .PHONY : src/ui/ProgressWindow.cpp.s
 
 src/ui/SettingsWindow.o: src/ui/SettingsWindow.cpp.o
@@ -470,7 +494,7 @@ src/ui/SettingsWindow.o: src/ui/SettingsWindow.cpp.o
 
 # target to build an object file
 src/ui/SettingsWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/SettingsWindow.cpp.o
 .PHONY : src/ui/SettingsWindow.cpp.o
 
 src/ui/SettingsWindow.i: src/ui/SettingsWindow.cpp.i
@@ -478,7 +502,7 @@ src/ui/SettingsWindow.i: src/ui/SettingsWindow.cpp.i
 
 # target to preprocess a source file
 src/ui/SettingsWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/SettingsWindow.cpp.i
 .PHONY : src/ui/SettingsWindow.cpp.i
 
 src/ui/SettingsWindow.s: src/ui/SettingsWindow.cpp.s
@@ -486,7 +510,7 @@ src/ui/SettingsWindow.s: src/ui/SettingsWindow.cpp.s
 
 # target to generate assembly for a file
 src/ui/SettingsWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/SettingsWindow.cpp.s
 .PHONY : src/ui/SettingsWindow.cpp.s
 
 src/ui/Texture.o: src/ui/Texture.cpp.o
@@ -494,7 +518,7 @@ src/ui/Texture.o: src/ui/Texture.cpp.o
 
 # target to build an object file
 src/ui/Texture.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/Texture.cpp.o
 .PHONY : src/ui/Texture.cpp.o
 
 src/ui/Texture.i: src/ui/Texture.cpp.i
@@ -502,7 +526,7 @@ src/ui/Texture.i: src/ui/Texture.cpp.i
 
 # target to preprocess a source file
 src/ui/Texture.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/Texture.cpp.i
 .PHONY : src/ui/Texture.cpp.i
 
 src/ui/Texture.s: src/ui/Texture.cpp.s
@@ -510,7 +534,7 @@ src/ui/Texture.s: src/ui/Texture.cpp.s
 
 # target to generate assembly for a file
 src/ui/Texture.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VerwaltungV5.dir/build.make CMakeFiles/VerwaltungV5.dir/src/ui/Texture.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pholio.dir/build.make CMakeFiles/Pholio.dir/src/ui/Texture.cpp.s
 .PHONY : src/ui/Texture.cpp.s
 
 # Help Target
@@ -521,7 +545,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... VerwaltungV5"
+	@echo "... Pholio"
 	@echo "... src/core/ConfigManager.o"
 	@echo "... src/core/ConfigManager.i"
 	@echo "... src/core/ConfigManager.s"
@@ -555,6 +579,9 @@ help:
 	@echo "... src/ui/AppWindow.o"
 	@echo "... src/ui/AppWindow.i"
 	@echo "... src/ui/AppWindow.s"
+	@echo "... src/ui/ChangelogWindow.o"
+	@echo "... src/ui/ChangelogWindow.i"
+	@echo "... src/ui/ChangelogWindow.s"
 	@echo "... src/ui/DashboardWindow.o"
 	@echo "... src/ui/DashboardWindow.i"
 	@echo "... src/ui/DashboardWindow.s"

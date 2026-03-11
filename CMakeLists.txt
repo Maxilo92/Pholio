@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 file(READ "VERSION" PROJECT_VERSION_FILE)
 string(STRIP "${PROJECT_VERSION_FILE}" PROJECT_VERSION_STR)
 
-project(VerwaltungV5 VERSION ${PROJECT_VERSION_STR} LANGUAGES CXX)
+project(Pholio VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,7 +34,7 @@ find_package(Stb REQUIRED)
 find_package(xxHash CONFIG REQUIRED)
 
 # Executable
-add_executable(VerwaltungV5 
+add_executable(Pholio 
     src/main.cpp
     src/core/CrashHandler.cpp
     src/core/CrashHandler.hpp
@@ -54,6 +54,8 @@ add_executable(VerwaltungV5
     src/ui/DashboardWindow.hpp
     src/ui/AboutWindow.cpp
     src/ui/AboutWindow.hpp
+    src/ui/ChangelogWindow.cpp
+    src/ui/ChangelogWindow.hpp
     src/ui/SettingsWindow.cpp
     src/ui/SettingsWindow.hpp
     src/ui/LogWindow.cpp
@@ -65,7 +67,7 @@ add_executable(VerwaltungV5
 )
 
 # Link dependencies
-target_link_libraries(VerwaltungV5 PRIVATE
+target_link_libraries(Pholio PRIVATE
     Exiv2::exiv2lib
     Backward::Backward
     ${AVFORMAT_LIBRARIES}
@@ -81,10 +83,10 @@ target_link_libraries(VerwaltungV5 PRIVATE
 )
 
 # stb is header-only
-target_include_directories(VerwaltungV5 PRIVATE ${Stb_INCLUDE_DIR})
+target_include_directories(Pholio PRIVATE ${Stb_INCLUDE_DIR})
 
 # Add include directories
-target_include_directories(VerwaltungV5 PRIVATE
+target_include_directories(Pholio PRIVATE
     ${AVFORMAT_INCLUDE_DIRS}
     ${AVCODEC_INCLUDE_DIRS}
     ${AVUTIL_INCLUDE_DIRS}
@@ -93,4 +95,4 @@ target_include_directories(VerwaltungV5 PRIVATE
 )
 
 # Output build system status
-message(STATUS "VerwaltungV5 version ${PROJECT_VERSION_STR} build system initialized")
+message(STATUS "Pholio version ${PROJECT_VERSION_STR} build system initialized")

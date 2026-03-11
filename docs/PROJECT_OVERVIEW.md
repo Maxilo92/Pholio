@@ -1,4 +1,4 @@
-# PhotoSorter C++ - Projektübersicht
+# Pholio C++ - Projektübersicht
 
 ## Zielsetzung
 Entwicklung einer robusten Desktop-Anwendung zur automatisierten Sortierung von Fotos und Videos basierend auf deren Metadaten (EXIF). Die Anwendung bietet eine moderne grafische Benutzeroberfläche mit Echtzeit-Statistiken und höchster Datensicherheit.

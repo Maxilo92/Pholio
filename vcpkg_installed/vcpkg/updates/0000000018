@@ -1,7 +1,0 @@
-Package: vcpkg-pkgconfig-get-modules
-Version: 2024-04-03
-Depends: pkgconf
-Architecture: x64-osx
-Multi-Arch: same
-Abi: bfc097cd255b443b3c63826d7c870b494bcb58a3ab827ebccb84d708895585e9
-Status: install ok half-installed
