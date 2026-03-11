@@ -173,6 +173,11 @@ void DashboardWindow::renderStatus() {
         ImGui::Text("%s", status.c_str()); ImGui::NextColumn();
 
         if (isRunning || progress > 0.0f) {
+            ImGui::Text("Data Processed:"); ImGui::NextColumn();
+            ImGui::Text("%.2f / %.2f GB", 
+                       static_cast<double>(m_worker.getProcessedBytes()) / (1024.0 * 1024.0 * 1024.0),
+                       static_cast<double>(m_worker.getTotalBytes()) / (1024.0 * 1024.0 * 1024.0)); ImGui::NextColumn();
+
             ImGui::Text("Files Processed:"); ImGui::NextColumn();
             ImGui::Text("%d / %d", m_worker.getProcessedFiles(), m_worker.getTotalFiles()); ImGui::NextColumn();
 

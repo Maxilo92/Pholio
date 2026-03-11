@@ -66,7 +66,14 @@ void Worker::run() {
         auto tasks = scanner.scan();
 
         m_totalFiles = static_cast<int>(tasks.size());
-        m_logWindow.info("Found " + std::to_string(m_totalFiles) + " files to process.");
+        uint64_t totalBytes = 0;
+        for (const auto& task : tasks) {
+            totalBytes += task.metadata.fileSize;
+        }
+        m_totalBytes = totalBytes;
+        
+        m_logWindow.info("Found " + std::to_string(m_totalFiles) + " files to process (" + 
+                           std::to_string(totalBytes / (1024 * 1024)) + " MB).");
 
         if (m_totalFiles == 0) {
             m_logWindow.warn("No media files found in source directory.");

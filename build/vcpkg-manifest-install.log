@@ -1,11 +1,11 @@
 Detecting compiler hash for triplet x64-osx...
 Compiler found: /usr/bin/c++
-The following packages will be built and installed:
+The following packages are already installed:
   * brotli:x64-osx@1.2.0
-    exiv2[bmff,core,png,xmp]:x64-osx@0.28.8
+    exiv2[core,xmp,png,bmff]:x64-osx@0.28.8
   * expat:x64-osx@2.7.4
     glfw3:x64-osx@3.4#1
-    imgui[core,docking-experimental,glfw-binding,opengl3-binding]:x64-osx@1.91.9
+    imgui[core,opengl3-binding,glfw-binding,docking-experimental]:x64-osx@1.91.9
     implot:x64-osx@0.17
   * inih[core,cpp]:x64-osx@62
   * libiconv:x64-osx@1.18#3
@@ -18,69 +18,6 @@ The following packages will be built and installed:
   * vcpkg-tool-meson:x64-osx@1.9.0#3
     xxhash:x64-osx@0.8.3
   * zlib:x64-osx@1.3.1
-Additional packages (*) will be modified to complete this operation.
-Restored 17 package(s) from /Users/maximilian/.cache/vcpkg/archives in 7.6 s. Use --debug to see more details.
-Installing 1/17 vcpkg-cmake-config:x64-osx@2024-05-23...
-vcpkg-cmake-config:x64-osx@2024-05-23 package ABI: 4329d5ec5298303ca97681b15ec13d759275dae8c17a52d353fe212cb879928e
-Elapsed time to handle vcpkg-cmake-config:x64-osx: 78.4 ms
-Installing 2/17 vcpkg-cmake:x64-osx@2024-04-23...
-vcpkg-cmake:x64-osx@2024-04-23 package ABI: 17c45057046d8ee98921d5add98ce99296ce14bdf87aee114dcda4fb837686a4
-Elapsed time to handle vcpkg-cmake:x64-osx: 77.1 ms
-Installing 3/17 expat:x64-osx@2.7.4...
-expat:x64-osx@2.7.4 package ABI: 5001c9293c6001c68c921b042d54201e4259806db6e46e650969486e878f0b40
-Elapsed time to handle expat:x64-osx: 98.2 ms
-Installing 4/17 zlib:x64-osx@1.3.1...
-zlib:x64-osx@1.3.1 package ABI: c1a93dbe6d9939fc95146d8042504577b76a605ae53f10e6ecf08ce5f41cd40b
-Elapsed time to handle zlib:x64-osx: 61.4 ms
-Installing 5/17 libiconv:x64-osx@1.18#3...
-libiconv:x64-osx@1.18#3 package ABI: 080db03a4daad5b9a393f1fb4157d9324be0fda58bb5dbd66767cf87f21a249e
-Elapsed time to handle libiconv:x64-osx: 78.6 ms
-Installing 6/17 vcpkg-cmake-get-vars:x64-osx@2025-05-29...
-vcpkg-cmake-get-vars:x64-osx@2025-05-29 package ABI: 4a86c3f7315709f13fc10313bffcf56e21d668677b29d444f01e1650d3293b91
-Elapsed time to handle vcpkg-cmake-get-vars:x64-osx: 7.32 ms
-Installing 7/17 vcpkg-tool-meson:x64-osx@1.9.0#3...
-vcpkg-tool-meson:x64-osx@1.9.0#3 package ABI: 043c2253827d02b6090a5f83a1f3d4d8298add0f8c8834bfe7d6b000e28e3e79
-Elapsed time to handle vcpkg-tool-meson:x64-osx: 7.17 ms
-Installing 8/17 inih[core,cpp]:x64-osx@62...
-inih[core,cpp]:x64-osx@62 package ABI: f83fd2b8333a5ad55c9eb76b9f9508400677ba304c345fa04e480c33beadc4f6
-Elapsed time to handle inih:x64-osx: 9.44 ms
-Installing 9/17 brotli:x64-osx@1.2.0...
-brotli:x64-osx@1.2.0 package ABI: e32105b06a6b9d84d8eafe87c7be8efb34b2d07d322e9bd108002212457ac34f
-Elapsed time to handle brotli:x64-osx: 12 ms
-Installing 10/17 exiv2[bmff,core,png,xmp]:x64-osx@0.28.8...
-exiv2[bmff,core,png,xmp]:x64-osx@0.28.8 package ABI: 3bae49406d8c5f4fd8922fe0b8570435ec994e73c88260bb1a09e716d5fe49ea
-Elapsed time to handle exiv2:x64-osx: 23 ms
-Installing 11/17 glfw3:x64-osx@3.4#1...
-glfw3:x64-osx@3.4#1 package ABI: 9484b7dcac7fe0270040a4f8cbb30a6f09b7ea098aa083012b07017ed0cd5b5c
-Elapsed time to handle glfw3:x64-osx: 8.57 ms
-Installing 12/17 imgui[core,docking-experimental,glfw-binding,opengl3-binding]:x64-osx@1.91.9...
-imgui[core,docking-experimental,glfw-binding,opengl3-binding]:x64-osx@1.91.9 package ABI: 122448853c8e0b591b13723b5a48f113f91a57d63daff6e1279fcd1c576bf08a
-Elapsed time to handle imgui:x64-osx: 12.2 ms
-Installing 13/17 implot:x64-osx@0.17...
-implot:x64-osx@0.17 package ABI: 2068b9eda1dabf77aaee7996a3a8f4ae88b5de636f0348bfe2e1c487377019c3
-Elapsed time to handle implot:x64-osx: 7.02 ms
-Installing 14/17 nativefiledialog-extended:x64-osx@1.3.0...
-nativefiledialog-extended:x64-osx@1.3.0 package ABI: 33a11b41b04cbfaab54680770d83bb2b573323221891ec82ae8f234bbf2d1385
-Elapsed time to handle nativefiledialog-extended:x64-osx: 8.14 ms
-Installing 15/17 nlohmann-json:x64-osx@3.12.0#2...
-nlohmann-json:x64-osx@3.12.0#2 package ABI: 506831cdd44fd5082a3614a47eb7d93dd971378035384f5390ef99736c48dcb7
-Elapsed time to handle nlohmann-json:x64-osx: 17.7 ms
-Installing 16/17 stb:x64-osx@2024-07-29#1...
-stb:x64-osx@2024-07-29#1 package ABI: f89ae7e23177860818695c7d421fb980750afb3a4f73356829b7b406d3471f69
-Elapsed time to handle stb:x64-osx: 11.5 ms
-Installing 17/17 xxhash:x64-osx@0.8.3...
-xxhash:x64-osx@0.8.3 package ABI: 33e9b3769a04e95b153bb89d3e7d70569b7c84703d4631ed3e6faf06f87b5aa4
-Elapsed time to handle xxhash:x64-osx: 9.14 ms
-Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
-Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
-Packages installed in this vcpkg installation declare the following licenses:
-(MIT OR CC-PDDC)
-Apache-2.0
-BSD-2-Clause
-BSD-3-Clause
-GPL-2.0-or-later
-MIT
-Zlib
 exiv2 provides CMake targets:
 
   # this is heuristically generated, and may not be correct
@@ -149,4 +86,4 @@ xxhash provides pkg-config modules:
   # extremely fast hash algorithm
   libxxhash
 
-All requested installations completed successfully in: 538 ms
+All requested installations completed successfully in: 664 us
