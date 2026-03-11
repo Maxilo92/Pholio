@@ -1015,8 +1015,8 @@ CMakeFiles/VerwaltungV5.dir/src/engine/Sorter.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../ui/LogWindow.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imgui.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imconfig.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/float.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/float.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/float.h \

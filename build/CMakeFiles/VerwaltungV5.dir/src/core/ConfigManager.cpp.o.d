@@ -980,36 +980,36 @@ CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/path_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/recursive_directory_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/u8path.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/json.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/adl_serializer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/abi_macros.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/from_json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/adl_serializer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/abi_macros.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/from_json.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/valarray \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/exceptions.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/value_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/macro_scope.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/detected.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/void_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/thirdparty/hedley/hedley.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/exceptions.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/value_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/macro_scope.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/detected.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/void_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cassert \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_escape.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/position_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/cpp_future.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/type_traits.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iterator_traits.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/call_std/begin.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/call_std/end.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/json_fwd.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_concat.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/identity_tag.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/std_fs.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/to_json.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_escape.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/position_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/cpp_future.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/type_traits.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iterator_traits.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/call_std/begin.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/call_std/end.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/json_fwd.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_concat.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/identity_tag.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/std_fs.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/to_json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iteration_proxy.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ranges \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/all.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/compose.h \
@@ -1043,11 +1043,11 @@ CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/transform_view.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/views.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/istream_view.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_utils.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/byte_container_with_subtype.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/hash.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/binary_reader.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/input_adapters.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_utils.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/byte_container_with_subtype.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/hash.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/binary_reader.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/input_adapters.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/numeric \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/accumulate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/adjacent_difference.h \
@@ -1065,25 +1065,25 @@ CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/saturation_arithmetic.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/execution \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_execution_policy.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/json_sax.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/lexer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/is_sax.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/parser.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/internal_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/primitive_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iter_impl.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_custom_base_class.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_pointer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_ref.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/binary_writer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/output_adapters.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/serializer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/to_chars.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/ordered_map.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/json_sax.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/lexer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/is_sax.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/parser.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/internal_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iter_impl.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_custom_base_class.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_pointer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_ref.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/binary_writer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/output_adapters.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/serializer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/to_chars.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/ordered_map.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/any \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/macro_unscope.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/macro_unscope.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../engine/Sorter.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../engine/Types.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/chrono \
@@ -1119,8 +1119,8 @@ CMakeFiles/VerwaltungV5.dir/src/core/ConfigManager.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../ui/LogWindow.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imgui.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imconfig.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/float.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/float.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/float.h \

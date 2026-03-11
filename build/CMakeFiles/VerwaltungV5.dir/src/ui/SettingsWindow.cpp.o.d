@@ -1,9 +1,8 @@
 CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/SettingsWindow.cpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/SettingsWindow.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imgui.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imconfig.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/float.h \
+  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/../core/ConfigManager.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/filesystem \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config_site \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/abi.h \
@@ -11,65 +10,6 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/platform.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/language.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/float.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/float.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_header_macro.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg___gnuc_va_list.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_list.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_arg.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg___va_copy.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_copy.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stddef.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stddef.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stddef.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_header_macro.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_ptrdiff_t.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_size_t.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_wchar_t.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_null.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_nullptr_t.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_max_align_t.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_offsetof.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/string.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_string.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_bounds.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_symbol_aliasing.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_posix_availability.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/ptrcheck.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/i386/_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_size_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_null.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/i386/types.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int8_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int16_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int32_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int64_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int8_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int16_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int32_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int64_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_uintptr_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_ssize_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_strings.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
-  /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/../core/ConfigManager.hpp \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/filesystem \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/copy_options.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/directory_entry.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__chrono/time_point.h \
@@ -160,10 +100,24 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdint.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdint.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int8_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int16_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int32_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_int64_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_uint8_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_uint16_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_uint32_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_uint64_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_symbol_aliasing.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_posix_availability.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/ptrcheck.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/i386/_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_intptr_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_uintptr_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_intmax_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types/_uintmax_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_trivially_destructible.h \
@@ -213,7 +167,21 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ctime \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/time.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_time.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_bounds.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_clock_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/i386/types.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int8_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int16_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int32_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_int64_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_null.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_size_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_time_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_timespec.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/filesystem_error.h \
@@ -257,7 +225,18 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_callable.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/initializer_list \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstddef \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stddef.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stddef.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stddef.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_header_macro.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_ptrdiff_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_size_t.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_rsize_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_wchar_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_null.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_nullptr_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_max_align_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_offsetof.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__cstddef/byte.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/byte.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__cstddef/max_align_t.h \
@@ -307,6 +286,13 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/wchar.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_wchar.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_mbstate_t.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_header_macro.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg___gnuc_va_list.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_list.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_arg.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg___va_copy.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stdarg_va_copy.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdio.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdio.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_stdio.h \
@@ -316,6 +302,7 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_seek_set.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_ctermid.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_off_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_ssize_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__mbstate_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/find_if.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/remove_if.h \
@@ -336,6 +323,12 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_trivially_relocatable.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/piecewise_construct.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstring \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/string.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_string.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_strings.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/string.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/memory.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/memory_resource.h \
@@ -988,34 +981,36 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/path_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/recursive_directory_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/u8path.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/json.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/adl_serializer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/abi_macros.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/from_json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/adl_serializer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/abi_macros.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/from_json.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/valarray \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/exceptions.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/value_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/macro_scope.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/detected.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/void_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/thirdparty/hedley/hedley.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/exceptions.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/value_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/macro_scope.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/detected.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/void_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cassert \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_escape.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/position_t.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/cpp_future.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/type_traits.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iterator_traits.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/call_std/begin.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/call_std/end.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/json_fwd.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_concat.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/identity_tag.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/std_fs.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/to_json.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_escape.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/position_t.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/cpp_future.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/type_traits.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iterator_traits.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/call_std/begin.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/call_std/end.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/json_fwd.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_concat.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/identity_tag.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/std_fs.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/to_json.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iteration_proxy.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ranges \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/all.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/compose.h \
@@ -1049,11 +1044,11 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/transform_view.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/views.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/istream_view.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/string_utils.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/byte_container_with_subtype.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/hash.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/binary_reader.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/input_adapters.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/string_utils.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/byte_container_with_subtype.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/hash.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/binary_reader.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/input_adapters.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/numeric \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/accumulate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/adjacent_difference.h \
@@ -1071,25 +1066,25 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/saturation_arithmetic.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/execution \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_execution_policy.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/json_sax.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/lexer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/meta/is_sax.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/input/parser.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/internal_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/primitive_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/iter_impl.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_custom_base_class.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_pointer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/json_ref.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/binary_writer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/output_adapters.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/output/serializer.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/conversions/to_chars.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/ordered_map.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/json_sax.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/lexer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/meta/is_sax.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/input/parser.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/internal_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/iter_impl.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_custom_base_class.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_pointer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/json_ref.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/binary_writer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/output_adapters.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/output/serializer.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/conversions/to_chars.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/ordered_map.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/any \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/detail/macro_unscope.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/detail/macro_unscope.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/../core/../engine/Sorter.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/ui/../core/../engine/Types.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/chrono \
@@ -1125,5 +1120,10 @@ CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../ui/LogWindow.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nfd.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/nfd.h
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/float.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/float.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/float.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nfd.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/nfd.h

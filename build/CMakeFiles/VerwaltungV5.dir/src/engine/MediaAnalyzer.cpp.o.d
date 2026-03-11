@@ -1014,61 +1014,61 @@ CMakeFiles/VerwaltungV5.dir/src/engine/MediaAnalyzer.cpp.o: \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/Loggable.hpp \
   /Users/maximilian/Documents/Code/Verwaltung\ V5/src/core/../ui/LogWindow.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/fstream \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imgui.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/imconfig.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imgui.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/imconfig.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/float.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/float.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/float.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_static_assert.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/exiv2.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/basicio.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/exiv2lib_export.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/error.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/config.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/exv_conf.h \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/types.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/slice.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/exiv2.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/basicio.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/exiv2lib_export.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/error.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/config.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/exv_conf.h \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/types.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/slice.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cassert \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/bmffimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/image.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/exif.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/metadatum.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/value.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/bmffimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/image.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/exif.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/metadatum.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/value.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/tags.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/tags.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/list \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/image_types.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/iptc.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/datasets.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/xmp_exiv2.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/properties.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/image_types.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/iptc.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/datasets.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/xmp_exiv2.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/properties.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/set \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/bmpimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/convert.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/cr2image.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/crwimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/easyaccess.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/epsimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/futils.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/gifimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/jp2image.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/jpgimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/mrwimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/orfimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/tiffimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/pgfimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/photoshop.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/pngimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/preview.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/psdimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/rafimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/rw2image.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/tgaimage.hpp \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/version.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/bmpimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/convert.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/cr2image.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/crwimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/easyaccess.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/epsimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/futils.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/gifimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/jp2image.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/jpgimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/mrwimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/orfimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/tiffimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/pgfimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/photoshop.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/pngimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/preview.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/psdimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/rafimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/rw2image.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/tgaimage.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/version.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/regex \
-  /tmp/vcpkg_installed_photosorter/x64-osx/include/exiv2/xmpsidecar.hpp \
+  /tmp/vcpkg_installed_verwaltungv5/x64-osx/include/exiv2/xmpsidecar.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream \
   /usr/local/Cellar/ffmpeg/8.0.1_4/include/libavformat/avformat.h \
   /usr/local/Cellar/ffmpeg/8.0.1_4/include/libavcodec/codec_par.h \

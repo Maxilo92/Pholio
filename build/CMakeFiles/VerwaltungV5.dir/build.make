@@ -303,21 +303,21 @@ VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/SettingsWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/LogWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/src/ui/ProgressWindow.cpp.o
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/build.make
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libexiv2.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libimgui.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libglfw3.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libexiv2.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libimgui.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libglfw3.a
 VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libimplot.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libnfd.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libxxhash.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libexpat.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libz.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libbrotlidec.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libbrotlicommon.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libimplot.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libnfd.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libxxhash.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libexpat.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libz.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libbrotlidec.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libbrotlicommon.a
 VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libiconv.tbd
 VerwaltungV5: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libcharset.tbd
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libINIReader.a
-VerwaltungV5: /tmp/vcpkg_installed_photosorter/x64-osx/lib/libinih.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libINIReader.a
+VerwaltungV5: /tmp/vcpkg_installed_verwaltungv5/x64-osx/lib/libinih.a
 VerwaltungV5: CMakeFiles/VerwaltungV5.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable VerwaltungV5"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/VerwaltungV5.dir/link.txt --verbose=$(VERBOSE)

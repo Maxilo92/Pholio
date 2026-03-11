@@ -46,8 +46,7 @@ void DashboardWindow::render() {
 
         if (changed) {
             core::ConfigManager::getInstance().setSettings(settings);
-            // Optional: Save immediately if desired
-            // core::ConfigManager::getInstance().save();
+            core::ConfigManager::getInstance().save();
         }
     }
 }
@@ -122,6 +121,7 @@ void DashboardWindow::renderFolderSelection() {
 
     if (changed) {
         core::ConfigManager::getInstance().setSettings(settings);
+        core::ConfigManager::getInstance().save();
     }
 }
 

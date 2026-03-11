@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/Cellar/ffmpeg/8.0.1_4/include -I"/Users/maximilian/Documents/Code/Verwaltung V5/src" -I"/Users/maximilian/Documents/Code/Verwaltung V5/build/generated" -isystem /tmp/vcpkg_installed_photosorter/x64-osx/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks
+CXX_INCLUDES = -I/usr/local/Cellar/ffmpeg/8.0.1_4/include -I"/Users/maximilian/Documents/Code/Verwaltung V5/src" -I"/Users/maximilian/Documents/Code/Verwaltung V5/build/generated" -isystem /tmp/vcpkg_installed_verwaltungv5/x64-osx/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks
 
 CXX_FLAGS = -O3 -DNDEBUG -std=gnu++20
 

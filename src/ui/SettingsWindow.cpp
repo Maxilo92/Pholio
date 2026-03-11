@@ -1,6 +1,5 @@
 #include "SettingsWindow.hpp"
 #include <imgui.h>
-#include "../core/ConfigManager.hpp"
 #include <nfd.hpp>
 #include <cstring>
 #include <string>
@@ -8,14 +7,20 @@
 namespace ui {
 
 void SettingsWindow::render() {
-    static core::AppSettings settings = core::ConfigManager::getInstance().getSettings();
-    static bool first_run = true;
-    if (first_run) {
-        settings = core::ConfigManager::getInstance().getSettings();
-        first_run = false;
+    auto& config = core::ConfigManager::getInstance();
+    
+    // Sync from global config if we aren't currently editing something unsaved
+    if (!m_initialized || !m_isDirty) {
+        m_editedSettings = config.getSettings();
+        m_initialized = true;
     }
 
     if (ImGui::Begin("Settings")) {
+        if (m_isDirty) {
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "You have unsaved changes!");
+            ImGui::Separator();
+        }
+
         if (ImGui::CollapsingHeader("Directories", ImGuiTreeNodeFlags_DefaultOpen)) {
             if (ImGui::BeginTable("DirectorySettings", 3, ImGuiTableFlags_SizingStretchProp)) {
                 ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f);
@@ -29,10 +34,11 @@ void SettingsWindow::render() {
                 ImGui::Text("Source Path:");
                 ImGui::TableSetColumnIndex(1);
                 char sourceBuf[1024];
-                std::strncpy(sourceBuf, settings.sourcePath.string().c_str(), sizeof(sourceBuf));
+                std::strncpy(sourceBuf, m_editedSettings.sourcePath.string().c_str(), sizeof(sourceBuf));
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::InputText("##SourceSet", sourceBuf, sizeof(sourceBuf))) {
-                    settings.sourcePath = sourceBuf;
+                    m_editedSettings.sourcePath = sourceBuf;
+                    m_isDirty = true;
                 }
                 ImGui::PopItemWidth();
                 ImGui::TableSetColumnIndex(2);
@@ -45,10 +51,11 @@ void SettingsWindow::render() {
                 ImGui::Text("Target Path:");
                 ImGui::TableSetColumnIndex(1);
                 char targetBuf[1024];
-                std::strncpy(targetBuf, settings.targetPath.string().c_str(), sizeof(targetBuf));
+                std::strncpy(targetBuf, m_editedSettings.targetPath.string().c_str(), sizeof(targetBuf));
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::InputText("##TargetSet", targetBuf, sizeof(targetBuf))) {
-                    settings.targetPath = targetBuf;
+                    m_editedSettings.targetPath = targetBuf;
+                    m_isDirty = true;
                 }
                 ImGui::PopItemWidth();
                 ImGui::TableSetColumnIndex(2);
@@ -68,11 +75,12 @@ void SettingsWindow::render() {
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Text("Operation Mode:");
                 ImGui::TableSetColumnIndex(1);
-                int opMode = static_cast<int>(settings.operationMode);
+                int opMode = static_cast<int>(m_editedSettings.operationMode);
                 const char* opModes[] = { "Copy (Safe)", "Move (Efficient)" };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##OpMode", &opMode, opModes, 2)) {
-                    settings.operationMode = static_cast<engine::OperationMode>(opMode);
+                    m_editedSettings.operationMode = static_cast<engine::OperationMode>(opMode);
+                    m_isDirty = true;
                 }
                 ImGui::PopItemWidth();
 
@@ -81,11 +89,12 @@ void SettingsWindow::render() {
                 ImGui::TableSetColumnIndex(0);
                 ImGui::Text("Verification:");
                 ImGui::TableSetColumnIndex(1);
-                int verLevel = static_cast<int>(settings.verificationLevel);
+                int verLevel = static_cast<int>(m_editedSettings.verificationLevel);
                 const char* verLevels[] = { "None (Fastest)", "Size Only", "Partial Hash", "Full Hash (Safest)" };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##VerLevel", &verLevel, verLevels, 4)) {
-                    settings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
+                    m_editedSettings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
+                    m_isDirty = true;
                 }
                 ImGui::PopItemWidth();
 
@@ -93,20 +102,22 @@ void SettingsWindow::render() {
             }
 
             ImGui::Spacing();
-            ImGui::Checkbox("Dry Run (Simulation Mode)", &settings.dryRun);
-            ImGui::Checkbox("Auto-Start on selection", &settings.autoStart);
+            if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
+            if (ImGui::Checkbox("Auto-Start on selection", &m_editedSettings.autoStart)) m_isDirty = true;
         }
 
         ImGui::Separator();
         ImGui::Spacing();
 
         if (ImGui::Button("SAVE ALL SETTINGS", ImVec2(150, 40))) {
-            core::ConfigManager::getInstance().setSettings(settings);
-            core::ConfigManager::getInstance().save();
+            config.setSettings(m_editedSettings);
+            config.save();
+            m_isDirty = false;
         }
         ImGui::SameLine();
         if (ImGui::Button("DISCARD CHANGES", ImVec2(150, 40))) {
-            settings = core::ConfigManager::getInstance().getSettings();
+            m_editedSettings = config.getSettings();
+            m_isDirty = false;
         }
     }
     ImGui::End();
@@ -114,14 +125,15 @@ void SettingsWindow::render() {
     // Deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
         nfdchar_t *outPath = NULL;
-        std::string defaultPath = m_shouldBrowseSource ? settings.sourcePath.string() : settings.targetPath.string();
+        std::string defaultPath = m_shouldBrowseSource ? m_editedSettings.sourcePath.string() : m_editedSettings.targetPath.string();
         
         if (NFD_PickFolder(&outPath, defaultPath.c_str()) == NFD_OKAY) {
             if (m_shouldBrowseSource) {
-                settings.sourcePath = outPath;
+                m_editedSettings.sourcePath = outPath;
             } else {
-                settings.targetPath = outPath;
+                m_editedSettings.targetPath = outPath;
             }
+            m_isDirty = true;
             NFD_FreePath(outPath);
         }
         
