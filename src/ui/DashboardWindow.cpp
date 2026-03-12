@@ -17,9 +17,11 @@ void DashboardWindow::render() {
     std::string status = m_worker.getStatusMessage();
     bool isRunning = m_worker.isRunning();
 
-    // Error detection logic
+    // Summary detection logic
     if (m_workerWasRunning && !isRunning) {
-        if (status.find("Error") != std::string::npos || status.find("Full") != std::string::npos) {
+        if (status == "Completed") {
+            m_showSummaryPopup = true;
+        } else if (status.find("Error") != std::string::npos || status.find("Full") != std::string::npos) {
             m_lastErrorMessage = status;
             m_showErrorPopup = true;
         }
@@ -36,6 +38,7 @@ void DashboardWindow::render() {
     ImGui::End();
 
     renderErrorPopup();
+    renderSummaryPopup();
 
     // Handle deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
@@ -81,6 +84,52 @@ void DashboardWindow::renderErrorPopup() {
 
         if (ImGui::Button("OK", ImVec2(120, 0))) {
             m_showErrorPopup = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void DashboardWindow::renderSummaryPopup() {
+    if (m_showSummaryPopup) {
+        ImGui::OpenPopup("Process Finished");
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Process Finished", &m_showSummaryPopup, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("The media organization process has finished.");
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        if (ImGui::BeginTable("SummaryTable", 2)) {
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Total Files:");
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%d", m_worker.getTotalFiles());
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Successful:");
+            ImGui::TableSetColumnIndex(1); ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "%d", m_worker.getSuccessCount());
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Failed/Skipped:");
+            ImGui::TableSetColumnIndex(1); 
+            if (m_worker.getErrorCount() > 0)
+                ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f), "%d", m_worker.getErrorCount());
+            else
+                ImGui::Text("%d", m_worker.getErrorCount());
+
+            ImGui::EndTable();
+        }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        if (ImGui::Button("Great!", ImVec2(120, 0))) {
+            m_showSummaryPopup = false;
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
