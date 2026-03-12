@@ -50,6 +50,10 @@ int main(int, char**) {
         glfwShowWindow(window);
         glfwFocusWindow(window);
 
+        if (glfwWindowShouldClose(window)) {
+            std::cout << "DEBUG: Window should close BEFORE initialization!" << std::endl;
+        }
+
         core::ConfigManager::getInstance().load();
 
         IMGUI_CHECKVERSION();
@@ -71,8 +75,14 @@ int main(int, char**) {
         ui::AppWindow appWindow;
         std::cout << "Application initialized. GUI Ready." << std::endl;
 
+        int closeFlag = glfwWindowShouldClose(window);
+        std::cout << "DEBUG: glfwWindowShouldClose is " << closeFlag << std::endl;
+
         int exitCode = 0;
+        int frameCount = 0;
         while (!glfwWindowShouldClose(window)) {
+            std::cout << "DEBUG: Frame " << frameCount << " starting..." << std::endl;
+            frameCount++;
             glfwPollEvents();
 
             ImGui_ImplOpenGL3_NewFrame();

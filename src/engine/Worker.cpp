@@ -145,6 +145,8 @@ void Worker::run() {
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;
         uint64_t batchBytes = 0;
+        int successCount = 0;
+        int errorCount = 0;
 
         for (auto& task : tasks) {
             if (m_shouldStop) {
@@ -167,12 +169,15 @@ void Worker::run() {
                 if (sorter.process(task, settings.operationMode)) {
                     m_logWindow.success("Processed: " + task.metadata.path.filename().string() + 
                                        " -> " + task.targetPath.string());
+                    successCount++;
                 } else {
                     m_logWindow.error("Failed: " + task.metadata.path.filename().string() + 
                                      " (" + task.statusMessage + ")");
+                    errorCount++;
                 }
             } else {
                 m_logWindow.error("Analysis failed: " + task.metadata.path.filename().string());
+                errorCount++;
             }
 
             m_processedFiles++;
@@ -190,9 +195,19 @@ void Worker::run() {
         }
 
         if (!m_shouldStop) {
-            m_logWindow.success("Process completed successfully. " + 
-                               std::to_string(m_processedFiles) + "/" + 
-                               std::to_string(m_totalFiles) + " files processed.");
+            std::string summary = "Process finished. " + 
+                                 std::to_string(successCount) + " successful, " + 
+                                 std::to_string(errorCount) + " failed, " +
+                                 std::to_string(m_totalFiles) + " total.";
+            
+            if (errorCount == 0) {
+                m_logWindow.success(summary);
+            } else if (successCount > 0) {
+                m_logWindow.warn(summary);
+            } else {
+                m_logWindow.error(summary);
+            }
+            
             setStatus("Completed");
             setCurrentImagePath("");
         }
