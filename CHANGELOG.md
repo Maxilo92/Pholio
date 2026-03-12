@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.16-alpha] - 2026-03-12
+
+### Added
+- **Process Summary Popup:** A modal dialog now appears automatically when the organization process completes, showing a clear balance of successful and failed/skipped files.
+
 ## [1.0.15-alpha] - 2026-03-12
 
 ### Changed

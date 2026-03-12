@@ -76243,3 +76243,29 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/CheckIPOSupported.cmake:197 (try_compile)"
+      - "/usr/local/share/cmake/Modules/CheckIPOSupported.cmake:320 (_ipo_run_language_check)"
+      - "CMakeLists.txt:23 (check_ipo_supported)"
+    directories:
+      source: "/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/_CMakeLTOTest-CXX/src"
+      binary: "/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/_CMakeLTOTest-CXX/bin"
+    buildResult:
+      variable: "_IPO_LANGUAGE_CHECK_RESULT"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/_CMakeLTOTest-CXX/bin'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v
+        [1/4] /usr/bin/c++   -flto=thin -MD -MT CMakeFiles/foo.dir/foo.cpp.o -MF CMakeFiles/foo.dir/foo.cpp.o.d -o CMakeFiles/foo.dir/foo.cpp.o -c '/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/_CMakeLTOTest-CXX/src/foo.cpp'
+        [2/4] /usr/bin/c++   -flto=thin -MD -MT CMakeFiles/boo.dir/main.cpp.o -MF CMakeFiles/boo.dir/main.cpp.o.d -o CMakeFiles/boo.dir/main.cpp.o -c '/Users/maximilian/Documents/Code/Verwaltung V5/build/CMakeFiles/_CMakeLTOTest-CXX/src/main.cpp'
+        [3/4] : && /usr/local/bin/cmake -E rm -f libfoo.a && "/usr/bin/ar" qc libfoo.a  CMakeFiles/foo.dir/foo.cpp.o && "/usr/bin/ranlib" libfoo.a && /usr/local/bin/cmake -E touch libfoo.a && :
+        [4/4] : && /usr/bin/c++ -flto=thin -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/boo.dir/main.cpp.o -o boo  libfoo.a && :
+        
+      exitCode: 0
+...

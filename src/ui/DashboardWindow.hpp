@@ -19,6 +19,7 @@ private:
     void renderControls();
     void renderStatus();
     void renderErrorPopup();
+    void renderSummaryPopup();
     
     std::string browseFolder(const std::string& defaultPath);
     void openFolderInExplorer(const std::filesystem::path& path);
@@ -28,6 +29,7 @@ private:
 
     std::string m_lastErrorMessage;
     bool m_showErrorPopup = false;
+    bool m_showSummaryPopup = false;
     bool m_workerWasRunning = false;
 };
 

@@ -24,6 +24,8 @@ public:
     // Progress metrics
     int getTotalFiles() const { return m_totalFiles; }
     int getProcessedFiles() const { return m_processedFiles; }
+    int getSuccessCount() const { return m_successCount; }
+    int getErrorCount() const { return m_errorCount; }
     uint64_t getTotalBytes() const { return m_totalBytes; }
     uint64_t getProcessedBytes() const { return m_processedBytes; }
     float getFilesPerSecond() const { return m_filesPerSecond; }
@@ -44,6 +46,8 @@ private:
 
     std::atomic<int> m_totalFiles{0};
     std::atomic<int> m_processedFiles{0};
+    std::atomic<int> m_successCount{0};
+    std::atomic<int> m_errorCount{0};
     std::atomic<uint64_t> m_totalBytes{0};
     std::atomic<uint64_t> m_processedBytes{0};
     

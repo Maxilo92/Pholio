@@ -21,6 +21,8 @@ void Worker::start() {
     m_isRunning = true;
     m_shouldStop = false;
     m_processedFiles = 0;
+    m_successCount = 0;
+    m_errorCount = 0;
     m_processedBytes = 0;
     m_totalFiles = 0;
     m_totalBytes = 0;
@@ -169,15 +171,15 @@ void Worker::run() {
                 if (sorter.process(task, settings.operationMode)) {
                     m_logWindow.success("Processed: " + task.metadata.path.filename().string() + 
                                        " -> " + task.targetPath.string());
-                    successCount++;
+                    m_successCount++;
                 } else {
                     m_logWindow.error("Failed: " + task.metadata.path.filename().string() + 
                                      " (" + task.statusMessage + ")");
-                    errorCount++;
+                    m_errorCount++;
                 }
             } else {
                 m_logWindow.error("Analysis failed: " + task.metadata.path.filename().string());
-                errorCount++;
+                m_errorCount++;
             }
 
             m_processedFiles++;
@@ -196,13 +198,13 @@ void Worker::run() {
 
         if (!m_shouldStop) {
             std::string summary = "Process finished. " + 
-                                 std::to_string(successCount) + " successful, " + 
-                                 std::to_string(errorCount) + " failed, " +
+                                 std::to_string(m_successCount) + " successful, " + 
+                                 std::to_string(m_errorCount) + " failed, " +
                                  std::to_string(m_totalFiles) + " total.";
             
-            if (errorCount == 0) {
+            if (m_errorCount == 0) {
                 m_logWindow.success(summary);
-            } else if (successCount > 0) {
+            } else if (m_successCount > 0) {
                 m_logWindow.warn(summary);
             } else {
                 m_logWindow.error(summary);
