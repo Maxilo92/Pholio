@@ -66,39 +66,73 @@ void SettingsWindow::render() {
                 ImGui::EndTable();
             }
 
+            // Source Size Calculation
+            if (!m_editedSettings.sourcePath.empty() && std::filesystem::exists(m_editedSettings.sourcePath)) {
+                if (m_lastCalculatedSourcePath != m_editedSettings.sourcePath && !m_isCalculatingSourceSize) {
+                    m_isCalculatingSourceSize = true;
+                    m_lastCalculatedSourcePath = m_editedSettings.sourcePath;
+                    m_sourceSizeFuture = std::async(std::launch::async, [path = m_editedSettings.sourcePath]() {
+                        uint64_t totalSize = 0;
+                        try {
+                            for (const auto& entry : std::filesystem::recursive_directory_iterator(path)) {
+                                if (entry.is_regular_file()) {
+                                    totalSize += entry.file_size();
+                                }
+                            }
+                        } catch (...) {}
+                        return totalSize;
+                    });
+                }
+
+                if (m_isCalculatingSourceSize && m_sourceSizeFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+                    m_sourceSize = m_sourceSizeFuture.get();
+                    m_isCalculatingSourceSize = false;
+                }
+
+                ImGui::Text("Source Size: %.2f GB %s", 
+                    static_cast<double>(m_sourceSize) / (1024.0 * 1024.0 * 1024.0),
+                    m_isCalculatingSourceSize ? "(calculating...)" : "");
+            }
+
             // Disk Space Warning Bar
             if (!m_editedSettings.targetPath.empty() && std::filesystem::exists(m_editedSettings.targetPath)) {
                 try {
                     auto space = std::filesystem::space(m_editedSettings.targetPath);
-                    float capacity = static_cast<float>(space.capacity);
-                    float available = static_cast<float>(space.available);
-                    float used = capacity - available;
-                    float usedRatio = used / capacity;
+                    uint64_t capacity = space.capacity;
+                    uint64_t available = space.available;
+                    uint64_t used = capacity - available;
+                    
+                    float usedRatio = static_cast<float>(used) / static_cast<float>(capacity);
+                    float requiredRatio = static_cast<float>(m_sourceSize) / static_cast<float>(available);
 
                     ImGui::Spacing();
                     ImGui::Text("Target Drive Space:");
                     
-                    ImVec4 color;
-                    const char* statusText;
-                    if (usedRatio > 0.9f) {
+                    ImVec4 color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f); // Green
+                    const char* statusText = "Disk space is healthy.";
+
+                    if (m_sourceSize > available) {
                         color = ImVec4(1.0f, 0.2f, 0.2f, 1.0f); // Red
-                        statusText = "CRITICAL: Very low disk space!";
+                        statusText = "CRITICAL: Not enough space for source files!";
+                    } else if (requiredRatio > 0.8f || usedRatio > 0.9f) {
+                        color = ImVec4(1.0f, 0.5f, 0.0f, 1.0f); // Orange
+                        statusText = "Warning: Space will be very tight after processing.";
                     } else if (usedRatio > 0.75f) {
                         color = ImVec4(1.0f, 0.8f, 0.0f, 1.0f); // Yellow
-                        statusText = "Warning: Disk space is getting low.";
-                    } else {
-                        color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f); // Green
-                        statusText = "Disk space is healthy.";
+                        statusText = "Note: Target drive is more than 75% full.";
                     }
 
                     ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
-                    char buf[64];
-                    std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total", available / (1024*1024*1024), capacity / (1024*1024*1024));
+                    char buf[128];
+                    std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total (Source needs %.1f GB)", 
+                        static_cast<double>(available) / (1024*1024*1024), 
+                        static_cast<double>(capacity) / (1024*1024*1024),
+                        static_cast<double>(m_sourceSize) / (1024*1024*1024));
                     ImGui::ProgressBar(usedRatio, ImVec2(-1, 20), buf);
                     ImGui::PopStyleColor();
                     ImGui::TextColored(color, "%s", statusText);
                 } catch (...) {
-                    // Ignore errors if path is invalid
+                    // Ignore errors
                 }
             }
         }

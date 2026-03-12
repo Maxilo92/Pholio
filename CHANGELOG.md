@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.14-alpha] - 2026-03-12
+
+### Changed
+- **Enhanced Disk Space Check:** The storage indicator in Settings now automatically calculates the total size of the source directory in the background. It provides a specific warning if the source files will not fit on the target drive.
+
 ## [1.0.13-alpha] - 2026-03-12
 
 ### Added
