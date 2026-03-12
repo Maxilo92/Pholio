@@ -81,7 +81,10 @@ void AppWindow::update() {
             m_shouldRestart = true;
             if (io.KeyShift) m_shouldRebuild = true;
         }
-        if (ImGui::IsKeyPressed(ImGuiKey_Q)) m_shouldClose = true;
+        if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
+            std::cout << "DEBUG: Close shortcut triggered (Cmd+Q)" << std::endl;
+            m_shouldClose = true;
+        }
     }
 }
 

@@ -158,6 +158,7 @@ void LogWindow::clear() {
 
 std::string LogWindow::getTimestamp() {
     auto now = std::chrono::system_clock::now();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
     std::tm tm_buf;
 #ifdef _WIN32
@@ -166,7 +167,7 @@ std::string LogWindow::getTimestamp() {
     localtime_r(&in_time_t, &tm_buf);
 #endif
     std::stringstream ss;
-    ss << std::put_time(&tm_buf, "%H:%M:%S");
+    ss << std::put_time(&tm_buf, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
     return ss.str();
 }
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.15-alpha] - 2026-03-12
+
+### Changed
+- **Logging Improvements:**
+  - Added millisecond resolution to log timestamps for better event tracking.
+  - Improved process summary reporting: The application now accurately distinguishes between successful and failed file operations.
+  - Final status messages now reflect the actual outcome (Success/Warning/Error) instead of always reporting success.
+
 ## [1.0.14-alpha] - 2026-03-12
 
 ### Changed
