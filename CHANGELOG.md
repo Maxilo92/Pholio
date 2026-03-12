@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.17-alpha] - 2026-03-12
+
+### Added
+- **Update Test:** Triggered a new version to test the auto-update notification.
+
 ## [1.0.16-alpha] - 2026-03-12
 
 ### Added
