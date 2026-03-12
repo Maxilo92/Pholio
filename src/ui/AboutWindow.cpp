@@ -1,5 +1,6 @@
 #include "core/Config.hpp"
 #include "AboutWindow.hpp"
+#include "core/UpdateManager.hpp"
 #include <string>
 
 namespace ui {
@@ -8,7 +9,7 @@ void AboutWindow::render(bool* p_open) {
     if (!*p_open) return;
 
     std::string title = "About " + std::string(core::PROJECT_NAME);
-    ImGui::SetNextWindowSize(ImVec2(400, 350), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(400, 450), ImGuiCond_FirstUseEver);
     if (ImGui::Begin(title.c_str(), p_open, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::TextColored(ImVec4(0.2f, 0.7f, 1.0f, 1.0f), "%.*s", (int)core::PROJECT_NAME.size(), core::PROJECT_NAME.data());
         ImGui::Separator();
@@ -40,7 +41,19 @@ void AboutWindow::render(bool* p_open) {
         ImGui::BulletText("backward-cpp - Crash analysis");
         
         ImGui::Spacing();
-        if (ImGui::Button("Close")) {
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        if (core::UpdateManager::getInstance().isChecking()) {
+            ImGui::Button("Checking for Updates...", ImVec2(180, 0));
+        } else {
+            if (ImGui::Button("Check for Update", ImVec2(180, 0))) {
+                core::UpdateManager::getInstance().checkForUpdates();
+            }
+        }
+        
+        ImGui::SameLine();
+        if (ImGui::Button("Close", ImVec2(180, 0))) {
             *p_open = false;
         }
     }

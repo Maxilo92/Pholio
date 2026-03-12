@@ -76,6 +76,8 @@ if(APPLE)
         src/core/UpdateManager.hpp
         src/ui/AppWindow.cpp
         src/ui/AppWindow.hpp
+        src/ui/DebugWindow.cpp
+        src/ui/DebugWindow.hpp
         src/ui/DashboardWindow.cpp
         src/ui/DashboardWindow.hpp
         src/ui/PreviewWindow.cpp
@@ -124,6 +126,8 @@ else()
         src/core/UpdateManager.hpp
         src/ui/AppWindow.cpp
         src/ui/AppWindow.hpp
+        src/ui/DebugWindow.cpp
+        src/ui/DebugWindow.hpp
         src/ui/DashboardWindow.cpp
         src/ui/DashboardWindow.hpp
         src/ui/PreviewWindow.cpp
