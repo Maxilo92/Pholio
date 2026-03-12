@@ -1,76 +1,49 @@
-# Pholio C++
+# Pholio C++ (Development)
 
-**Pholio C++** is a high-performance, desktop-class media organization tool designed for advanced users and photographers on Linux and macOS. It automates the process of organizing large collections of photos and videos into a consistent, date-based hierarchy while ensuring absolute data integrity through its strict "No-Loss Policy."
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Maxilo92/Pholio/build.yml?branch=development)](https://github.com/Maxilo92/Pholio/actions)
+[![Latest Dev Version](https://img.shields.io/github/v/tag/Maxilo92/Pholio?label=dev-version)](https://github.com/Maxilo92/Pholio/tree/development)
 
-## Key Features
+This is the **development branch** for Pholio C++. Here you will find the latest features, experimental updates, and the full source code for building.
 
-- **No-Loss Policy:** Zero-tolerance for data loss. Source files are only deleted (in Move mode) after a successful checksum verification of the target file.
-- **Robust Metadata Analysis:** Reliable extraction of image (EXIF) and video metadata using industry-standard libraries (`Exiv2`, `FFmpeg`).
-- **Date-Based Organization:** Automatically sorts media into structured hierarchies (e.g., `Year/Month/Day/`).
-- **Three Operation Modes:**
-    - **Copy:** Preserves source files and creates organized copies in the target directory.
-    - **Move:** Safely migrates files to the target directory, deleting source files only after verified transfer.
-    - **Dry Run:** Simulates the entire process without performing any file operations.
-- **Multi-Level Verification:** Configurable integrity checks:
-    - **Full:** Complete checksum comparison (using XXHash).
-    - **Partial:** Verifies file size and the first 1MB of data.
-    - **Size Only:** Basic verification of file size.
-- **Sidecar Support:** Automatically detects and pairs RAW images with their corresponding sidecar files (e.g., `.xmp`, `.json`).
-- **Modern UI:** Responsive, docking-based interface using `Dear ImGui` and `ImPlot` for real-time progress metrics and live logging.
+> [!IMPORTANT]
+> This branch may be unstable. For regular use, please use the [Release Branch](https://github.com/Maxilo92/Pholio/tree/release) or download the latest binary from [Releases](https://github.com/Maxilo92/Pholio/releases).
 
 ## Tech Stack
-
 - **Language:** C++20
-- **GUI:** Dear ImGui (Docking branch), Glfw + OpenGL3
-- **Visualization:** ImPlot
-- **Metadata:** Exiv2 (Images), FFmpeg (Video)
-- **Dependency Management:** vcpkg
-- **Build System:** CMake
+- **GUI:** Dear ImGui (Docking), GLFW, OpenGL3
+- **Dependencies:** vcpkg (exiv2, nlohmann-json, etc.)
+- **Build System:** CMake + Ninja/Make
 
-## Getting Started
+## Building from Source
 
 ### Prerequisites
-
-- **CMake** (3.20 or higher)
+- **CMake** (3.20+)
 - **vcpkg** (C++ package manager)
-- **C++20 compatible compiler** (GCC 11+, Clang 13+, or MSVC 2022+)
-- **OpenGL** development libraries
+- **C++20 Compiler** (Clang 13+, GCC 11+, or MSVC 2022+)
 
-### Building the Project
-
-1. **Clone the repository:**
+### Instructions
+1. **Clone & Setup:**
    ```bash
-   git clone <repository-url>
-   cd "Verwaltung V5"
+   git clone -b development https://github.com/Maxilo92/Pholio.git
+   cd Pholio
+   ```
+2. **Build with included script:**
+   ```bash
+   # Multi-core build with auto-dependency management
+   python3 build.py --config Release
+   ```
+3. **Run:**
+   ```bash
+   ./build/Pholio.app/Contents/MacOS/Pholio (macOS)
+   ./build/Pholio (Linux/Windows)
    ```
 
-2. **Install dependencies via vcpkg:**
-   ```bash
-   vcpkg install
-   ```
-
-3. **Configure and build using CMake:**
-   ```bash
-   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=[path-to-vcpkg]/scripts/buildsystems/vcpkg.cmake
-   cmake --build build
-   ```
-
-4. **Run the application:**
-   ```bash
-   ./build/Pholio
-   ```
-
-## Usage
-
-1. **Source & Target:** Select your source directory containing disorganized media and your desired target directory for the organized archive.
-2. **Configuration:** Choose between **Copy** or **Move** mode and select your preferred **Verification Level**.
-3. **Execution:** Click **Start** to begin the process. Monitor real-time progress, throughput (MB/s), and detailed logs in the application windows.
-4. **Completion:** Review the summary window once the process finishes to ensure all files were successfully organized.
-
-## Documentation
-
-Detailed API and architectural documentation can be found in the `docs/` directory.
+## Contributing
+1. Fork the repo.
+2. Create your feature branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request against the `development` branch.
 
 ## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
