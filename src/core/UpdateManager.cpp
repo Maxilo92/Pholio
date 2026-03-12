@@ -34,8 +34,7 @@ void UpdateManager::checkForUpdates() {
     m_updateFuture = std::async(std::launch::async, [this]() {
         try {
             // Using curl to fetch latest release info from GitHub API
-            // Note: This is a placeholder URL. Replace with your actual repository.
-            const char* url = "https://api.github.com/repos/maximilian/Pholio/releases/latest";
+            const char* url = "https://api.github.com/repos/Maxilo92/Pholio/releases/latest";
             
             // Build curl command with User-Agent (required by GitHub API)
             std::string cmd = "curl -s -H \"User-Agent: Pholio-App\" " + std::string(url);
