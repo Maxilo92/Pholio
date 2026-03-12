@@ -10,10 +10,10 @@ void AboutWindow::render(bool* p_open) {
     std::string title = "About " + std::string(core::PROJECT_NAME);
     ImGui::SetNextWindowSize(ImVec2(400, 350), ImGuiCond_FirstUseEver);
     if (ImGui::Begin(title.c_str(), p_open, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::TextColored(ImVec4(0.2f, 0.7f, 1.0f, 1.0f), "%s", core::PROJECT_NAME);
+        ImGui::TextColored(ImVec4(0.2f, 0.7f, 1.0f, 1.0f), "%.*s", (int)core::PROJECT_NAME.size(), core::PROJECT_NAME.data());
         ImGui::Separator();
         
-        ImGui::Text("Version: %s", core::PROJECT_VERSION);
+        ImGui::Text("Version: %.*s", (int)core::PROJECT_VERSION.size(), core::PROJECT_VERSION.data());
         ImGui::Text("Author: Maximilian");
         ImGui::Text("A powerful and efficient tool for organizing your media library.");
         
@@ -21,10 +21,13 @@ void AboutWindow::render(bool* p_open) {
         ImGui::Separator();
         ImGui::Spacing();
         
-        ImGui::Text("Pholio Evolution (1.0.0-alpha):");
+        ImGui::Text("Core Features:");
         ImGui::BulletText("Intelligent Structure Analysis");
         ImGui::BulletText("Robust Crash Reporting");
         ImGui::BulletText("Real-time Photo Previews");
+        ImGui::BulletText("Google Photos Takeout Integration");
+        ImGui::BulletText("macOS App Bundle Support");
+        ImGui::BulletText("User Reporting System (via Help)");
         
         ImGui::Spacing();
         ImGui::Separator();

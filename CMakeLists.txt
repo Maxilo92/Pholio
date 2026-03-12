@@ -3,10 +3,31 @@ cmake_minimum_required(VERSION 3.20)
 file(READ "VERSION" PROJECT_VERSION_FILE)
 string(STRIP "${PROJECT_VERSION_FILE}" PROJECT_VERSION_STR)
 
-project(Pholio VERSION 1.0.0 LANGUAGES CXX)
+project(Pholio LANGUAGES CXX)
+set(PROJECT_VERSION ${PROJECT_VERSION_STR})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Enable ccache if available to speed up recompilation
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "ccache found, enabling compiler cache")
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+endif()
+
+# Enable Interprocedural Optimization (LTO) for Release builds
+if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT ipo_supported OUTPUT error)
+    if(ipo_supported)
+        message(STATUS "IPO/LTO supported, enabling for optimized build")
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    else()
+        message(STATUS "IPO/LTO not supported: ${error}")
+    endif()
+endif()
 
 # Configure version header
 configure_file(
@@ -34,37 +55,95 @@ find_package(Stb REQUIRED)
 find_package(xxHash CONFIG REQUIRED)
 
 # Executable
-add_executable(Pholio 
-    src/main.cpp
-    src/core/CrashHandler.cpp
-    src/core/CrashHandler.hpp
-    src/engine/Scanner.cpp
-    src/engine/MediaAnalyzer.cpp
-    src/engine/StructureAnalyzer.cpp
-    src/engine/Verifier.cpp
-    src/engine/Sorter.cpp
-    src/engine/Worker.cpp
-    src/engine/Worker.hpp
-    src/core/ConfigManager.cpp
-    src/core/ConfigManager.hpp
-    src/core/Loggable.hpp
-    src/ui/AppWindow.cpp
-    src/ui/AppWindow.hpp
-    src/ui/DashboardWindow.cpp
-    src/ui/DashboardWindow.hpp
-    src/ui/AboutWindow.cpp
-    src/ui/AboutWindow.hpp
-    src/ui/ChangelogWindow.cpp
-    src/ui/ChangelogWindow.hpp
-    src/ui/SettingsWindow.cpp
-    src/ui/SettingsWindow.hpp
-    src/ui/LogWindow.cpp
-    src/ui/LogWindow.hpp
-    src/ui/Texture.cpp
-    src/ui/Texture.hpp
-    src/ui/ProgressWindow.cpp
-    src/ui/ProgressWindow.hpp
-)
+if(APPLE)
+    add_executable(Pholio MACOSX_BUNDLE
+        src/main.cpp
+        src/core/CrashHandler.cpp
+        src/core/CrashHandler.hpp
+        src/engine/Scanner.cpp
+        src/engine/MediaAnalyzer.cpp
+        src/engine/StructureAnalyzer.cpp
+        src/engine/Verifier.cpp
+        src/engine/Sorter.cpp
+        src/engine/Worker.cpp
+        src/engine/Worker.hpp
+        src/core/ConfigManager.cpp
+        src/core/ConfigManager.hpp
+        src/core/Loggable.hpp
+        src/core/ReportManager.cpp
+        src/core/ReportManager.hpp
+        src/core/UpdateManager.cpp
+        src/core/UpdateManager.hpp
+        src/ui/AppWindow.cpp
+        src/ui/AppWindow.hpp
+        src/ui/DashboardWindow.cpp
+        src/ui/DashboardWindow.hpp
+        src/ui/PreviewWindow.cpp
+        src/ui/PreviewWindow.hpp
+        src/ui/AboutWindow.cpp
+        src/ui/AboutWindow.hpp
+        src/ui/ChangelogWindow.cpp
+        src/ui/ChangelogWindow.hpp
+        src/ui/ReportWindow.cpp
+        src/ui/ReportWindow.hpp
+        src/ui/SettingsWindow.cpp
+        src/ui/SettingsWindow.hpp
+        src/ui/LogWindow.cpp
+        src/ui/LogWindow.hpp
+        src/ui/Texture.cpp
+        src/ui/Texture.hpp
+        src/ui/ProgressWindow.cpp
+        src/ui/ProgressWindow.hpp
+    )
+    
+    set_target_properties(Pholio PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/packaging/macOS/Info.plist
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.pholio.cpp"
+        MACOSX_BUNDLE_BUNDLE_NAME "Pholio"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    )
+else()
+    add_executable(Pholio 
+        src/main.cpp
+        src/core/CrashHandler.cpp
+        src/core/CrashHandler.hpp
+        src/engine/Scanner.cpp
+        src/engine/MediaAnalyzer.cpp
+        src/engine/StructureAnalyzer.cpp
+        src/engine/Verifier.cpp
+        src/engine/Sorter.cpp
+        src/engine/Worker.cpp
+        src/engine/Worker.hpp
+        src/core/ConfigManager.cpp
+        src/core/ConfigManager.hpp
+        src/core/Loggable.hpp
+        src/core/ReportManager.cpp
+        src/core/ReportManager.hpp
+        src/core/UpdateManager.cpp
+        src/core/UpdateManager.hpp
+        src/ui/AppWindow.cpp
+        src/ui/AppWindow.hpp
+        src/ui/DashboardWindow.cpp
+        src/ui/DashboardWindow.hpp
+        src/ui/PreviewWindow.cpp
+        src/ui/PreviewWindow.hpp
+        src/ui/AboutWindow.cpp
+        src/ui/AboutWindow.hpp
+        src/ui/ChangelogWindow.cpp
+        src/ui/ChangelogWindow.hpp
+        src/ui/ReportWindow.cpp
+        src/ui/ReportWindow.hpp
+        src/ui/SettingsWindow.cpp
+        src/ui/SettingsWindow.hpp
+        src/ui/LogWindow.cpp
+        src/ui/LogWindow.hpp
+        src/ui/Texture.cpp
+        src/ui/Texture.hpp
+        src/ui/ProgressWindow.cpp
+        src/ui/ProgressWindow.hpp
+    )
+endif()
 
 # Link dependencies
 target_link_libraries(Pholio PRIVATE

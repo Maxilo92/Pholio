@@ -14,6 +14,12 @@ enum class MediaType {
     Unknown
 };
 
+enum class DuplicateAction {
+    Skip,
+    Overwrite,
+    Rename
+};
+
 struct MediaMetadata {
     std::filesystem::path path;
     MediaType type = MediaType::Unknown;
@@ -21,6 +27,7 @@ struct MediaMetadata {
     std::string format;
     std::uintmax_t fileSize = 0;
     std::optional<std::filesystem::path> sidecarPath;
+    std::optional<std::filesystem::path> supplementalMetadataPath;
 };
 
 struct MediaTask {

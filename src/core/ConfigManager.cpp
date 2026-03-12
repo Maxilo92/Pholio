@@ -21,10 +21,28 @@ void ConfigManager::load() {
         std::ifstream file(configPath);
         nlohmann::json j;
         file >> j;
+        
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_settings = j.get<AppSettings>();
+        // Use a safer way to load to avoid exceptions on missing keys
+        if (j.contains("sourcePath")) m_settings.sourcePath = j.at("sourcePath").get<std::filesystem::path>();
+        if (j.contains("targetPath")) m_settings.targetPath = j.at("targetPath").get<std::filesystem::path>();
+        if (j.contains("operationMode")) m_settings.operationMode = j.at("operationMode").get<engine::OperationMode>();
+        if (j.contains("verificationLevel")) m_settings.verificationLevel = j.at("verificationLevel").get<engine::VerificationLevel>();
+        if (j.contains("duplicateAction")) m_settings.duplicateAction = j.at("duplicateAction").get<engine::DuplicateAction>();
+        if (j.contains("askOnDuplicate")) m_settings.askOnDuplicate = j.at("askOnDuplicate").get<bool>();
+        if (j.contains("dryRun")) m_settings.dryRun = j.at("dryRun").get<bool>();
+        if (j.contains("autoStart")) m_settings.autoStart = j.at("autoStart").get<bool>();
+        if (j.contains("showPreview")) m_settings.showPreview = j.at("showPreview").get<bool>();
+        if (j.contains("lastVersion")) m_settings.lastVersion = j.at("lastVersion").get<std::string>();
+        if (j.contains("folderPattern")) m_settings.folderPattern = j.at("folderPattern").get<std::string>();
+        if (j.contains("showDashboard")) m_settings.showDashboard = j.at("showDashboard").get<bool>();
+        if (j.contains("showSettings")) m_settings.showSettings = j.at("showSettings").get<bool>();
+        if (j.contains("showProgress")) m_settings.showProgress = j.at("showProgress").get<bool>();
+        if (j.contains("showLogs")) m_settings.showLogs = j.at("showLogs").get<bool>();
+        if (j.contains("showReport")) m_settings.showReport = j.at("showReport").get<bool>();
+        
     } catch (const std::exception& e) {
-        std::cerr << "Failed to load config: " << e.what() << std::endl;
+        std::cerr << "Warning: Failed to load some config values: " << e.what() << std::endl;
     }
 }
 
@@ -46,11 +64,19 @@ void ConfigManager::save() {
 }
 
 std::filesystem::path ConfigManager::getLogDirectory() const {
-    return getConfigPath().parent_path() / "logs";
+    return std::filesystem::current_path() / "logs";
 }
 
 std::filesystem::path ConfigManager::getCrashesDirectory() const {
     return getConfigPath().parent_path() / "crashes";
+}
+
+std::filesystem::path ConfigManager::getReportsDirectory() const {
+    return std::filesystem::current_path() / "reports";
+}
+
+std::filesystem::path ConfigManager::getImguiConfigPath() const {
+    return getConfigPath().parent_path() / "imgui.ini";
 }
 
 std::filesystem::path ConfigManager::getConfigPath() const {

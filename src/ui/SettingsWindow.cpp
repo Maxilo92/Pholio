@@ -65,6 +65,70 @@ void SettingsWindow::render() {
 
                 ImGui::EndTable();
             }
+
+            // Disk Space Warning Bar
+            if (!m_editedSettings.targetPath.empty() && std::filesystem::exists(m_editedSettings.targetPath)) {
+                try {
+                    auto space = std::filesystem::space(m_editedSettings.targetPath);
+                    float capacity = static_cast<float>(space.capacity);
+                    float available = static_cast<float>(space.available);
+                    float used = capacity - available;
+                    float usedRatio = used / capacity;
+
+                    ImGui::Spacing();
+                    ImGui::Text("Target Drive Space:");
+                    
+                    ImVec4 color;
+                    const char* statusText;
+                    if (usedRatio > 0.9f) {
+                        color = ImVec4(1.0f, 0.2f, 0.2f, 1.0f); // Red
+                        statusText = "CRITICAL: Very low disk space!";
+                    } else if (usedRatio > 0.75f) {
+                        color = ImVec4(1.0f, 0.8f, 0.0f, 1.0f); // Yellow
+                        statusText = "Warning: Disk space is getting low.";
+                    } else {
+                        color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f); // Green
+                        statusText = "Disk space is healthy.";
+                    }
+
+                    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+                    char buf[64];
+                    std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total", available / (1024*1024*1024), capacity / (1024*1024*1024));
+                    ImGui::ProgressBar(usedRatio, ImVec2(-1, 20), buf);
+                    ImGui::PopStyleColor();
+                    ImGui::TextColored(color, "%s", statusText);
+                } catch (...) {
+                    // Ignore errors if path is invalid
+                }
+            }
+        }
+
+        if (ImGui::CollapsingHeader("Organization", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ImGui::Text("Folder Structure Pattern:");
+            char patternBuf[256];
+            std::strncpy(patternBuf, m_editedSettings.folderPattern.c_str(), sizeof(patternBuf));
+            if (ImGui::InputText("##FolderPattern", patternBuf, sizeof(patternBuf))) {
+                m_editedSettings.folderPattern = patternBuf;
+                m_isDirty = true;
+            }
+            ImGui::SetItemTooltip("Use standard strftime format codes.\n%%Y = Year (2024)\n%%m = Month (01-12)\n%%d = Day (01-31)\n%%B = Month Name (January)");
+
+            ImGui::Text("Presets:");
+            ImGui::SameLine();
+            if (ImGui::Button("Year/Month/Day")) {
+                m_editedSettings.folderPattern = "%Y/%m/%d";
+                m_isDirty = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Year/Month")) {
+                m_editedSettings.folderPattern = "%Y/%m";
+                m_isDirty = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Year/Full Date")) {
+                m_editedSettings.folderPattern = "%Y/%Y-%m-%d";
+                m_isDirty = true;
+            }
         }
 
         if (ImGui::CollapsingHeader("Engine Behavior", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -102,18 +166,33 @@ void SettingsWindow::render() {
                 ImGui::SetItemTooltip("None: No check.\nSizeOnly: Check file size.\nPartial: Check first 1MB hash.\nFull: Check entire file hash.");
                 ImGui::PopItemWidth();
 
+                // Duplicate Action
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("Duplicate Handling:");
+                ImGui::TableSetColumnIndex(1);
+                int dupAction = static_cast<int>(m_editedSettings.duplicateAction);
+                const char* dupActions[] = { "Skip (Safest)", "Overwrite (Dangerous)", "Rename (e.g. file (1).jpg)" };
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::Combo("##DupAction", &dupAction, dupActions, 3)) {
+                    m_editedSettings.duplicateAction = static_cast<engine::DuplicateAction>(dupAction);
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("What to do if a file already exists in the target directory.");
+                ImGui::PopItemWidth();
+
                 ImGui::EndTable();
             }
 
             ImGui::Spacing();
+            if (ImGui::Checkbox("Ask for each duplicate", &m_editedSettings.askOnDuplicate)) m_isDirty = true;
+            ImGui::SetItemTooltip("Show a dialog for every duplicate encountered to choose manually.");
+
             if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
             ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
             
             if (ImGui::Checkbox("Auto-Start on selection", &m_editedSettings.autoStart)) m_isDirty = true;
             ImGui::SetItemTooltip("Automatically start the sorting process when a valid source and target are selected.");
-
-            if (ImGui::Checkbox("Show Image Preview during processing", &m_editedSettings.showPreview)) m_isDirty = true;
-            ImGui::SetItemTooltip("Enable/Disable the real-time photo preview in the dashboard.");
         }
 
         ImGui::Separator();

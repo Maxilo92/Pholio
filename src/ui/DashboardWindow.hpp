@@ -18,7 +18,6 @@ private:
     void renderFolderSelection();
     void renderControls();
     void renderStatus();
-    void renderPreview();
     void renderErrorPopup();
     
     std::string browseFolder(const std::string& defaultPath);
@@ -26,9 +25,6 @@ private:
 
     bool m_shouldBrowseSource = false;
     bool m_shouldBrowseTarget = false;
-
-    Texture m_previewTexture;
-    std::filesystem::path m_lastLoadedPath;
 
     std::string m_lastErrorMessage;
     bool m_showErrorPopup = false;

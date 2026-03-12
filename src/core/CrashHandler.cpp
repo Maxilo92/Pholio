@@ -25,10 +25,13 @@ void CrashHandler::writeCrashReport(const std::string& reason) {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
     
-    std::stringstream ss;
-    ss << "crash_" << std::put_time(std::localtime(&in_time_t), "%Y%m%d_%H%M%S") << ".txt";
+    std::stringstream ss_folder;
+    ss_folder << "crash_" << std::put_time(std::localtime(&in_time_t), "%Y%m%d_%H%M%S");
     
-    std::filesystem::path reportPath = m_crashDir / ss.str();
+    std::filesystem::path reportDir = m_crashDir / ss_folder.str();
+    std::filesystem::create_directories(reportDir);
+    
+    std::filesystem::path reportPath = reportDir / "report.txt";
     std::ofstream file(reportPath);
     
     if (file.is_open()) {

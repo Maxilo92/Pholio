@@ -4,6 +4,7 @@
 #include "core/Loggable.hpp"
 #include <filesystem>
 #include <chrono>
+#include <nlohmann/json.hpp>
 
 namespace engine {
 
@@ -16,6 +17,7 @@ public:
 private:
     bool analyzeImage(MediaMetadata& metadata);
     bool analyzeVideo(MediaMetadata& metadata);
+    bool analyzeSupplementalMetadata(MediaMetadata& metadata);
     
     std::chrono::system_clock::time_point getFileModificationTime(const std::filesystem::path& path);
 };

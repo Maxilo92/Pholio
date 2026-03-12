@@ -72,6 +72,7 @@ void Scanner::processEntry(const fs::directory_entry& entry, std::vector<MediaTa
     metadata.format = path.extension().string();
     metadata.type = isImage(path) ? MediaType::Image : MediaType::Video;
     metadata.sidecarPath = findSidecar(path);
+    metadata.supplementalMetadataPath = findSupplementalMetadata(path);
 
     tasks.push_back({metadata, {}, false, ""});
 }
@@ -88,6 +89,29 @@ std::optional<fs::path> Scanner::findSidecar(const fs::path& mediaPath) {
     sidecar2.replace_extension(".xmp");
     if (sidecar2 != mediaPath && fs::exists(sidecar2)) {
         return sidecar2;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<fs::path> Scanner::findSupplementalMetadata(const fs::path& mediaPath) {
+    // 1. Check for <filename>.<ext>.supplemental-metadata.json
+    fs::path supp1 = mediaPath.string() + ".supplemental-metadata.json";
+    if (fs::exists(supp1)) {
+        return supp1;
+    }
+
+    // 2. Check for <filename>.<ext>.json
+    fs::path supp2 = mediaPath.string() + ".json";
+    if (fs::exists(supp2)) {
+        return supp2;
+    }
+
+    // 3. Check for <filename>.json
+    fs::path supp3 = mediaPath;
+    supp3.replace_extension(".json");
+    if (supp3 != mediaPath && fs::exists(supp3)) {
+        return supp3;
     }
 
     return std::nullopt;

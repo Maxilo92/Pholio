@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 
 extern "C" {
 #include <libavformat/avformat.h>
@@ -18,10 +19,21 @@ MediaAnalyzer::MediaAnalyzer(ui::LogWindow& logWindow)
 
 bool MediaAnalyzer::analyze(MediaMetadata& metadata) {
     bool success = false;
-    if (metadata.type == MediaType::Image) {
-        success = analyzeImage(metadata);
-    } else if (metadata.type == MediaType::Video) {
-        success = analyzeVideo(metadata);
+
+    // 1. Try supplemental metadata first (often most accurate for Google Takeout)
+    if (metadata.supplementalMetadataPath) {
+        if (analyzeSupplementalMetadata(metadata)) {
+            success = true;
+        }
+    }
+
+    // 2. Try embedded metadata if supplemental failed or creationTime still empty
+    if (metadata.creationTime == std::chrono::system_clock::time_point{}) {
+        if (metadata.type == MediaType::Image) {
+            if (analyzeImage(metadata)) success = true;
+        } else if (metadata.type == MediaType::Video) {
+            if (analyzeVideo(metadata)) success = true;
+        }
     }
 
     // Fallback to file modification time if metadata extraction failed or date is missing
@@ -31,6 +43,29 @@ bool MediaAnalyzer::analyze(MediaMetadata& metadata) {
     }
 
     return true; // Always return true because we have a fallback
+}
+
+bool MediaAnalyzer::analyzeSupplementalMetadata(MediaMetadata& metadata) {
+    if (!metadata.supplementalMetadataPath) return false;
+
+    try {
+        std::ifstream file(*metadata.supplementalMetadataPath);
+        if (!file.is_open()) return false;
+
+        nlohmann::json data;
+        file >> data;
+
+        if (data.contains("photoTakenTime") && data["photoTakenTime"].contains("timestamp")) {
+            std::string tsStr = data["photoTakenTime"]["timestamp"];
+            long long ts = std::stoll(tsStr);
+            metadata.creationTime = std::chrono::system_clock::from_time_t(static_cast<time_t>(ts));
+            info("Using photoTakenTime from supplemental metadata for: " + metadata.path.filename().string());
+            return true;
+        }
+    } catch (const std::exception& e) {
+        error("Error parsing supplemental metadata for " + metadata.path.filename().string() + ": " + e.what());
+    }
+    return false;
 }
 
 std::chrono::system_clock::time_point parseExifDate(const std::string& dateStr) {

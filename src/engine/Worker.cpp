@@ -31,6 +31,10 @@ void Worker::start() {
         m_currentImagePath = "";
     }
     
+    if (m_thread.joinable()) {
+        m_thread.join();
+    }
+
     m_thread = std::thread(&Worker::run, this);
 }
 
@@ -135,8 +139,8 @@ void Worker::run() {
 
         // 4. Start Processing
         MediaAnalyzer analyzer(m_logWindow);
-        StructureAnalyzer structAnalyzer(settings.targetPath);
-        Sorter sorter(m_logWindow, settings.verificationLevel);
+        StructureAnalyzer structAnalyzer(settings.targetPath, settings.folderPattern);
+        Sorter sorter(m_logWindow, settings.verificationLevel, settings.duplicateAction, settings.askOnDuplicate);
 
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;

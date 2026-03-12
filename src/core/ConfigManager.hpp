@@ -31,6 +31,12 @@ namespace engine {
         {VerificationLevel::Partial, "Partial"},
         {VerificationLevel::Full, "Full"},
     })
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(DuplicateAction, {
+        {DuplicateAction::Skip, "Skip"},
+        {DuplicateAction::Overwrite, "Overwrite"},
+        {DuplicateAction::Rename, "Rename"},
+    })
 }
 
 namespace core {
@@ -40,12 +46,20 @@ struct AppSettings {
     std::filesystem::path targetPath;
     engine::OperationMode operationMode = engine::OperationMode::Copy;
     engine::VerificationLevel verificationLevel = engine::VerificationLevel::Full;
+    engine::DuplicateAction duplicateAction = engine::DuplicateAction::Skip;
+    bool askOnDuplicate = true;
     bool dryRun = false;
     bool autoStart = false;
     bool showPreview = true;
     std::string lastVersion = "0.0.0";
+    std::string folderPattern = "%Y/%m-%B/%d";
+    bool showDashboard = true;
+    bool showSettings = false;
+    bool showProgress = false;
+    bool showLogs = true;
+    bool showReport = false;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, dryRun, autoStart, showPreview, lastVersion)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, autoStart, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport)
 };
 
 class ConfigManager {
@@ -67,6 +81,9 @@ public:
 
     std::filesystem::path getLogDirectory() const;
     std::filesystem::path getCrashesDirectory() const;
+    std::filesystem::path getReportsDirectory() const;
+    std::filesystem::path getImguiConfigPath() const;
+    std::filesystem::path getConfigPath() const;
 
 private:
     ConfigManager() = default;
@@ -74,7 +91,6 @@ private:
 
     AppSettings m_settings;
     mutable std::mutex m_mutex;
-    std::filesystem::path getConfigPath() const;
 };
 
 } // namespace core

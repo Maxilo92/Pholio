@@ -29,6 +29,7 @@ private:
 
     void processEntry(const std::filesystem::directory_entry& entry, std::vector<MediaTask>& tasks);
     std::optional<std::filesystem::path> findSidecar(const std::filesystem::path& mediaPath);
+    std::optional<std::filesystem::path> findSupplementalMetadata(const std::filesystem::path& mediaPath);
 };
 
 } // namespace engine

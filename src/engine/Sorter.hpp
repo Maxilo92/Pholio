@@ -14,7 +14,8 @@ enum class OperationMode {
 
 class Sorter : public core::Loggable {
 public:
-    explicit Sorter(ui::LogWindow& logWindow, VerificationLevel level = VerificationLevel::Full);
+    explicit Sorter(ui::LogWindow& logWindow, VerificationLevel level = VerificationLevel::Full, 
+                    DuplicateAction dupAction = DuplicateAction::Skip, bool askOnDuplicate = false);
 
     /**
      * @brief Processes a media task: copies or moves the file to the target path,
@@ -28,8 +29,11 @@ public:
 
 private:
     VerificationLevel m_level;
+    DuplicateAction m_dupAction;
+    bool m_askOnDuplicate;
 
     bool handleSidecar(const MediaTask& task, OperationMode mode);
+    bool mergeSupplementalMetadata(const MediaTask& task);
 };
 
 } // namespace engine

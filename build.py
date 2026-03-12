@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--vcpkg-root", help="Path to vcpkg installation")
     parser.add_argument("--clean", action="store_true", help="Remove build directory before building")
     parser.add_argument("--install-dir", help="Custom vcpkg installed directory (useful for paths with spaces)")
+    parser.add_argument("-s", "--start", "-start", action="store_true", help="Start the application after successful build")
     
     args = parser.parse_args()
 
@@ -66,6 +67,10 @@ def main():
         f"-DCMAKE_TOOLCHAIN_FILE={toolchain_file}"
     ]
     
+    # Use Ninja generator if available for faster builds
+    if shutil.which("ninja"):
+        cmake_configure.extend(["-G", "Ninja"])
+    
     # Handle spaces in path issue if needed
     if args.install_dir:
         cmake_configure.append(f"-DVCPKG_INSTALLED_DIR={args.install_dir}")
@@ -83,7 +88,8 @@ def main():
     cmake_build = [
         "cmake",
         "--build", str(build_dir),
-        "--config", args.config
+        "--config", args.config,
+        "--parallel" # Uses all available CPU cores
     ]
     
     if not run_command(cmake_build):
@@ -92,8 +98,24 @@ def main():
 
     print("\n" + "="*40)
     print(f"Build successful! (Configuration: {args.config})")
-    print(f"Executable: {build_dir / 'Pholio'}")
+    
+    binary_path = build_dir / "Pholio"
+    if sys.platform == "darwin":
+        app_bundle = build_dir / "Pholio.app"
+        if app_bundle.exists():
+            print(f"App Bundle: {app_bundle}")
+            binary_path = app_bundle / "Contents/MacOS/Pholio"
+    
+    print(f"Executable: {binary_path}")
     print("="*40)
+
+    # 5. Execute if requested
+    if args.start:
+        print("\nStarting Pholio...")
+        if sys.platform == "darwin" and (build_dir / "Pholio.app").exists():
+            run_command(["open", str(build_dir / "Pholio.app")])
+        else:
+            run_command([str(binary_path)])
 
 if __name__ == "__main__":
     main()

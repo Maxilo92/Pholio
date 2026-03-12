@@ -29,23 +29,9 @@ void DashboardWindow::render() {
     if (ImGui::Begin("Dashboard")) {
         renderFolderSelection();
         ImGui::Separator();
-        
-        bool showPreview = settings.showPreview;
-        if (ImGui::Checkbox("Show Image Preview during processing", &showPreview)) {
-            settings.showPreview = showPreview;
-            core::ConfigManager::getInstance().setSettings(settings);
-            core::ConfigManager::getInstance().save();
-        }
-        
-        ImGui::Separator();
         renderControls();
         ImGui::Separator();
         renderStatus();
-        
-        if (settings.showPreview) {
-            ImGui::Separator();
-            renderPreview();
-        }
     }
     ImGui::End();
 
@@ -237,7 +223,13 @@ void DashboardWindow::renderStatus() {
             ImGui::Text("%d / %d", m_worker.getProcessedFiles(), m_worker.getTotalFiles()); ImGui::NextColumn();
 
             ImGui::Text("Processing Speed:"); ImGui::NextColumn();
-            ImGui::Text("%.2f files/sec", m_worker.getFilesPerSecond()); ImGui::NextColumn();
+            float bytesPerSec = m_worker.getBytesPerSecond();
+            if (bytesPerSec > 1024.0f * 1024.0f * 1024.0f) {
+                ImGui::Text("%.2f files/sec (%.2f GB/s)", m_worker.getFilesPerSecond(), bytesPerSec / (1024.0 * 1024.0 * 1024.0));
+            } else {
+                ImGui::Text("%.2f files/sec (%.2f MB/s)", m_worker.getFilesPerSecond(), bytesPerSec / (1024.0 * 1024.0));
+            }
+            ImGui::NextColumn();
 
             int remaining = m_worker.getTotalFiles() - m_worker.getProcessedFiles();
             if (remaining > 0 && m_worker.getFilesPerSecond() > 0.1f) {
@@ -249,41 +241,6 @@ void DashboardWindow::renderStatus() {
         ImGui::Columns(1);
     }
     ImGui::EndChild();
-}
-
-void DashboardWindow::renderPreview() {
-    auto currentPath = m_worker.getCurrentImagePath();
-    
-    if (!currentPath.empty() && currentPath != m_lastLoadedPath) {
-        if (m_previewTexture.loadFromFile(currentPath)) {
-            m_lastLoadedPath = currentPath;
-        }
-    } else if (currentPath.empty()) {
-        m_previewTexture.release();
-        m_lastLoadedPath = "";
-    }
-
-    if (m_previewTexture.isValid()) {
-        float windowWidth = ImGui::GetContentRegionAvail().x;
-        float texWidth = static_cast<float>(m_previewTexture.getWidth());
-        float texHeight = static_cast<float>(m_previewTexture.getHeight());
-        
-        float aspectRatio = texHeight / texWidth;
-        float displayWidth = windowWidth;
-        float displayHeight = displayWidth * aspectRatio;
-        
-        float maxHeight = 300.0f;
-        if (displayHeight > maxHeight) {
-            displayHeight = maxHeight;
-            displayWidth = displayHeight / aspectRatio;
-        }
-
-        ImGui::Text("Current File: %s", currentPath.filename().string().c_str());
-        ImTextureID texID = (ImTextureID)(intptr_t)m_previewTexture.getID();
-        ImGui::Image(texID, ImVec2(displayWidth, displayHeight));
-    } else {
-        ImGui::Text("No preview available");
-    }
 }
 
 std::string DashboardWindow::browseFolder(const std::string& defaultPath) {
