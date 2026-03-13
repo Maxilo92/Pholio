@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2026-03-13
+
+### Added
+- **Signing CI Placeholder:** Added `.github/workflows/release-signing-placeholder.yml` with dedicated macOS and Windows signing placeholder jobs.
+- **Secret Validation:** Added strict CI checks for required signing/notarization secrets before placeholder signing steps run.
+- **Signing Documentation:** Added `docs/SIGNING_WORKFLOW.md` documenting required secrets and next implementation steps.
+
+### Changed
+- **Roadmap Progress:** Marked the Phase 3 item "Signing-Workflow vorbereiten" as completed.
+- **Versioning:** Bumped semantic version to `1.10.0`.
+
 ## [1.9.0] - 2026-03-13
 
 ### Added

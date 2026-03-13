@@ -1,0 +1,72 @@
+name: Release Signing (Placeholder)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  macos-signing-placeholder:
+    name: macOS signing + notarization (placeholder)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required macOS secrets
+        env:
+          APPLE_CERT_BASE64: ${{ secrets.APPLE_CERT_BASE64 }}
+          APPLE_CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for name in APPLE_CERT_BASE64 APPLE_CERT_PASSWORD APPLE_TEAM_ID APPLE_ID APPLE_APP_PASSWORD; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Missing required secret: $name"
+              exit 1
+            fi
+          done
+          echo "All required macOS signing secrets are configured."
+
+      - name: Placeholder signing steps
+        run: |
+          set -euo pipefail
+          echo "TODO: Build release artifact (DMG/APP)."
+          echo "TODO: Import signing certificate into temporary keychain."
+          echo "TODO: codesign app + notarize with notarytool."
+          echo "TODO: staple notarization ticket and upload signed artifact."
+
+  windows-signing-placeholder:
+    name: Windows signing (placeholder)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required Windows secrets
+        shell: pwsh
+        env:
+          WINDOWS_PFX_BASE64: ${{ secrets.WINDOWS_PFX_BASE64 }}
+          WINDOWS_PFX_PASSWORD: ${{ secrets.WINDOWS_PFX_PASSWORD }}
+        run: |
+          $required = @("WINDOWS_PFX_BASE64", "WINDOWS_PFX_PASSWORD")
+          foreach ($name in $required) {
+            if ([string]::IsNullOrWhiteSpace((Get-Item -Path "Env:$name").Value)) {
+              Write-Error "Missing required secret: $name"
+              exit 1
+            }
+          }
+          Write-Host "All required Windows signing secrets are configured."
+
+      - name: Placeholder signing steps
+        shell: pwsh
+        run: |
+          Write-Host "TODO: Build release artifact (MSI/EXE)."
+          Write-Host "TODO: Decode PFX certificate to temporary file."
+          Write-Host "TODO: Sign artifact with signtool.exe."
+          Write-Host "TODO: Verify signature and upload signed artifact."

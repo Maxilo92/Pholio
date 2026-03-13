@@ -49,7 +49,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [x] **Windows CI-Grundlage aktiv:** Workflow für MSVC-Build ist vorhanden (`.github/workflows/windows-msvc.yml`).
 - [x] **Test-Harness aufgesetzt:** CTest in CMake integriert und erste Kernmodul-Tests für `StructureAnalyzer` hinzugefügt (`tests/StructureAnalyzerTests.cpp`).
 - [x] **Performance-Benchmarks definiert:** Reproduzierbare Benchmarks und Zielmetriken dokumentiert (`docs/PERFORMANCE_BENCHMARKS.md`) und ausführbares Benchmark-Target ergänzt (`PholioBenchmarks`).
-- [ ] **Signing-Workflow vorbereiten:** Platzhalter für Zertifikate/Secrets und Build-Schritte für Signierung in CI ergänzen.
+- [x] **Signing-Workflow vorbereitet:** CI-Placeholder mit Secret-Validierung für macOS/Windows ergänzt (`.github/workflows/release-signing-placeholder.yml`) und dokumentiert (`docs/SIGNING_WORKFLOW.md`).
 - [ ] **Installer-Pipeline vervollständigen:** DMG-, MSI- und Linux-Artefakte automatisiert im Release-Flow erzeugen.
 
 ---
@@ -63,4 +63,4 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 
 ---
 
-*Zuletzt aktualisiert: 13. März 2026 (Phase 3 aktiv: Tests + Benchmarks)*
+*Zuletzt aktualisiert: 13. März 2026 (Phase 3 aktiv: Tests + Benchmarks + Signing-Prep)*
