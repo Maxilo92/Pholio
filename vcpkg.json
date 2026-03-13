@@ -1,6 +1,7 @@
 {
   "name": "pholio",
   "version-string": "1.0.0-alpha",
+  "builtin-baseline": "47205630845bd49eaf16cdfb757cf9dfba144c52",
   "dependencies": [
     "backward-cpp",
     {
@@ -19,6 +20,7 @@
         "opengl3-binding"
       ]
     },
+    "ffmpeg",
     "glfw3",
     "implot",
     "nativefiledialog-extended",
