@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.0] - 2026-03-13
+
+### Added
+- **Packaging Workflow:** Added `.github/workflows/release-packaging.yml` to build and package release artifacts for macOS, Windows, and Linux.
+- **CPack Integration:** Added install/CPack configuration to CMake so CI can generate `DMG` (macOS), `MSI` (Windows), and Linux `TGZ` artifacts.
+- **Packaging Documentation:** Added `docs/PACKAGING_PIPELINE.md` with triggers, artifact outputs, and pipeline structure.
+
+### Changed
+- **Roadmap Progress:** Marked the RC-track item "Installer-Pipeline vervollständigen" as completed.
+- **Versioning:** Bumped semantic version to `1.11.0`.
+
 ## [1.10.0] - 2026-03-13
 
 ### Added

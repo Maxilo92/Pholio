@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.10.0")
+set(PHOLIO_VERSION "1.11.0")
 
 project(Pholio LANGUAGES CXX)
 
@@ -272,3 +272,24 @@ if(PHOLIO_BUILD_BENCHMARKS)
         ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 endif()
+
+include(GNUInstallDirs)
+install(TARGETS Pholio
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+set(CPACK_PACKAGE_NAME "Pholio")
+set(CPACK_PACKAGE_VENDOR "Pholio")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Pholio media organizer")
+set(CPACK_PACKAGE_VERSION "${PHOLIO_VERSION}")
+
+if(APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+elseif(WIN32)
+    set(CPACK_GENERATOR "WIX")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
+
+include(CPack)

@@ -1,0 +1,118 @@
+name: Release Packaging
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  package-macos-dmg:
+    name: Package macOS (DMG)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgJsonGlob: vcpkg.json
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package DMG
+        run: cpack --config build/CPackConfig.cmake -G DragNDrop
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: pholio-macos-dmg
+          path: build/*.dmg
+          if-no-files-found: error
+
+  package-windows-msi:
+    name: Package Windows (MSI)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgJsonGlob: vcpkg.json
+
+      - name: Install WiX Toolset
+        run: choco install wixtoolset --yes --no-progress
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}\scripts\buildsystems\vcpkg.cmake
+          -DVCPKG_TARGET_TRIPLET=x64-windows
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package MSI
+        run: cpack --config build/CPackConfig.cmake -G WIX
+
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: pholio-windows-msi
+          path: build/*.msi
+          if-no-files-found: error
+
+  package-linux-tgz:
+    name: Package Linux artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgJsonGlob: vcpkg.json
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+          -DVCPKG_TARGET_TRIPLET=x64-linux
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package Linux artifact
+        run: cpack --config build/CPackConfig.cmake -G TGZ
+
+      - name: Upload Linux package
+        uses: actions/upload-artifact@v4
+        with:
+          name: pholio-linux-package
+          path: build/*.tar.gz
+          if-no-files-found: error
