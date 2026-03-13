@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.11.0")
+set(PHOLIO_VERSION "1.12.0")
 
 project(Pholio LANGUAGES CXX)
 

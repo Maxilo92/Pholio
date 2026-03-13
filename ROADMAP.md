@@ -4,7 +4,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 
 ---
 
-## 🏗️ Phase 1: Alpha (Aktueller Status) - Fundament & Stabilität
+## 🏗️ Phase 1: Alpha - Fundament & Stabilität
 *Fokus: Kern-Engine, grundlegende Benutzeroberfläche und robuste Dateioperationen.*
 
 - [x] **Core Engine:** Implementierung von Scanner, Sorter und MediaAnalyzer.
@@ -35,12 +35,12 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 ## 🚀 Phase 3: Release Candidate (1.0) - Produktionsreife
 *Fokus: Performance-Optimierung, Dokumentation und Deployment.*
 
-- [ ] **Optimierung:** Multithreading-Feinschliff für maximale Performance bei SSD/NVMe-Laufwerken.
-- [ ] **Qualitätssicherung:** Umfassende Unit- und Integrationstests für alle Kernmodule.
-- [ ] **Dokumentation:** Vollständiges Benutzerhandbuch und technische API-Dokumentation.
-- [ ] **Code Signing:** Signierung und Notarisierung für macOS; Code-Signing für Windows.
-- [ ] **Packaging:** Erstellung von stabilen Installern (DMG, MSI, AppImage/Flatpak).
-- [ ] **V1.0 Launch:** Offizieller Release der ersten stabilen Version.
+- [x] **Optimierung:** Multithreading-Feinschliff für maximale Performance bei SSD/NVMe-Laufwerken.
+- [x] **Qualitätssicherung:** Umfassende Unit- und Integrationstests für alle Kernmodule.
+- [x] **Dokumentation:** Vollständiges Benutzerhandbuch und technische API-Dokumentation.
+- [x] **Code Signing:** Signierung und Notarisierung für macOS; Code-Signing für Windows.
+- [x] **Packaging:** Erstellung von stabilen Installern (DMG, MSI, AppImage/Flatpak).
+- [x] **V1.0 Launch:** Offizieller Release der ersten stabilen Version.
 
 ### Nächste konkrete Schritte (RC-Track)
 
@@ -54,7 +54,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 
 ---
 
-## 🌟 Phase 4: Post 1.0 - Zukünftige Erweiterungen
+## 🌟 Phase 4: Post 1.0 (Aktueller Status) - Zukünftige Erweiterungen
 *Fokus: Intelligente Funktionen und Ökosystem-Erweiterung.*
 
 - [ ] **Gesichtserkennung:** Datenschutz-konforme Erkennung von Personen (lokale Verarbeitung).
@@ -63,4 +63,4 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 
 ---
 
-*Zuletzt aktualisiert: 13. März 2026 (Phase 3 RC-Track vollständig)*
+*Zuletzt aktualisiert: 13. März 2026 (Phase 3 abgeschlossen, Phase 4 aktiv)*

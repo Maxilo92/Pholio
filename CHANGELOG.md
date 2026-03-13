@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.0] - 2026-03-13
+
+### Changed
+- **Phase Completion:** Closed Phase 3 by marking all Release Candidate objectives as completed and moving active status to Phase 4 in `ROADMAP.md`.
+- **Versioning:** Bumped semantic version to `1.12.0`.
+
 ## [1.11.0] - 2026-03-13
 
 ### Added
