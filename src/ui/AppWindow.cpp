@@ -47,6 +47,7 @@ AppWindow::AppWindow()
     m_showReport = settings.showReport;
     m_showPlugins = settings.showPlugins;
     ui::i18n::setLanguage(ui::i18n::languageFromCode(settings.uiLanguage));
+    m_uiTheme = settings.uiTheme;
     m_uiPluginsEnabled = settings.enablePlugins;
     m_uiPluginWindowsAllowed = settings.allowPluginWindows;
     m_uiPluginsDirectory = settings.pluginsDirectory;
@@ -57,7 +58,7 @@ AppWindow::AppWindow()
     }
 
     m_logWindow->setupFileLogging(core::ConfigManager::getInstance().getLogDirectory());
-    setupStyle();
+    setupStyle(m_uiTheme);
     checkVersionUpdate();
 
     // Start checking for updates in background
@@ -123,6 +124,10 @@ void AppWindow::update() {
 void AppWindow::render() {
     const auto currentSettings = core::ConfigManager::getInstance().getSettings();
     i18n::setLanguage(i18n::languageFromCode(currentSettings.uiLanguage));
+    if (currentSettings.uiTheme != m_uiTheme) {
+        m_uiTheme = currentSettings.uiTheme;
+        setupStyle(m_uiTheme);
+    }
     if (currentSettings.enablePlugins != m_uiPluginsEnabled ||
         currentSettings.pluginsDirectory != m_uiPluginsDirectory ||
         currentSettings.pluginReloadToken != m_uiPluginReloadToken) {
@@ -454,7 +459,7 @@ void AppWindow::renderStatusBar() {
     ImGui::End();
 }
 
-void AppWindow::setupStyle() {
+void AppWindow::setupStyle(const std::string& theme) {
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec4* colors = style.Colors;
 
@@ -462,14 +467,25 @@ void AppWindow::setupStyle() {
     style.FrameRounding = 4.0f;
     style.PopupRounding = 4.0f;
 
-    colors[ImGuiCol_Text]                   = ImVec4(0.95f, 0.96f, 0.98f, 1.00f);
-    colors[ImGuiCol_WindowBg]               = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
-    colors[ImGuiCol_Border]                 = ImVec4(0.25f, 0.25f, 0.27f, 1.00f);
-    colors[ImGuiCol_FrameBg]                = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
-    colors[ImGuiCol_Button]                 = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
-    colors[ImGuiCol_ButtonHovered]          = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-    colors[ImGuiCol_Header]                 = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
-    colors[ImGuiCol_HeaderHovered]          = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
+    if (theme == "light") {
+        ImGui::StyleColorsLight();
+        colors[ImGuiCol_WindowBg]      = ImVec4(0.96f, 0.96f, 0.97f, 1.00f);
+        colors[ImGuiCol_FrameBg]       = ImVec4(0.90f, 0.91f, 0.93f, 1.00f);
+        colors[ImGuiCol_Button]        = ImVec4(0.84f, 0.86f, 0.89f, 1.00f);
+        colors[ImGuiCol_ButtonHovered] = ImVec4(0.30f, 0.58f, 0.95f, 0.90f);
+        colors[ImGuiCol_Header]        = ImVec4(0.84f, 0.86f, 0.89f, 1.00f);
+        colors[ImGuiCol_HeaderHovered] = ImVec4(0.30f, 0.58f, 0.95f, 0.80f);
+    } else {
+        ImGui::StyleColorsDark();
+        colors[ImGuiCol_Text]          = ImVec4(0.95f, 0.96f, 0.98f, 1.00f);
+        colors[ImGuiCol_WindowBg]      = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
+        colors[ImGuiCol_Border]        = ImVec4(0.25f, 0.25f, 0.27f, 1.00f);
+        colors[ImGuiCol_FrameBg]       = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
+        colors[ImGuiCol_Button]        = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
+        colors[ImGuiCol_ButtonHovered] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+        colors[ImGuiCol_Header]        = ImVec4(0.20f, 0.21f, 0.22f, 1.00f);
+        colors[ImGuiCol_HeaderHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
+    }
 }
 
 } // namespace ui

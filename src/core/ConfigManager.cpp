@@ -51,6 +51,7 @@ void ConfigManager::load() {
         if (j.contains("showReport")) m_settings.showReport = j.at("showReport").get<bool>();
         if (j.contains("showPlugins")) m_settings.showPlugins = j.at("showPlugins").get<bool>();
         if (j.contains("uiLanguage")) m_settings.uiLanguage = j.at("uiLanguage").get<std::string>();
+        if (j.contains("uiTheme")) m_settings.uiTheme = j.at("uiTheme").get<std::string>();
         if (j.contains("pendingUpdateVersion")) m_settings.pendingUpdateVersion = j.at("pendingUpdateVersion").get<std::string>();
         if (j.contains("pendingUpdateAssetUrl")) m_settings.pendingUpdateAssetUrl = j.at("pendingUpdateAssetUrl").get<std::string>();
         if (j.contains("pendingUpdateAssetName")) m_settings.pendingUpdateAssetName = j.at("pendingUpdateAssetName").get<std::string>();

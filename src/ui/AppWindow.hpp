@@ -35,7 +35,7 @@ public:
 private:
     void renderMainDockspace();
     void renderStatusBar();
-    void setupStyle();
+    void setupStyle(const std::string& theme);
     void checkVersionUpdate();
     void saveWindowState();
     void renderCloseDuringSortingPopup();
@@ -74,6 +74,7 @@ private:
     bool m_uiPluginWindowsAllowed = true;
     std::filesystem::path m_uiPluginsDirectory;
     int m_uiPluginReloadToken = 0;
+    std::string m_uiTheme = "dark";
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }

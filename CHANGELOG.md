@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2026-03-13
+
+### Added
+- **Theme Setting:** Added persisted `uiTheme` setting (`dark`/`light`) to app configuration.
+
+### Changed
+- **Live Theme Application:** App style now updates based on the configured theme at runtime.
+- **Settings UX:** Added localized theme selector (Dark/Light) in settings.
+- **Roadmap Progress:** Advanced the UI/UX refinement milestone by implementing Dark/Light mode support.
+- **Versioning:** Bumped semantic version to `1.5.1`.
+
 ## [1.5.0] - 2026-03-13
 
 ### Added

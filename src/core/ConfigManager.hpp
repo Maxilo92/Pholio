@@ -76,11 +76,12 @@ struct AppSettings {
     bool showReport = false;
     bool showPlugins = false;
     std::string uiLanguage = "en";
+    std::string uiTheme = "dark";
     std::string pendingUpdateVersion;
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, disabledPlugins, allowPluginWindows, pluginReloadToken, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, showPlugins, uiLanguage, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, disabledPlugins, allowPluginWindows, pluginReloadToken, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, showPlugins, uiLanguage, uiTheme, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {

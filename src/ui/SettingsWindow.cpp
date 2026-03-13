@@ -254,6 +254,17 @@ void SettingsWindow::render() {
                     m_editedSettings.uiLanguage = i18n::languageCode(selected);
                     m_isDirty = true;
                 }
+                ImGui::Text("%s", tr("settings.theme", "Theme"));
+                int themeIndex = m_editedSettings.uiTheme == "light" ? 1 : 0;
+                const char* themeItems[] = {
+                    tr("settings.theme.dark", "Dark"),
+                    tr("settings.theme.light", "Light")
+                };
+                if (ImGui::Combo("##UiTheme", &themeIndex, themeItems, 2)) {
+                    m_editedSettings.uiTheme = themeIndex == 1 ? "light" : "dark";
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("%s", tr("settings.theme.tooltip", "Choose between dark and light UI themes."));
                 ImGui::Separator();
 
                 if (ImGui::BeginTable("EngineSettings", 2, ImGuiTableFlags_SizingStretchProp)) {
