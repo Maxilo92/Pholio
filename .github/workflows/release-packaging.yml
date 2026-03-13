@@ -20,6 +20,9 @@ jobs:
         with:
           vcpkgJsonGlob: vcpkg.json
 
+      - name: Clean build directory
+        run: rm -rf build
+
       - name: Configure
         run: >
           cmake -S . -B build -G Ninja
@@ -57,6 +60,13 @@ jobs:
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgJsonGlob: vcpkg.json
+
+      - name: Clean build directory
+        shell: pwsh
+        run: |
+          if (Test-Path build) {
+            Remove-Item -Recurse -Force build
+          }
 
       - name: Install WiX Toolset
         run: choco install wixtoolset --yes --no-progress
@@ -96,6 +106,9 @@ jobs:
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgJsonGlob: vcpkg.json
+
+      - name: Clean build directory
+        run: rm -rf build
 
       - name: Configure
         run: >
