@@ -42,15 +42,15 @@ void PluginWindow::render(bool* open, plugins::PluginManager* pluginManager) {
         return;
     }
 
-    if (ImGui::Button(tr("plugin.tab.search", "Search"), ImVec2(100, 0))) {
+    if (ImGui::Button(tr("plugin.tab.search.icon", "[?] Search"), ImVec2(100, 0))) {
         m_section = Section::Search;
     }
     ImGui::SameLine();
-    if (ImGui::Button(tr("plugin.tab.add", "Add"), ImVec2(100, 0))) {
+    if (ImGui::Button(tr("plugin.tab.add.icon", "[+] Add"), ImVec2(100, 0))) {
         m_section = Section::Add;
     }
     ImGui::SameLine();
-    if (ImGui::Button(tr("plugin.tab.manage", "Manage"), ImVec2(100, 0))) {
+    if (ImGui::Button(tr("plugin.tab.manage.icon", "[*] Manage"), ImVec2(100, 0))) {
         m_section = Section::Manage;
     }
     ImGui::Separator();

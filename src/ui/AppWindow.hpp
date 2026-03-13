@@ -12,6 +12,7 @@
 #include "PluginWindow.hpp"
 #include "plugins/PluginManager.hpp"
 #include "../engine/Worker.hpp"
+#include <imgui.h>
 #include <memory>
 #include <string>
 #include <filesystem>
@@ -33,9 +34,16 @@ public:
     void render();
 
 private:
+    enum class LayoutPreset {
+        Default = 0,
+        MediaFocus = 1,
+        Monitoring = 2
+    };
+
     void renderMainDockspace();
     void renderStatusBar();
     void setupStyle(const std::string& theme);
+    void applyLayoutPreset(LayoutPreset preset, ImGuiID dockspaceId, const ImVec2& workSize);
     void checkVersionUpdate();
     void saveWindowState();
     void renderCloseDuringSortingPopup();
@@ -75,6 +83,7 @@ private:
     std::filesystem::path m_uiPluginsDirectory;
     int m_uiPluginReloadToken = 0;
     std::string m_uiTheme = "dark";
+    int m_pendingLayoutPreset = -1;
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }

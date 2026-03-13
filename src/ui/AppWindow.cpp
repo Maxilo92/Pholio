@@ -318,23 +318,13 @@ void AppWindow::renderMainDockspace() {
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
     }
 
+    if (m_pendingLayoutPreset >= 0) {
+        applyLayoutPreset(static_cast<LayoutPreset>(m_pendingLayoutPreset), dockspace_id, viewport->WorkSize);
+        m_pendingLayoutPreset = -1;
+    }
+
     if (m_firstRun) {
-        ImGui::DockBuilderRemoveNode(dockspace_id);
-        ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-        ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->WorkSize);
-        
-        ImGuiID dock_main_id = dockspace_id;
-        ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.30f, NULL, &dock_main_id);
-        ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, NULL, &dock_main_id);
-        
-        ImGui::DockBuilderDockWindow("Dashboard", dock_main_id);
-        ImGui::DockBuilderDockWindow("Image Preview", dock_main_id);
-        ImGui::DockBuilderDockWindow("Logs", dock_id_bottom);
-        ImGui::DockBuilderDockWindow("Settings", dock_id_right);
-        ImGui::DockBuilderDockWindow("Progress & Performance", dock_id_right);
-        ImGui::DockBuilderDockWindow("Internal Debug", dock_id_bottom);
-        
-        ImGui::DockBuilderFinish(dockspace_id);
+        applyLayoutPreset(LayoutPreset::Default, dockspace_id, viewport->WorkSize);
         m_firstRun = false;
     }
 
@@ -345,28 +335,35 @@ void AppWindow::renderMainDockspace() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(i18n::tr("menu.view", "View"))) {
-            ImGui::MenuItem(i18n::tr("menu.dashboard", "Dashboard"), nullptr, &m_showDashboard);
-            ImGui::MenuItem(i18n::tr("menu.preview", "Image Preview"), nullptr, &m_showPreview);
-            ImGui::MenuItem(i18n::tr("menu.settings", "Settings"), nullptr, &m_showSettings);
-            ImGui::MenuItem(i18n::tr("menu.progress", "Progress & Performance"), nullptr, &m_showProgress);
-            ImGui::MenuItem(i18n::tr("menu.logs", "Logs"), nullptr, &m_showLogs);
-            ImGui::MenuItem(i18n::tr("menu.plugins", "Plugins"), nullptr, &m_showPlugins);
+            ImGui::MenuItem(i18n::tr("menu.dashboard.icon", "[D] Dashboard"), nullptr, &m_showDashboard);
+            ImGui::MenuItem(i18n::tr("menu.preview.icon", "[P] Image Preview"), nullptr, &m_showPreview);
+            ImGui::MenuItem(i18n::tr("menu.settings.icon", "[S] Settings"), nullptr, &m_showSettings);
+            ImGui::MenuItem(i18n::tr("menu.progress.icon", "[M] Progress & Performance"), nullptr, &m_showProgress);
+            ImGui::MenuItem(i18n::tr("menu.logs.icon", "[L] Logs"), nullptr, &m_showLogs);
+            ImGui::MenuItem(i18n::tr("menu.plugins.icon", "[G] Plugins"), nullptr, &m_showPlugins);
             ImGui::Separator();
             ImGui::MenuItem(i18n::tr("menu.internal_debug", "Internal Debug"), nullptr, &m_showDebug);
+            ImGui::Separator();
+            if (ImGui::BeginMenu(i18n::tr("menu.layout_presets", "Layout Presets"))) {
+                if (ImGui::MenuItem(i18n::tr("menu.layout.default", "Default"))) m_pendingLayoutPreset = static_cast<int>(LayoutPreset::Default);
+                if (ImGui::MenuItem(i18n::tr("menu.layout.media", "Media Focus"))) m_pendingLayoutPreset = static_cast<int>(LayoutPreset::MediaFocus);
+                if (ImGui::MenuItem(i18n::tr("menu.layout.monitor", "Monitoring Focus"))) m_pendingLayoutPreset = static_cast<int>(LayoutPreset::Monitoring);
+                ImGui::EndMenu();
+            }
             ImGui::Separator();
             if (ImGui::MenuItem(i18n::tr("menu.reset_layout", "Reset Layout"))) m_firstRun = true;
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu(i18n::tr("menu.plugins", "Plugins"))) {
-            if (ImGui::MenuItem(i18n::tr("menu.plugin.search", "Search"))) {
+            if (ImGui::MenuItem(i18n::tr("menu.plugin.search.icon", "[?] Search"))) {
                 m_showPlugins = true;
                 m_pluginWindow->setSection(PluginWindow::Section::Search);
             }
-            if (ImGui::MenuItem(i18n::tr("menu.plugin.add", "Add"))) {
+            if (ImGui::MenuItem(i18n::tr("menu.plugin.add.icon", "[+] Add"))) {
                 m_showPlugins = true;
                 m_pluginWindow->setSection(PluginWindow::Section::Add);
             }
-            if (ImGui::MenuItem(i18n::tr("menu.plugin.manage", "Manage"))) {
+            if (ImGui::MenuItem(i18n::tr("menu.plugin.manage.icon", "[*] Manage"))) {
                 m_showPlugins = true;
                 m_pluginWindow->setSection(PluginWindow::Section::Manage);
             }
@@ -425,6 +422,49 @@ void AppWindow::renderMainDockspace() {
         ImGui::EndMenuBar();
     }
     ImGui::End();
+}
+
+void AppWindow::applyLayoutPreset(LayoutPreset preset, ImGuiID dockspaceId, const ImVec2& workSize) {
+    ImGui::DockBuilderRemoveNode(dockspaceId);
+    ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);
+    ImGui::DockBuilderSetNodeSize(dockspaceId, workSize);
+
+    ImGuiID dock_main_id = dockspaceId;
+    ImGuiID dock_right_id = 0;
+    ImGuiID dock_bottom_id = 0;
+
+    switch (preset) {
+        case LayoutPreset::Default:
+            dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.30f, nullptr, &dock_main_id);
+            dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, nullptr, &dock_main_id);
+            ImGui::DockBuilderDockWindow("Dashboard", dock_main_id);
+            ImGui::DockBuilderDockWindow("Image Preview", dock_main_id);
+            ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
+            ImGui::DockBuilderDockWindow("Settings", dock_right_id);
+            ImGui::DockBuilderDockWindow("Progress & Performance", dock_right_id);
+            ImGui::DockBuilderDockWindow("Internal Debug", dock_bottom_id);
+            break;
+        case LayoutPreset::MediaFocus:
+            dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.28f, nullptr, &dock_main_id);
+            dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.18f, nullptr, &dock_main_id);
+            ImGui::DockBuilderDockWindow("Dashboard", dock_main_id);
+            ImGui::DockBuilderDockWindow("Image Preview", dock_main_id);
+            ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
+            ImGui::DockBuilderDockWindow("Settings", dock_right_id);
+            ImGui::DockBuilderDockWindow("Progress & Performance", dock_right_id);
+            break;
+        case LayoutPreset::Monitoring:
+            dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.35f, nullptr, &dock_main_id);
+            dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.40f, nullptr, &dock_main_id);
+            ImGui::DockBuilderDockWindow("Dashboard", dock_right_id);
+            ImGui::DockBuilderDockWindow("Settings", dock_right_id);
+            ImGui::DockBuilderDockWindow("Progress & Performance", dock_main_id);
+            ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
+            ImGui::DockBuilderDockWindow("Internal Debug", dock_bottom_id);
+            break;
+    }
+
+    ImGui::DockBuilderFinish(dockspaceId);
 }
 
 void AppWindow::renderStatusBar() {

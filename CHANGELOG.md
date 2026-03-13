@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2026-03-13
+
+### Added
+- **Layout Presets:** Added multiple dock layout presets (Default, Media Focus, Monitoring Focus) in `View`.
+- **Icon Labels:** Added clearer icon-style labels for key view/plugin navigation entries.
+
+### Changed
+- **UI/UX Milestone:** Completed and checked off the roadmap item "UI/UX Refinement".
+- **Versioning:** Bumped semantic version to `1.6.0`.
+
 ## [1.5.1] - 2026-03-13
 
 ### Added
