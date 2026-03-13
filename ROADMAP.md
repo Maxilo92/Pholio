@@ -28,7 +28,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [x] **Internationalisierung (I18n):** Unterstützung für mehrere Sprachen (Deutsch/Englisch initial).
 - [x] **UI/UX Refinement:** Themes (Dark/Light Mode), verbesserte Icons und Layout-Presets.
 - [x] **Fehler-Reporting:** Automatisierter Export von Absturzberichten und Diagnose-Logs.
-- [ ] **Windows Support:** Portierung und Validierung des Build-Systems für Windows (MSVC).
+- [x] **Windows Support:** Portierung und Validierung des Build-Systems für Windows (MSVC).
 
 ---
 
@@ -42,6 +42,16 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [ ] **Packaging:** Erstellung von stabilen Installern (DMG, MSI, AppImage/Flatpak).
 - [ ] **V1.0 Launch:** Offizieller Release der ersten stabilen Version.
 
+### Nächste konkrete Schritte (RC-Track)
+
+- [x] **Technische Doku-Basis steht:** Architektur- und API-Dokumente sind angelegt (`docs/TECHNICAL_DESIGN.md`, `docs/API.md`).
+- [x] **Packaging-Grundlagen vorhanden:** Plattform-spezifische Basisdateien liegen bereits in `packaging/`.
+- [x] **Windows CI-Grundlage aktiv:** Workflow für MSVC-Build ist vorhanden (`.github/workflows/windows-msvc.yml`).
+- [x] **Test-Harness aufgesetzt:** CTest in CMake integriert und erste Kernmodul-Tests für `StructureAnalyzer` hinzugefügt (`tests/StructureAnalyzerTests.cpp`).
+- [x] **Performance-Benchmarks definiert:** Reproduzierbare Benchmarks und Zielmetriken dokumentiert (`docs/PERFORMANCE_BENCHMARKS.md`) und ausführbares Benchmark-Target ergänzt (`PholioBenchmarks`).
+- [ ] **Signing-Workflow vorbereiten:** Platzhalter für Zertifikate/Secrets und Build-Schritte für Signierung in CI ergänzen.
+- [ ] **Installer-Pipeline vervollständigen:** DMG-, MSI- und Linux-Artefakte automatisiert im Release-Flow erzeugen.
+
 ---
 
 ## 🌟 Phase 4: Post 1.0 - Zukünftige Erweiterungen
@@ -53,4 +63,4 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 
 ---
 
-*Zuletzt aktualisiert: 13. März 2026*
+*Zuletzt aktualisiert: 13. März 2026 (Phase 3 aktiv: Tests + Benchmarks)*

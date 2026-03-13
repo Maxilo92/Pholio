@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0] - 2026-03-13
+
+### Added
+- **Unit Test Harness:** Added CTest integration and a dedicated test binary (`PholioEngineTests`) in CMake.
+- **Core Unit Tests:** Added initial tests for `StructureAnalyzer::generatePath` (`tests/StructureAnalyzerTests.cpp`).
+- **Performance Benchmarking:** Added benchmark binary (`PholioBenchmarks`) for reproducible `StructureAnalyzer.generatePath` throughput measurements.
+- **Benchmark Documentation:** Added `docs/PERFORMANCE_BENCHMARKS.md` with dataset definition, metrics, execution commands, baseline, and RC target values.
+
+### Changed
+- **Roadmap Progress:** Checked off the Phase 3 RC item "Performance-Benchmarks definieren" and documented active Phase-3 progress.
+- **Versioning:** Bumped semantic version to `1.9.0`.
+
+## [1.8.0] - 2026-03-13
+
+### Added
+- **Windows CI Validation:** Added GitHub Actions workflow (`windows-msvc.yml`) to configure and build on `windows-latest` with MSVC.
+
+### Changed
+- **Windows Build Porting:** Updated CMake FFmpeg resolution to support Windows/MSVC (vcpkg config targets) while keeping pkg-config flow for Unix-like systems.
+- **Dependency Manifest:** Added `ffmpeg` to `vcpkg.json` for reproducible cross-platform builds.
+- **Roadmap Progress:** Marked the "Windows Support" roadmap item as completed.
+- **Versioning:** Bumped semantic version to `1.8.0`.
+
 ## [1.7.0] - 2026-03-13
 
 ### Added

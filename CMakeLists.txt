@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.7.0")
+set(PHOLIO_VERSION "1.9.0")
 
 project(Pholio LANGUAGES CXX)
 
@@ -36,11 +36,35 @@ configure_file(
 # Find packages
 find_package(exiv2 CONFIG REQUIRED)
 
-# Find System FFmpeg (via PkgConfig)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(AVFORMAT REQUIRED libavformat)
-pkg_check_modules(AVCODEC REQUIRED libavcodec)
-pkg_check_modules(AVUTIL REQUIRED libavutil)
+if(WIN32)
+    # Prefer vcpkg CMake config targets on Windows/MSVC.
+    find_package(FFMPEG QUIET)
+    if(TARGET FFMPEG::avformat AND TARGET FFMPEG::avcodec AND TARGET FFMPEG::avutil)
+        set(PHOLIO_FFMPEG_LIBS
+            FFMPEG::avformat
+            FFMPEG::avcodec
+            FFMPEG::avutil
+        )
+    else()
+        find_package(unofficial-ffmpeg CONFIG REQUIRED)
+        set(PHOLIO_FFMPEG_LIBS
+            unofficial::ffmpeg::avformat
+            unofficial::ffmpeg::avcodec
+            unofficial::ffmpeg::avutil
+        )
+    endif()
+else()
+    # Use system FFmpeg (via PkgConfig) on Unix-like platforms.
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(AVFORMAT REQUIRED libavformat)
+    pkg_check_modules(AVCODEC REQUIRED libavcodec)
+    pkg_check_modules(AVUTIL REQUIRED libavutil)
+    set(PHOLIO_FFMPEG_LIBS
+        ${AVFORMAT_LIBRARIES}
+        ${AVCODEC_LIBRARIES}
+        ${AVUTIL_LIBRARIES}
+    )
+endif()
 
 find_package(imgui CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
@@ -167,9 +191,7 @@ endif()
 target_link_libraries(Pholio PRIVATE
     Exiv2::exiv2lib
     Backward::Backward
-    ${AVFORMAT_LIBRARIES}
-    ${AVCODEC_LIBRARIES}
-    ${AVUTIL_LIBRARIES}
+    ${PHOLIO_FFMPEG_LIBS}
     imgui::imgui
     glfw
     OpenGL::GL
@@ -185,12 +207,17 @@ target_include_directories(Pholio PRIVATE ${Stb_INCLUDE_DIR})
 
 # Add include directories
 target_include_directories(Pholio PRIVATE
-    ${AVFORMAT_INCLUDE_DIRS}
-    ${AVCODEC_INCLUDE_DIRS}
-    ${AVUTIL_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/generated
 )
+
+if(NOT WIN32)
+    target_include_directories(Pholio PRIVATE
+        ${AVFORMAT_INCLUDE_DIRS}
+        ${AVCODEC_INCLUDE_DIRS}
+        ${AVUTIL_INCLUDE_DIRS}
+    )
+endif()
 
 # Output build system status
 message(STATUS "Pholio version ${PHOLIO_VERSION} build system initialized")
@@ -213,4 +240,35 @@ if(PHOLIO_BUILD_SAMPLE_PLUGINS)
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/sample-plugins"
         )
     endforeach()
+endif()
+
+option(PHOLIO_BUILD_TESTS "Build unit tests" ON)
+if(PHOLIO_BUILD_TESTS)
+    enable_testing()
+
+    add_executable(PholioEngineTests
+        tests/StructureAnalyzerTests.cpp
+        src/engine/StructureAnalyzer.cpp
+    )
+
+    target_include_directories(PholioEngineTests PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+
+    add_test(
+        NAME pholio.engine.structure_analyzer
+        COMMAND PholioEngineTests
+    )
+endif()
+
+option(PHOLIO_BUILD_BENCHMARKS "Build performance benchmarks" ON)
+if(PHOLIO_BUILD_BENCHMARKS)
+    add_executable(PholioBenchmarks
+        tests/benchmarks/StructureAnalyzerBenchmark.cpp
+        src/engine/StructureAnalyzer.cpp
+    )
+
+    target_include_directories(PholioBenchmarks PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
 endif()
