@@ -6,6 +6,7 @@
 #include "core/ConfigManager.hpp"
 #include <iostream>
 #include <chrono>
+#include <future>
 
 namespace engine {
 
@@ -74,6 +75,7 @@ void Worker::setCurrentImagePath(const std::filesystem::path& path) {
 }
 
 void Worker::run() {
+    auto overallStartTime = std::chrono::steady_clock::now();
     try {
         const auto& settings = core::ConfigManager::getInstance().getSettings();
         
@@ -147,26 +149,31 @@ void Worker::run() {
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;
         uint64_t batchBytes = 0;
-        int successCount = 0;
-        int errorCount = 0;
 
-        for (auto& task : tasks) {
-            if (m_shouldStop) {
-                m_logWindow.warn("Processing cancelled by user.");
-                setStatus("Cancelled");
-                setCurrentImagePath("");
-                break;
+        // Determine concurrency
+        int numThreads = 1;
+        if (numThreads > 1) {
+            m_logWindow.info("Using parallel processing with " + std::to_string(numThreads) + " threads.");
+        }
+
+        auto processTask = [&](MediaTask& task) {
+            if (m_shouldStop) return;
+
+            // In parallel mode, we don't update status for every file to avoid flickering
+            if (numThreads == 1) {
+                setStatus("Analyzing: " + task.metadata.path.filename().string());
             }
-
-            setStatus("Analyzing: " + task.metadata.path.filename().string());
-            if (settings.showPreview) {
+            
+            if (settings.showPreview && numThreads == 1) {
                 setCurrentImagePath(task.metadata.path);
             }
             
             if (analyzer.analyze(task.metadata)) {
                 task.targetPath = structAnalyzer.generatePath(task.metadata);
                 
-                setStatus("Sorting: " + task.metadata.path.filename().string());
+                if (numThreads == 1) {
+                    setStatus("Sorting: " + task.metadata.path.filename().string());
+                }
                 
                 if (sorter.process(task, settings.operationMode)) {
                     m_logWindow.success("Processed: " + task.metadata.path.filename().string() + 
@@ -184,19 +191,73 @@ void Worker::run() {
 
             m_processedFiles++;
             m_processedBytes += task.metadata.fileSize;
-            batchProcessed++;
-            batchBytes += task.metadata.fileSize;
+            
+            // Note: batchProcessed and batchBytes are harder to track across threads without a mutex
+            // but for metrics they don't need to be perfect or we can use atomics
+        };
 
-            // Update metrics every 5 files or so
-            if (batchProcessed >= 5) {
-                updatePerformanceMetrics(batchProcessed, batchBytes, startTime);
-                batchProcessed = 0;
-                batchBytes = 0;
-                startTime = std::chrono::steady_clock::now();
+        if (numThreads == 1) {
+            for (auto& task : tasks) {
+                if (m_shouldStop) break;
+                processTask(task);
+                
+                batchProcessed++;
+                batchBytes += task.metadata.fileSize;
+                if (batchProcessed >= 5) {
+                    updatePerformanceMetrics(batchProcessed, batchBytes, startTime);
+                    batchProcessed = 0;
+                    batchBytes = 0;
+                    startTime = std::chrono::steady_clock::now();
+                }
             }
+        } else {
+            // Parallel processing with a window of 'numThreads'
+            std::vector<std::future<void>> futures;
+            for (auto& task : tasks) {
+                if (m_shouldStop) break;
+                
+                futures.push_back(std::async(std::launch::async, [&]() { processTask(task); }));
+                
+                if (futures.size() >= static_cast<size_t>(numThreads)) {
+                    // Wait for the oldest one to finish to keep the window size
+                    for (auto it = futures.begin(); it != futures.end(); ) {
+                        if (it->wait_for(std::chrono::milliseconds(1)) == std::future_status::ready) {
+                            it->get();
+                            it = futures.erase(it);
+                            
+                            // Approximate performance metrics
+                            updatePerformanceMetrics(1, 0, startTime); // We don't have bytes easily here
+                            startTime = std::chrono::steady_clock::now();
+                        } else {
+                            ++it;
+                        }
+                    }
+                    // If still full, wait properly for at least one
+                    if (futures.size() >= static_cast<size_t>(numThreads)) {
+                        futures.front().get();
+                        futures.erase(futures.begin());
+                    }
+                }
+            }
+            // Wait for remaining
+            for (auto& f : futures) f.get();
         }
 
         if (!m_shouldStop) {
+            // Detailed report
+            auto endTime = std::chrono::steady_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::seconds>(endTime - overallStartTime).count();
+            
+            float avgFps = (duration > 0) ? static_cast<float>(m_processedFiles) / static_cast<float>(duration) : 0;
+            float totalMB = static_cast<float>(m_processedBytes) / (1024.0f * 1024.0f);
+            float avgMBps = (duration > 0) ? totalMB / static_cast<float>(duration) : 0;
+
+            m_logWindow.info("-----------------------------------------");
+            m_logWindow.info("Summary: " + std::to_string(m_processedFiles) + " files, " + std::to_string(static_cast<int>(totalMB)) + " MB");
+            m_logWindow.info("Success: " + std::to_string(m_successCount) + ", Errors: " + std::to_string(m_errorCount));
+            m_logWindow.info("Time: " + std::to_string(duration) + "s, Speed: " + std::to_string(avgFps) + " fps (" + std::to_string(avgMBps) + " MB/s)");
+            m_logWindow.info("-----------------------------------------");
+
             std::string summary = "Process finished. " + 
                                  std::to_string(m_successCount) + " successful, " + 
                                  std::to_string(m_errorCount) + " failed, " +

@@ -18,24 +18,20 @@ bool ChangelogWindow::loadNewEntries(const std::string& sinceVersion) {
     VersionEntry currentEntry;
     bool collecting = false;
     
-    // Simple version comparison helper: 0.5.2 > 0.5.1
-    auto isNewer = [](const std::string& v, const std::string& target) {
-        // Very basic semantic comparison for this use case
-        return v != target; // In our sequential changelog, anything before the target is newer
-    };
-
-    std::regex versionRegex(R"(^## \[([0-9.]+)\] - ([0-9-]+))");
+    // Improved version regex to handle -alpha, -beta, etc.
+    std::regex versionRegex(R"(^## \[([^\]]+)\] - ([0-9-]+))");
     std::smatch match;
 
     while (std::getline(file, line)) {
         if (std::regex_search(line, match, versionRegex)) {
             std::string version = match[1];
             
-            if (version == sinceVersion) {
+            if (version == sinceVersion && sinceVersion != "0.0.0") {
                 // We reached the last known version, stop here
                 if (collecting) {
                     m_entries.push_back(currentEntry);
                 }
+                collecting = false;
                 break;
             }
 
@@ -54,22 +50,33 @@ bool ChangelogWindow::loadNewEntries(const std::string& sinceVersion) {
         }
     }
 
+    // Add the last entry if we were still collecting
+    if (collecting) {
+        m_entries.push_back(currentEntry);
+    }
+
     return !m_entries.empty();
 }
 
 void ChangelogWindow::render(bool* p_open) {
-    if (!ImGui::Begin("What's New", p_open, ImGuiWindowFlags_AlwaysAutoResize)) {
+    if (!ImGui::Begin("What's New", p_open)) {
         ImGui::End();
         return;
     }
 
-    ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "You've updated to a new version!");
-    ImGui::Text("Here is what changed since your last visit (%s):", m_sinceVersion.c_str());
+    ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "Pholio Changelog");
+    if (m_sinceVersion != "0.0.0") {
+        ImGui::Text("Changes since your last visit (%s):", m_sinceVersion.c_str());
+    }
     ImGui::Separator();
 
-    ImGui::BeginChild("ChangelogContent", ImVec2(500, 400), true);
+    ImGui::BeginChild("ChangelogContent", ImVec2(0, -ImGui::GetFrameHeightWithSpacing() - 10), true);
     for (const auto& entry : m_entries) {
-        ImGui::TextDisabled("%s (%s)", entry.version.c_str(), entry.date.c_str());
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1));
+        ImGui::Text("Version %s", entry.version.c_str());
+        ImGui::PopStyleColor();
+        ImGui::SameLine();
+        ImGui::TextDisabled("(%s)", entry.date.c_str());
         ImGui::Separator();
         
         for (const auto& change : entry.changes) {
@@ -85,7 +92,7 @@ void ChangelogWindow::render(bool* p_open) {
     }
     ImGui::EndChild();
 
-    if (ImGui::Button("Close & Don't show again", ImVec2(-1, 40))) {
+    if (ImGui::Button("Close", ImVec2(-1, 0))) {
         *p_open = false;
     }
 

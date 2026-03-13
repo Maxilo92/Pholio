@@ -1,6 +1,7 @@
 #include "AppWindow.hpp"
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <chrono>
 #include <iostream>
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
@@ -15,6 +16,7 @@ AppWindow::AppWindow()
       m_progressWindow(std::make_unique<ProgressWindow>(*m_worker)),
       m_dashboardWindow(std::make_unique<DashboardWindow>(*m_worker)),
       m_previewWindow(std::make_unique<PreviewWindow>(*m_worker)),
+      m_debugWindow(std::make_unique<DebugWindow>()),
       m_aboutWindow(std::make_unique<AboutWindow>()),
       m_changelogWindow(std::make_unique<ChangelogWindow>()),
       m_reportWindow(std::make_unique<ReportWindow>()),
@@ -51,16 +53,24 @@ AppWindow::AppWindow()
 AppWindow::~AppWindow() = default;
 
 void AppWindow::checkVersionUpdate() {
-    auto settings = core::ConfigManager::getInstance().getSettings();
+    auto& config = core::ConfigManager::getInstance();
+    auto settings = config.getSettings();
     std::string currentVersion(core::PROJECT_VERSION);
+
+    if (settings.lastVersion.empty()) {
+        settings.lastVersion = currentVersion;
+        config.setSettings(settings);
+        config.save();
+        return;
+    }
 
     if (settings.lastVersion != currentVersion) {
         if (m_changelogWindow->loadNewEntries(settings.lastVersion)) {
             m_showChangelog = true;
         }
         settings.lastVersion = currentVersion;
-        core::ConfigManager::getInstance().setSettings(settings);
-        core::ConfigManager::getInstance().save();
+        config.setSettings(settings);
+        config.save();
     }
 }
 
@@ -74,15 +84,18 @@ void AppWindow::update() {
     bool cmd_down = io.KeyCtrl;
 #endif
 
-    if (cmd_down) {
-        if (ImGui::IsKeyPressed(ImGuiKey_D)) { m_showDashboard = !m_showDashboard; saveWindowState(); }
-        if (ImGui::IsKeyPressed(ImGuiKey_S)) { m_showSettings = !m_showSettings; saveWindowState(); }
-        if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+    static const auto shortcutsEnabledAt = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    const bool shortcutsEnabled = std::chrono::steady_clock::now() >= shortcutsEnabledAt;
+
+    // Defer global shortcuts briefly after startup to avoid phantom modifier/key events.
+    if (cmd_down && shortcutsEnabled) {
+        if (ImGui::IsKeyPressed(ImGuiKey_D, false)) { m_showDashboard = !m_showDashboard; saveWindowState(); }
+        if (ImGui::IsKeyPressed(ImGuiKey_S, false)) { m_showSettings = !m_showSettings; saveWindowState(); }
+        if (ImGui::IsKeyPressed(ImGuiKey_R, false)) {
             m_shouldRestart = true;
             if (io.KeyShift) m_shouldRebuild = true;
         }
-        if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
-            std::cout << "DEBUG: Close shortcut triggered (Cmd+Q)" << std::endl;
+        if (ImGui::IsKeyPressed(ImGuiKey_Q, false)) {
             m_shouldClose = true;
         }
     }
@@ -91,21 +104,19 @@ void AppWindow::update() {
 void AppWindow::render() {
     renderMainDockspace();
 
-    // Show update banner if available
     auto& updateInfo = core::UpdateManager::getInstance().getUpdateInfo();
     if (updateInfo.hasUpdate) {
         ImGui::SetNextWindowPos(ImVec2(ImGui::GetMainViewport()->Pos.x + 20.0f, ImGui::GetMainViewport()->Pos.y + 40.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(350.0f, 0.0f));
         if (ImGui::Begin("Update Available", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize)) {
-            ImGui::Text("A new version is available: v%s", updateInfo.latestVersion.c_str());
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "A new version is available: v%s", updateInfo.latestVersion.c_str());
             ImGui::Spacing();
             if (ImGui::Button("View on GitHub")) {
 #ifdef _WIN32
-                std::string cmd = "start " + updateInfo.releaseUrl;
+                std::system(("start " + updateInfo.releaseUrl).c_str());
 #else
-                std::string cmd = "open " + updateInfo.releaseUrl;
+                std::system(("open " + updateInfo.releaseUrl).c_str());
 #endif
-                std::system(cmd.c_str());
             }
             ImGui::SameLine();
             if (ImGui::Button("Dismiss")) {
@@ -120,11 +131,11 @@ void AppWindow::render() {
     if (m_showProgress) m_progressWindow->render();
     if (m_showLogs) m_logWindow->render();
     if (m_showPreview) m_previewWindow->render(&m_showPreview);
+    if (m_showDebug) m_debugWindow->render(&m_showDebug);
     if (m_showAbout) m_aboutWindow->render(&m_showAbout);
     if (m_showChangelog) m_changelogWindow->render(&m_showChangelog);
     if (m_showReport) m_reportWindow->render(&m_showReport);
 
-    // Save window state if any window was toggled
     static bool lastDashboard = m_showDashboard;
     static bool lastSettings = m_showSettings;
     static bool lastProgress = m_showProgress;
@@ -195,6 +206,7 @@ void AppWindow::renderMainDockspace() {
         ImGui::DockBuilderDockWindow("Logs", dock_id_bottom);
         ImGui::DockBuilderDockWindow("Settings", dock_id_right);
         ImGui::DockBuilderDockWindow("Progress & Performance", dock_id_right);
+        ImGui::DockBuilderDockWindow("Internal Debug", dock_id_bottom);
         
         ImGui::DockBuilderFinish(dockspace_id);
         m_firstRun = false;
@@ -213,12 +225,20 @@ void AppWindow::renderMainDockspace() {
             ImGui::MenuItem("Progress & Performance", nullptr, &m_showProgress);
             ImGui::MenuItem("Logs", nullptr, &m_showLogs);
             ImGui::Separator();
+            ImGui::MenuItem("Internal Debug", nullptr, &m_showDebug);
+            ImGui::Separator();
             if (ImGui::MenuItem("Reset Layout")) m_firstRun = true;
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help")) {
+            if (ImGui::MenuItem("Check for Updates")) {
+                core::UpdateManager::getInstance().checkForUpdates();
+            }
             if (ImGui::MenuItem("Report Issue")) m_showReport = true;
-            if (ImGui::MenuItem("What's New")) { m_changelogWindow->loadNewEntries("0.0.0"); m_showChangelog = true; }
+            if (ImGui::MenuItem("What's New")) { 
+                m_changelogWindow->loadNewEntries("0.0.0"); 
+                m_showChangelog = true; 
+            }
             if (ImGui::MenuItem("About")) m_showAbout = true;
             ImGui::EndMenu();
         }
@@ -244,6 +264,15 @@ void AppWindow::renderStatusBar() {
             } else {
                 ImGui::Text("Status: Idle");
             }
+            
+            if (core::UpdateManager::getInstance().isChecking()) {
+                ImGui::Separator();
+                ImGui::TextDisabled("Checking for updates...");
+            } else if (core::UpdateManager::getInstance().getUpdateInfo().hasUpdate) {
+                ImGui::Separator();
+                ImGui::TextColored(ImVec4(0, 1, 0, 1), "Update Available!");
+            }
+
             ImGui::EndMenuBar();
         }
     }

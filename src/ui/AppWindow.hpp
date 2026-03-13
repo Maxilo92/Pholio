@@ -5,6 +5,7 @@
 #include "LogWindow.hpp"
 #include "DashboardWindow.hpp"
 #include "PreviewWindow.hpp"
+#include "DebugWindow.hpp"
 #include "AboutWindow.hpp"
 #include "ChangelogWindow.hpp"
 #include "ReportWindow.hpp"
@@ -40,6 +41,7 @@ private:
     std::unique_ptr<ProgressWindow> m_progressWindow;
     std::unique_ptr<DashboardWindow> m_dashboardWindow;
     std::unique_ptr<PreviewWindow> m_previewWindow;
+    std::unique_ptr<DebugWindow> m_debugWindow;
     std::unique_ptr<AboutWindow> m_aboutWindow;
     std::unique_ptr<ChangelogWindow> m_changelogWindow;
     std::unique_ptr<ReportWindow> m_reportWindow;
@@ -49,6 +51,7 @@ private:
     bool m_showProgress = false;
     bool m_showLogs = true;
     bool m_showPreview = true;
+    bool m_showDebug = false;
     bool m_showAbout = false;
     bool m_showChangelog = false;
     bool m_showReport = false;
@@ -62,6 +65,7 @@ public:
     bool shouldRestart() const { return m_shouldRestart; }
     bool shouldRebuild() const { return m_shouldRebuild; }
     bool shouldClose() const { return m_shouldClose; }
+    void clearFlags() { m_shouldRestart = m_shouldRebuild = m_shouldClose = false; }
 };
 
 } // namespace ui

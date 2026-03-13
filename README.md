@@ -22,4 +22,4 @@ For most users, we recommend downloading the pre-compiled application:
 If you are looking for the latest features or want to contribute, please check the [Development Branch](https://github.com/Maxilo92/Pholio/tree/development).
 
 ---
-*For build instructions from source, please refer to the development branch documentation.*
+*For build instructions from source, please refer to the development branch documentation and use `./run.sh` as launcher.*
