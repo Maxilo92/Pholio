@@ -1,20 +1,25 @@
-# Pholio C++ (Development)
+# Pholio C++ (Release)
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Maxilo92/Pholio/build.yml?branch=development)](https://github.com/Maxilo92/Pholio/actions)
-[![Latest Dev Version](https://img.shields.io/github/v/tag/Maxilo92/Pholio?label=dev-version)](https://github.com/Maxilo92/Pholio/tree/development)
+[![Release](https://img.shields.io/github/v/release/Maxilo92/Pholio?include_prereleases)](https://github.com/Maxilo92/Pholio/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This is the **development branch** for Pholio C++. Here you will find the latest features, experimental updates, and the full source code for building.
+**Pholio C++** is a high-performance, desktop-class media organization tool designed for advanced users and photographers. This is the **stable branch**, providing the most reliable versions of Pholio.
 
-> [!IMPORTANT]
-> This branch may be unstable. For regular use, please use the [Release Branch](https://github.com/Maxilo92/Pholio/tree/release) or download the latest binary from [Releases](https://github.com/Maxilo92/Pholio/releases).
+## 🚀 Download Ready-to-Run
+For most users, we recommend downloading the pre-compiled application:
+1. Go to the [Releases](https://github.com/Maxilo92/Pholio/releases) page.
+2. Download the latest `.zip` for your operating system (e.g., `Pholio-macOS-vX.X.X.zip`).
+3. Extract and run.
 
-## Tech Stack
-- **Language:** C++20
-- **GUI:** Dear ImGui (Docking), GLFW, OpenGL3
-- **Dependencies:** vcpkg (exiv2, nlohmann-json, etc.)
-- **Build System:** CMake + Ninja/Make
+## Key Features
+- **No-Loss Policy:** Source files are only deleted (in Move mode) after successful checksum verification.
+- **Intelligent Storage Warning:** Calculates source size in the background and warns if target space is insufficient.
+- **Real-time Image Preview:** See processed photos in a dedicated window during organization.
+- **Date-Based Organization:** Hierarchies like `Year/Month/Day/` based on EXIF/Metadata.
+- **Automatic Updates:** Pholio checks for new GitHub releases on startup.
 
-## Building from Source
+## Development
+If you are looking for the latest features or want to contribute, please check the [Development Branch](https://github.com/Maxilo92/Pholio/tree/development).
 
 ### Prerequisites
 - **CMake** (3.20+)
