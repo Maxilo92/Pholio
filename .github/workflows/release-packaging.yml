@@ -20,6 +20,11 @@ jobs:
         with:
           vcpkgJsonGlob: vcpkg.json
 
+      - name: Install Linux build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nasm
+
       - name: Clean build directory
         run: rm -rf build
 
