@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 
-file(READ "VERSION" PROJECT_VERSION_FILE)
-string(STRIP "${PROJECT_VERSION_FILE}" PROJECT_VERSION_STR)
+set(PHOLIO_VERSION "1.0.29-alpha")
 
 project(Pholio LANGUAGES CXX)
-set(PROJECT_VERSION ${PROJECT_VERSION_STR})
+set(PROJECT_VERSION ${PHOLIO_VERSION})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -178,4 +177,4 @@ target_include_directories(Pholio PRIVATE
 )
 
 # Output build system status
-message(STATUS "Pholio version ${PROJECT_VERSION_STR} build system initialized")
+message(STATUS "Pholio version ${PHOLIO_VERSION} build system initialized")

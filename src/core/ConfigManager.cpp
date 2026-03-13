@@ -40,6 +40,9 @@ void ConfigManager::load() {
         if (j.contains("showProgress")) m_settings.showProgress = j.at("showProgress").get<bool>();
         if (j.contains("showLogs")) m_settings.showLogs = j.at("showLogs").get<bool>();
         if (j.contains("showReport")) m_settings.showReport = j.at("showReport").get<bool>();
+        if (j.contains("pendingUpdateVersion")) m_settings.pendingUpdateVersion = j.at("pendingUpdateVersion").get<std::string>();
+        if (j.contains("pendingUpdateAssetUrl")) m_settings.pendingUpdateAssetUrl = j.at("pendingUpdateAssetUrl").get<std::string>();
+        if (j.contains("pendingUpdateAssetName")) m_settings.pendingUpdateAssetName = j.at("pendingUpdateAssetName").get<std::string>();
         
     } catch (const std::exception& e) {
         std::cerr << "Warning: Failed to load some config values: " << e.what() << std::endl;

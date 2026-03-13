@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <chrono>
+#include <cstdlib>
 #include <iostream>
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
@@ -84,7 +85,12 @@ void AppWindow::update() {
     bool cmd_down = io.KeyCtrl;
 #endif
 
-    static const auto shortcutsEnabledAt = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    static const auto shortcutsDelay = []() {
+        const char* relaunchedEnv = std::getenv("PHOLIO_RELAUNCHED");
+        const bool isRelaunched = relaunchedEnv != nullptr && std::string(relaunchedEnv) == "1";
+        return std::chrono::seconds(isRelaunched ? 15 : 3);
+    }();
+    static const auto shortcutsEnabledAt = std::chrono::steady_clock::now() + shortcutsDelay;
     const bool shortcutsEnabled = std::chrono::steady_clock::now() >= shortcutsEnabledAt;
 
     // Defer global shortcuts briefly after startup to avoid phantom modifier/key events.
@@ -104,13 +110,52 @@ void AppWindow::update() {
 void AppWindow::render() {
     renderMainDockspace();
 
-    auto& updateInfo = core::UpdateManager::getInstance().getUpdateInfo();
+    const auto updateInfo = core::UpdateManager::getInstance().getUpdateInfo();
     if (updateInfo.hasUpdate) {
         ImGui::SetNextWindowPos(ImVec2(ImGui::GetMainViewport()->Pos.x + 20.0f, ImGui::GetMainViewport()->Pos.y + 40.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(350.0f, 0.0f));
         if (ImGui::Begin("Update Available", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize)) {
             ImGui::TextColored(ImVec4(0, 1, 0, 1), "A new version is available: v%s", updateInfo.latestVersion.c_str());
             ImGui::Spacing();
+            const bool sortingActive = m_worker->isRunning();
+
+            if (updateInfo.canInstallDirectly) {
+                if (sortingActive) {
+                    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.2f, 1.0f), "Update is blocked while sorting is running.");
+                }
+
+                ImGui::BeginDisabled(sortingActive);
+                if (ImGui::Button("Update and Restart")) {
+                    if (core::UpdateManager::getInstance().installQueuedUpdateNow()) {
+                        m_updateActionMessage = "Installing update and closing app...";
+                        m_shouldClose = true;
+                    } else {
+                        m_updateActionMessage = core::UpdateManager::getInstance().getLastInstallError();
+                        if (m_updateActionMessage.empty()) {
+                            m_updateActionMessage = "Update installation could not be started.";
+                        }
+                    }
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Update at Restart")) {
+                    if (core::UpdateManager::getInstance().queueUpdateForNextRestart()) {
+                        m_updateActionMessage = "Update queued for next restart.";
+                    } else {
+                        m_updateActionMessage = "No installable update package found.";
+                    }
+                }
+                ImGui::EndDisabled();
+                ImGui::Spacing();
+            } else {
+                ImGui::TextDisabled("Direct install package not found in this release.");
+                ImGui::Spacing();
+            }
+
+            if (!m_updateActionMessage.empty()) {
+                ImGui::TextWrapped("%s", m_updateActionMessage.c_str());
+                ImGui::Spacing();
+            }
+
             if (ImGui::Button("View on GitHub")) {
 #ifdef _WIN32
                 std::system(("start " + updateInfo.releaseUrl).c_str());

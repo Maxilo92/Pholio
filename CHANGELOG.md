@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.29-alpha] - 2026-03-13
+
+### Fixed
+- **Restart Reliability:** Hardened normal restart handoff so the current app only closes after the new instance confirms startup.
+- **Update Relaunch Stability:** Added explicit startup acknowledgment and fallback behavior for update/restart relaunch on macOS.
+
 ## [1.0.18-alpha] - 2026-03-12
 
 ### Added

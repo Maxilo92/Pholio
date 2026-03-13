@@ -10,6 +10,9 @@
 #include <string>
 #include <array>
 #include <system_error>
+#include <fstream>
+#include <thread>
+#include <signal.h>
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
 #include <fcntl.h>
@@ -23,6 +26,7 @@
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
 #include "core/CrashHandler.hpp"
+#include "core/UpdateManager.hpp"
 #include "ui/AppWindow.hpp"
 
 static std::string shellQuote(const std::string& value) {
@@ -35,17 +39,17 @@ static std::string shellQuote(const std::string& value) {
     return out;
 }
 
-#if defined(__APPLE__)
-static std::filesystem::path findAppBundlePath(const std::filesystem::path& execPath) {
-    if (execPath.empty()) return {};
-    auto p = execPath;
-    for (int i = 0; i < 4 && !p.empty(); ++i) {
-        if (p.extension() == ".app") return p;
-        p = p.parent_path();
-    }
-    return {};
+static void appendRestartLog(const std::string& message) {
+    const char* home = std::getenv("HOME");
+    if (home == nullptr || std::string(home).empty()) return;
+    std::error_code ec;
+    const auto dir = std::filesystem::path(home) / ".config" / "Pholio";
+    std::filesystem::create_directories(dir, ec);
+    if (ec) return;
+    std::ofstream out(dir / "restart.log", std::ios::app);
+    if (!out.is_open()) return;
+    out << message << '\n';
 }
-#endif
 
 static bool relaunchDetached(const std::filesystem::path& execPath) {
     if (execPath.empty()) return false;
@@ -53,11 +57,44 @@ static bool relaunchDetached(const std::filesystem::path& execPath) {
     std::string cmd = "start \"\" " + shellQuote(execPath.string());
     return std::system(cmd.c_str()) == 0;
 #else
-    pid_t pid = fork();
-    if (pid < 0) return false;
-    if (pid > 0) return true;
+    int statusPipe[2] = {-1, -1};
+    if (pipe(statusPipe) != 0) return false;
+    if (fcntl(statusPipe[1], F_SETFD, FD_CLOEXEC) != 0) {
+        close(statusPipe[0]);
+        close(statusPipe[1]);
+        return false;
+    }
 
-    if (setsid() < 0) _exit(127);
+    pid_t pid = fork();
+    if (pid < 0) {
+        close(statusPipe[0]);
+        close(statusPipe[1]);
+        return false;
+    }
+    if (pid > 0) {
+        close(statusPipe[1]);
+        char failureByte = 0;
+        const ssize_t bytesRead = read(statusPipe[0], &failureByte, 1);
+        close(statusPipe[0]);
+        if (bytesRead == 1) {
+            const bool ok = failureByte == 'S';
+            appendRestartLog(std::string("relaunchDetached explicit ack: ") + (ok ? "success" : "failure"));
+            return ok;
+        }
+#if defined(__APPLE__)
+        appendRestartLog("relaunchDetached failed: no explicit ack");
+        return false;
+#else
+        return bytesRead == 0;
+#endif
+    }
+
+    close(statusPipe[0]);
+
+    if (setsid() < 0) {
+        (void)write(statusPipe[1], "E", 1);
+        _exit(127);
+    }
     const int nullFd = open("/dev/null", O_RDWR);
     if (nullFd >= 0) {
         dup2(nullFd, STDIN_FILENO);
@@ -66,15 +103,57 @@ static bool relaunchDetached(const std::filesystem::path& execPath) {
         if (nullFd > STDERR_FILENO) close(nullFd);
     }
 #if defined(__APPLE__)
-    const auto appBundlePath = findAppBundlePath(execPath);
-    if (!appBundlePath.empty()) {
-        execlp("open", "open", "-n", appBundlePath.string().c_str(), static_cast<char*>(nullptr));
+    std::error_code ackEc;
+    const auto ackPath = std::filesystem::temp_directory_path(ackEc) /
+                         ("pholio-restart-ack-" + std::to_string(static_cast<long long>(getpid())));
+    if (!ackEc) {
+        std::filesystem::remove(ackPath, ackEc);
+    }
+
+    pid_t launchedPid = fork();
+    if (launchedPid < 0) {
+        (void)write(statusPipe[1], "E", 1);
         _exit(127);
     }
-#endif
 
-    execl(execPath.string().c_str(), execPath.string().c_str(), static_cast<char*>(nullptr));
+    if (launchedPid == 0) {
+        setenv("PHOLIO_RELAUNCHED", "1", 1);
+        if (!ackEc) {
+            setenv("PHOLIO_RESTART_ACK_FILE", ackPath.string().c_str(), 1);
+        }
+        execl(execPath.string().c_str(), execPath.string().c_str(), static_cast<char*>(nullptr));
+        _exit(127);
+    }
+
+    bool ackSeen = false;
+    for (int i = 0; i < 40; ++i) {
+        if (kill(launchedPid, 0) != 0) break;
+        if (!ackEc && std::filesystem::exists(ackPath, ackEc) && !ackEc) {
+            ackSeen = true;
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+
+    if (ackSeen && kill(launchedPid, 0) == 0) {
+        if (!ackEc) {
+            std::filesystem::remove(ackPath, ackEc);
+        }
+        (void)write(statusPipe[1], "S", 1);
+        _exit(0);
+    }
+
+    if (!ackEc) {
+        std::filesystem::remove(ackPath, ackEc);
+    }
+    (void)write(statusPipe[1], "E", 1);
     _exit(127);
+#else
+    setenv("PHOLIO_RELAUNCHED", "1", 1);
+    execl(execPath.string().c_str(), execPath.string().c_str(), static_cast<char*>(nullptr));
+    (void)write(statusPipe[1], "E", 1);
+    _exit(127);
+#endif
 #endif
 }
 
@@ -162,6 +241,9 @@ int main(int argc, char** argv) {
         glfwFocusWindow(window);
 
         core::ConfigManager::getInstance().load();
+        if (core::UpdateManager::getInstance().applyPendingUpdateIfRequested()) {
+            return 0;
+        }
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -181,7 +263,19 @@ int main(int argc, char** argv) {
 
         ui::AppWindow appWindow;
         std::cout << "Application initialized. GUI Ready." << std::endl;
+        const char* ackFile = std::getenv("PHOLIO_RESTART_ACK_FILE");
+        if (ackFile != nullptr && std::string(ackFile).size() > 0) {
+            std::ofstream ackOut(ackFile, std::ios::trunc);
+            if (ackOut.is_open()) {
+                ackOut << "ok";
+            }
+        }
 
+        const char* delegatedRestartEnv = std::getenv("PHOLIO_RESTART_VIA_EXIT_CODE");
+        const bool delegateRestartViaExitCode = delegatedRestartEnv != nullptr && std::string(delegatedRestartEnv) == "1";
+        const std::filesystem::path execPath = resolveExecutablePath((argv != nullptr) ? argv[0] : nullptr);
+        const char* relaunchedEnv = std::getenv("PHOLIO_RELAUNCHED");
+        const bool isRelaunchedInstance = relaunchedEnv != nullptr && std::string(relaunchedEnv) == "1";
         int exitCode = 0;
         auto startTime = std::chrono::steady_clock::now();
         bool forceCloseRequested = false;
@@ -191,7 +285,8 @@ int main(int argc, char** argv) {
             auto elapsedSeconds = std::chrono::duration_cast<std::chrono::milliseconds>(
                                       std::chrono::steady_clock::now() - startTime)
                                       .count() / 1000.0f;
-            const bool isInitializing = elapsedSeconds < 1.0f;
+            const bool isInitializing = elapsedSeconds < (isRelaunchedInstance ? 30.0f : 1.0f);
+            const bool restartAllowed = !isRelaunchedInstance || elapsedSeconds > 10.0f;
             if (glfwWindowShouldClose(window)) {
                 if (isInitializing && !forceCloseRequested) {
                     glfwSetWindowShouldClose(window, GLFW_FALSE);
@@ -208,14 +303,42 @@ int main(int argc, char** argv) {
             appWindow.render();
 
             if (appWindow.shouldRestart()) {
-                exitCode = appWindow.shouldRebuild() ? 43 : 42;
-                forceCloseRequested = true;
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                if (!restartAllowed) {
+                    appendRestartLog("restart ignored during relaunched grace window");
+                    appWindow.clearFlags();
+                    continue;
+                }
+                const bool rebuildRequested = appWindow.shouldRebuild();
+                if (rebuildRequested) {
+                    appendRestartLog("restart requested: rebuild path");
+                    exitCode = 43;
+                    forceCloseRequested = true;
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+                } else {
+                    if (execPath.empty()) {
+                        appendRestartLog("restart requested: normal path rejected (no exec path)");
+                        std::cerr << "Restart launch failed: executable path unavailable." << std::endl;
+                    } else if (relaunchDetached(execPath)) {
+                        appendRestartLog("restart requested: replacement confirmed, closing current");
+                        exitCode = 0;
+                        forceCloseRequested = true;
+                        glfwSetWindowShouldClose(window, GLFW_TRUE);
+                    } else {
+                        appendRestartLog("restart requested: replacement failed, keeping current alive");
+                        std::cerr << "Restart launch failed. Keeping current instance alive." << std::endl;
+                    }
+                }
+                appWindow.clearFlags();
             }
 
             if (appWindow.shouldClose()) {
-                forceCloseRequested = true;
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                if (isRelaunchedInstance && elapsedSeconds < 15.0f) {
+                    appendRestartLog("close ignored during relaunched grace window");
+                    appWindow.clearFlags();
+                } else {
+                    forceCloseRequested = true;
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+                }
             }
 
             ImGui::Render();
@@ -239,22 +362,16 @@ int main(int argc, char** argv) {
         glfwDestroyWindow(window);
         glfwTerminate();
 
-        if (exitCode == 42 || exitCode == 43) {
-            const bool rebuildRequested = exitCode == 43;
-            const char* delegatedRestartEnv = std::getenv("PHOLIO_RESTART_VIA_EXIT_CODE");
-            const bool delegateRestartViaExitCode = delegatedRestartEnv != nullptr && std::string(delegatedRestartEnv) == "1";
+        if (exitCode == 43) {
             if (delegateRestartViaExitCode) {
                 return exitCode;
             }
 
-            std::filesystem::path execPath = resolveExecutablePath((argv != nullptr) ? argv[0] : nullptr);
             if (execPath.empty()) {
                 std::cerr << "Failed to resolve executable path for relaunch." << std::endl;
                 return 1;
             }
-            if (rebuildRequested) {
-                std::cerr << "Rebuild+restart requested without wrapper. Relaunching current executable without rebuild." << std::endl;
-            }
+            std::cerr << "Rebuild+restart requested without wrapper. Relaunching current executable without rebuild." << std::endl;
             if (!relaunchDetached(execPath)) {
                 std::cerr << "Failed to relaunch executable: " << execPath.string() << std::endl;
                 return 1;

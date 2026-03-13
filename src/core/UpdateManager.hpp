@@ -13,6 +13,9 @@ struct UpdateInfo {
     std::string latestVersion;
     std::string releaseUrl;
     std::string releaseNotes;
+    std::string installAssetUrl;
+    std::string installAssetName;
+    bool canInstallDirectly = false;
 };
 
 struct ApiLogEntry {
@@ -28,8 +31,12 @@ public:
 
     void checkForUpdates();
     bool isChecking() const { return m_isChecking; }
-    const UpdateInfo& getUpdateInfo() const { return m_updateInfo; }
-    void reset() { m_updateInfo = UpdateInfo{}; }
+    UpdateInfo getUpdateInfo() const;
+    void reset();
+    bool queueUpdateForNextRestart();
+    bool installQueuedUpdateNow();
+    bool applyPendingUpdateIfRequested();
+    std::string getLastInstallError() const;
     
     // API Logging
     std::vector<ApiLogEntry> getApiLogs();
@@ -40,10 +47,15 @@ private:
     ~UpdateManager() = default;
 
     void addLog(const std::string& endpoint, int status, const std::string& response);
+    void clearPendingUpdateSettings();
+    bool applyPendingUpdateMacOS(const std::string& version, const std::string& assetUrl, const std::string& assetName);
 
     std::atomic<bool> m_isChecking{false};
     UpdateInfo m_updateInfo;
     std::future<void> m_updateFuture;
+    mutable std::mutex m_updateMutex;
+    mutable std::mutex m_errorMutex;
+    std::string m_lastInstallError;
     
     std::mutex m_logMutex;
     std::vector<ApiLogEntry> m_apiLogs;

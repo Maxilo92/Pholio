@@ -4,8 +4,43 @@
 #include <sstream>
 #include <regex>
 #include <algorithm>
+#include <tuple>
 
 namespace ui {
+
+namespace {
+struct ParsedVersion {
+    int major = 0;
+    int minor = 0;
+    int patch = 0;
+    std::string suffix;
+    bool valid = false;
+};
+
+ParsedVersion parseVersion(const std::string& version) {
+    std::regex semverRegex(R"(^\s*(\d+)\.(\d+)\.(\d+)(?:-([A-Za-z0-9.\-]+))?\s*$)");
+    std::smatch m;
+    if (!std::regex_match(version, m, semverRegex)) return {};
+
+    ParsedVersion out;
+    out.major = std::stoi(m[1].str());
+    out.minor = std::stoi(m[2].str());
+    out.patch = std::stoi(m[3].str());
+    out.suffix = m[4].matched ? m[4].str() : "";
+    out.valid = true;
+    return out;
+}
+
+int compareVersions(const ParsedVersion& a, const ParsedVersion& b) {
+    if (a.major != b.major) return a.major < b.major ? -1 : 1;
+    if (a.minor != b.minor) return a.minor < b.minor ? -1 : 1;
+    if (a.patch != b.patch) return a.patch < b.patch ? -1 : 1;
+    if (a.suffix == b.suffix) return 0;
+    if (a.suffix.empty()) return 1;
+    if (b.suffix.empty()) return -1;
+    return a.suffix < b.suffix ? -1 : (a.suffix > b.suffix ? 1 : 0);
+}
+} // namespace
 
 bool ChangelogWindow::loadNewEntries(const std::string& sinceVersion) {
     m_sinceVersion = sinceVersion;
@@ -22,25 +57,33 @@ bool ChangelogWindow::loadNewEntries(const std::string& sinceVersion) {
     std::regex versionRegex(R"(^## \[([^\]]+)\] - ([0-9-]+))");
     std::smatch match;
 
+    const ParsedVersion sinceParsed = parseVersion(sinceVersion);
+
     while (std::getline(file, line)) {
         if (std::regex_search(line, match, versionRegex)) {
             std::string version = match[1];
-            
-            if (version == sinceVersion && sinceVersion != "0.0.0") {
-                // We reached the last known version, stop here
-                if (collecting) {
-                    m_entries.push_back(currentEntry);
-                }
-                collecting = false;
-                break;
-            }
 
             if (collecting) {
                 m_entries.push_back(currentEntry);
             }
 
+            bool includeEntry = true;
+            if (sinceVersion != "0.0.0") {
+                if (version == sinceVersion) {
+                    break;
+                }
+
+                const ParsedVersion currentParsed = parseVersion(version);
+                if (sinceParsed.valid && currentParsed.valid) {
+                    includeEntry = compareVersions(currentParsed, sinceParsed) > 0;
+                    if (!includeEntry) {
+                        break;
+                    }
+                }
+            }
+
             currentEntry = {version, match[2], {}};
-            collecting = true;
+            collecting = includeEntry;
         } else if (collecting) {
             if (line.find("###") == 0) {
                 currentEntry.changes.push_back(line);

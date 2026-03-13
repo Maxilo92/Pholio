@@ -11,6 +11,7 @@
 #include "ReportWindow.hpp"
 #include "../engine/Worker.hpp"
 #include <memory>
+#include <string>
 
 #ifdef __APPLE__
 #define STR_CTRL "Cmd"
@@ -60,6 +61,7 @@ private:
     bool m_shouldRestart = false;
     bool m_shouldRebuild = false;
     bool m_shouldClose = false;
+    std::string m_updateActionMessage;
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }

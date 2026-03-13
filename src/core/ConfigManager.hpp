@@ -58,8 +58,11 @@ struct AppSettings {
     bool showProgress = false;
     bool showLogs = true;
     bool showReport = false;
+    std::string pendingUpdateVersion;
+    std::string pendingUpdateAssetUrl;
+    std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, autoStart, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, autoStart, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {
