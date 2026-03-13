@@ -27,15 +27,9 @@ This is the **development branch** for Pholio C++. Here you will find the latest
    git clone -b development https://github.com/Maxilo92/Pholio.git
    cd Pholio
    ```
-2. **Build with included script:**
+2. **Build and run with included launcher:**
    ```bash
-   # Multi-core build with auto-dependency management
-   python3 build.py --config Release
-   ```
-3. **Run:**
-   ```bash
-   ./build/Pholio.app/Contents/MacOS/Pholio (macOS)
-   ./build/Pholio (Linux/Windows)
+   ./run.sh
    ```
 
 ## Contributing

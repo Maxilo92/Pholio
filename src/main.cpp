@@ -8,6 +8,18 @@
 #include <chrono>
 #include <filesystem>
 #include <string>
+#include <array>
+#include <system_error>
+#if defined(__APPLE__)
+#include <mach-o/dyld.h>
+#include <fcntl.h>
+#include <unistd.h>
+#elif defined(_WIN32)
+#include <windows.h>
+#else
+#include <fcntl.h>
+#include <unistd.h>
+#endif
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
 #include "core/CrashHandler.hpp"
@@ -23,10 +35,88 @@ static std::string shellQuote(const std::string& value) {
     return out;
 }
 
-static bool relaunchDetached(const std::string& execPath) {
+#if defined(__APPLE__)
+static std::filesystem::path findAppBundlePath(const std::filesystem::path& execPath) {
+    if (execPath.empty()) return {};
+    auto p = execPath;
+    for (int i = 0; i < 4 && !p.empty(); ++i) {
+        if (p.extension() == ".app") return p;
+        p = p.parent_path();
+    }
+    return {};
+}
+#endif
+
+static bool relaunchDetached(const std::filesystem::path& execPath) {
     if (execPath.empty()) return false;
-    std::string cmd = "nohup " + shellQuote(execPath) + " > /tmp/pholio_relaunch.log 2>&1 < /dev/null &";
+#if defined(_WIN32)
+    std::string cmd = "start \"\" " + shellQuote(execPath.string());
     return std::system(cmd.c_str()) == 0;
+#else
+    pid_t pid = fork();
+    if (pid < 0) return false;
+    if (pid > 0) return true;
+
+    if (setsid() < 0) _exit(127);
+    const int nullFd = open("/dev/null", O_RDWR);
+    if (nullFd >= 0) {
+        dup2(nullFd, STDIN_FILENO);
+        dup2(nullFd, STDOUT_FILENO);
+        dup2(nullFd, STDERR_FILENO);
+        if (nullFd > STDERR_FILENO) close(nullFd);
+    }
+#if defined(__APPLE__)
+    const auto appBundlePath = findAppBundlePath(execPath);
+    if (!appBundlePath.empty()) {
+        execlp("open", "open", "-n", appBundlePath.string().c_str(), static_cast<char*>(nullptr));
+        _exit(127);
+    }
+#endif
+
+    execl(execPath.string().c_str(), execPath.string().c_str(), static_cast<char*>(nullptr));
+    _exit(127);
+#endif
+}
+
+static std::filesystem::path resolveExecutablePath(const char* argv0) {
+#if defined(__APPLE__)
+    uint32_t size = 0;
+    _NSGetExecutablePath(nullptr, &size);
+    if (size > 0) {
+        std::string buffer(size, '\0');
+        if (_NSGetExecutablePath(buffer.data(), &size) == 0) {
+            std::error_code ec;
+            auto canonical = std::filesystem::weakly_canonical(std::filesystem::path(buffer.c_str()), ec);
+            if (!ec) return canonical;
+            return std::filesystem::path(buffer.c_str());
+        }
+    }
+#elif defined(_WIN32)
+    std::array<char, MAX_PATH> buffer{};
+    const DWORD len = GetModuleFileNameA(nullptr, buffer.data(), static_cast<DWORD>(buffer.size()));
+    if (len > 0) {
+        return std::filesystem::path(std::string(buffer.data(), len));
+    }
+#else
+    std::array<char, 4096> buffer{};
+    const ssize_t len = readlink("/proc/self/exe", buffer.data(), buffer.size() - 1);
+    if (len > 0) {
+        buffer[static_cast<size_t>(len)] = '\0';
+        return std::filesystem::path(buffer.data());
+    }
+#endif
+
+    if (argv0 != nullptr && std::string(argv0).size() > 0) {
+        std::error_code ec;
+        std::filesystem::path path(argv0);
+        if (path.is_relative()) {
+            path = std::filesystem::absolute(path, ec);
+        }
+        auto canonical = std::filesystem::weakly_canonical(path, ec);
+        if (!ec) return canonical;
+        return path;
+    }
+    return {};
 }
 
 static void glfw_error_callback(int error, const char* description) {
@@ -94,7 +184,7 @@ int main(int argc, char** argv) {
 
         int exitCode = 0;
         auto startTime = std::chrono::steady_clock::now();
-        int framesSinceStart = 0;
+        bool forceCloseRequested = false;
         while (true) {
             glfwPollEvents();
 
@@ -103,7 +193,7 @@ int main(int argc, char** argv) {
                                       .count() / 1000.0f;
             const bool isInitializing = elapsedSeconds < 1.0f;
             if (glfwWindowShouldClose(window)) {
-                if (isInitializing) {
+                if (isInitializing && !forceCloseRequested) {
                     glfwSetWindowShouldClose(window, GLFW_FALSE);
                 } else {
                     break;
@@ -117,18 +207,15 @@ int main(int argc, char** argv) {
             appWindow.update();
             appWindow.render();
 
-            if (framesSinceStart < 10) {
-                appWindow.clearFlags();
-                framesSinceStart++;
-            } else {
-                if (appWindow.shouldRestart()) {
-                    exitCode = appWindow.shouldRebuild() ? 43 : 42;
-                    glfwSetWindowShouldClose(window, GLFW_TRUE);
-                }
+            if (appWindow.shouldRestart()) {
+                exitCode = appWindow.shouldRebuild() ? 43 : 42;
+                forceCloseRequested = true;
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            }
 
-                if (appWindow.shouldClose()) {
-                    glfwSetWindowShouldClose(window, GLFW_TRUE);
-                }
+            if (appWindow.shouldClose()) {
+                forceCloseRequested = true;
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
             }
 
             ImGui::Render();
@@ -152,18 +239,23 @@ int main(int argc, char** argv) {
         glfwDestroyWindow(window);
         glfwTerminate();
 
-        if (exitCode == 42) {
+        if (exitCode == 42 || exitCode == 43) {
+            const bool rebuildRequested = exitCode == 43;
             const char* delegatedRestartEnv = std::getenv("PHOLIO_RESTART_VIA_EXIT_CODE");
             const bool delegateRestartViaExitCode = delegatedRestartEnv != nullptr && std::string(delegatedRestartEnv) == "1";
             if (delegateRestartViaExitCode) {
-                return 42;
+                return exitCode;
             }
 
-            std::filesystem::path execPath;
-            if (argv != nullptr && argv[0] != nullptr && std::string(argv[0]).size() > 0) {
-                execPath = std::filesystem::absolute(argv[0]);
+            std::filesystem::path execPath = resolveExecutablePath((argv != nullptr) ? argv[0] : nullptr);
+            if (execPath.empty()) {
+                std::cerr << "Failed to resolve executable path for relaunch." << std::endl;
+                return 1;
             }
-            if (!relaunchDetached(execPath.string())) {
+            if (rebuildRequested) {
+                std::cerr << "Rebuild+restart requested without wrapper. Relaunching current executable without rebuild." << std::endl;
+            }
+            if (!relaunchDetached(execPath)) {
                 std::cerr << "Failed to relaunch executable: " << execPath.string() << std::endl;
                 return 1;
             }
