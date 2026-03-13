@@ -390,6 +390,7 @@ void Worker::run() {
             settings.videoOutputFormat);
         plugins::PluginManager pluginManager(m_logWindow);
         if (settings.enablePlugins) {
+            pluginManager.setDisabledPlugins(settings.disabledPlugins);
             pluginManager.loadFromDirectory(settings.pluginsDirectory);
             if (!pluginManager.hasPlugins()) {
                 m_logWindow.warn("Plugin system enabled, but no compatible plugins were loaded.");

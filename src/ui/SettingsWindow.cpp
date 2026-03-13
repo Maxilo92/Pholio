@@ -4,6 +4,8 @@
 #include <cstring>
 #include <string>
 #include <ctime>
+#include <cstdlib>
+#include "I18n.hpp"
 
 namespace ui {
 
@@ -25,6 +27,7 @@ std::string buildPatternExample(const std::string& pattern) {
 
 void SettingsWindow::render() {
     auto& config = core::ConfigManager::getInstance();
+    auto tr = [](const char* key, const char* fallback) { return i18n::tr(key, fallback); };
     
     // Sync from global config if we aren't currently editing something unsaved
     if (!m_initialized || !m_isDirty) {
@@ -35,13 +38,13 @@ void SettingsWindow::render() {
     if (ImGui::Begin("Settings")) {
         if (m_isDirty) {
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
-            ImGui::TextWrapped("You have unsaved changes!");
+            ImGui::TextWrapped("%s", tr("settings.unsaved", "You have unsaved changes!"));
             ImGui::PopStyleColor();
             ImGui::Separator();
         }
 
         if (ImGui::BeginTabBar("SettingsTabs")) {
-            if (ImGui::BeginTabItem("Directories")) {
+            if (ImGui::BeginTabItem(tr("settings.tab.directories", "Directories"))) {
                 if (ImGui::BeginTable("DirectorySettings", 3, ImGuiTableFlags_SizingStretchProp)) {
                     ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f);
                     ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
@@ -50,7 +53,7 @@ void SettingsWindow::render() {
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::AlignTextToFramePadding();
-                    ImGui::Text("Source Path:");
+                    ImGui::Text("%s", tr("settings.source_path", "Source Path:"));
                     ImGui::TableSetColumnIndex(1);
                     char sourceBuf[1024];
                     std::strncpy(sourceBuf, m_editedSettings.sourcePath.string().c_str(), sizeof(sourceBuf));
@@ -59,15 +62,15 @@ void SettingsWindow::render() {
                         m_editedSettings.sourcePath = sourceBuf;
                         m_isDirty = true;
                     }
-                    ImGui::SetItemTooltip("The directory where your unorganized photos and videos are located.");
+                    ImGui::SetItemTooltip("%s", tr("settings.tooltip.source", "The directory where your unorganized photos and videos are located."));
                     ImGui::PopItemWidth();
                     ImGui::TableSetColumnIndex(2);
-                    if (ImGui::Button("Browse...##SourceSet")) m_shouldBrowseSource = true;
+                    if (ImGui::Button((std::string(tr("settings.browse", "Browse...")) + "##SourceSet").c_str())) m_shouldBrowseSource = true;
 
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::AlignTextToFramePadding();
-                    ImGui::Text("Target Path:");
+                    ImGui::Text("%s", tr("settings.target_path", "Target Path:"));
                     ImGui::TableSetColumnIndex(1);
                     char targetBuf[1024];
                     std::strncpy(targetBuf, m_editedSettings.targetPath.string().c_str(), sizeof(targetBuf));
@@ -76,10 +79,10 @@ void SettingsWindow::render() {
                         m_editedSettings.targetPath = targetBuf;
                         m_isDirty = true;
                     }
-                    ImGui::SetItemTooltip("The root directory where the organized library will be created.");
+                    ImGui::SetItemTooltip("%s", tr("settings.tooltip.target", "The root directory where the organized library will be created."));
                     ImGui::PopItemWidth();
                     ImGui::TableSetColumnIndex(2);
-                    if (ImGui::Button("Browse...##TargetSet")) m_shouldBrowseTarget = true;
+                    if (ImGui::Button((std::string(tr("settings.browse", "Browse...")) + "##TargetSet").c_str())) m_shouldBrowseTarget = true;
 
                     ImGui::EndTable();
                 }
@@ -106,9 +109,9 @@ void SettingsWindow::render() {
                         m_isCalculatingSourceSize = false;
                     }
 
-                    ImGui::Text("Source Size: %.2f GB %s",
+                    ImGui::Text(tr("settings.source_size", "Source Size: %.2f GB %s"),
                                 static_cast<double>(m_sourceSize) / (1024.0 * 1024.0 * 1024.0),
-                                m_isCalculatingSourceSize ? "(calculating...)" : "");
+                                m_isCalculatingSourceSize ? tr("settings.calculating", "(calculating...)") : "");
                 }
 
                 if (!m_editedSettings.targetPath.empty() && std::filesystem::exists(m_editedSettings.targetPath)) {
@@ -122,25 +125,25 @@ void SettingsWindow::render() {
                         float requiredRatio = static_cast<float>(m_sourceSize) / static_cast<float>(available);
 
                         ImGui::Spacing();
-                        ImGui::Text("Target Drive Space:");
+                        ImGui::Text("%s", tr("settings.target_drive_space", "Target Drive Space:"));
 
                         ImVec4 color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f);
-                        const char* statusText = "Disk space is healthy.";
+                        const char* statusText = tr("settings.disk_ok", "Disk space is healthy.");
 
                         if (m_sourceSize > available) {
                             color = ImVec4(1.0f, 0.2f, 0.2f, 1.0f);
-                            statusText = "CRITICAL: Not enough space for source files!";
+                            statusText = tr("settings.disk_critical", "CRITICAL: Not enough space for source files!");
                         } else if (requiredRatio > 0.8f || usedRatio > 0.9f) {
                             color = ImVec4(1.0f, 0.5f, 0.0f, 1.0f);
-                            statusText = "Warning: Space will be very tight after processing.";
+                            statusText = tr("settings.disk_warning", "Warning: Space will be very tight after processing.");
                         } else if (usedRatio > 0.75f) {
                             color = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
-                            statusText = "Note: Target drive is more than 75% full.";
+                            statusText = tr("settings.disk_note", "Note: Target drive is more than 75% full.");
                         }
 
                         ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
                         char buf[128];
-                        std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total (Source needs %.1f GB)",
+                        std::snprintf(buf, sizeof(buf), tr("settings.disk_progress", "%.1f GB free / %.1f GB total (Source needs %.1f GB)"),
                                       static_cast<double>(available) / (1024 * 1024 * 1024),
                                       static_cast<double>(capacity) / (1024 * 1024 * 1024),
                                       static_cast<double>(m_sourceSize) / (1024 * 1024 * 1024));
@@ -155,23 +158,23 @@ void SettingsWindow::render() {
                 ImGui::EndTabItem();
             }
 
-            if (ImGui::BeginTabItem("Folder Structure")) {
-                ImGui::Text("Folder Structure Pattern:");
+            if (ImGui::BeginTabItem(tr("settings.tab.folder_structure", "Folder Structure"))) {
+                ImGui::Text("%s", tr("settings.folder_pattern", "Folder Structure Pattern:"));
                 char patternBuf[256];
                 std::strncpy(patternBuf, m_editedSettings.folderPattern.c_str(), sizeof(patternBuf));
                 if (ImGui::InputText("##FolderPattern", patternBuf, sizeof(patternBuf))) {
                     m_editedSettings.folderPattern = patternBuf;
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("Use strftime codes.\n%%Y=Year  %%m=Month  %%d=Day  %%B=Month Name");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.pattern", "Use strftime codes.\n%%Y=Year  %%m=Month  %%d=Day  %%B=Month Name"));
 
                 ImGui::Spacing();
-                ImGui::Text("Migration Strategy:");
+                ImGui::Text("%s", tr("settings.migration_strategy", "Migration Strategy:"));
                 int migrationMode = static_cast<int>(m_editedSettings.migrationMode);
                 const char* migrationModes[] = {
-                    "Umbau (bestehende Struktur in neues Muster migrieren)",
-                    "Merge (erkannte Zielstruktur weiterverwenden)",
-                    "Weiterfuehren (erkannte Zielstruktur uebernehmen)"
+                    tr("settings.migration.rebuild", "Umbau (bestehende Struktur in neues Muster migrieren)"),
+                    tr("settings.migration.merge", "Merge (erkannte Zielstruktur weiterverwenden)"),
+                    tr("settings.migration.continue", "Weiterfuehren (erkannte Zielstruktur uebernehmen)")
                 };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##MigrationMode", &migrationMode, migrationModes, 3)) {
@@ -179,32 +182,32 @@ void SettingsWindow::render() {
                     m_isDirty = true;
                 }
                 ImGui::PopItemWidth();
-                ImGui::SetItemTooltip(
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.migration",
                     "Umbau: Bestehende Dateien im Ziel werden ins konfigurierte Muster verschoben.\n"
                     "Merge: Neue Dateien nutzen die erkannte Zielstruktur, falls vorhanden.\n"
-                    "Weiterfuehren: Wie Merge, uebernimmt erkannte Struktur zusaetzlich als neues Standardmuster.");
+                    "Weiterfuehren: Wie Merge, uebernimmt erkannte Struktur zusaetzlich als neues Standardmuster."));
 
                 const std::string example = buildPatternExample(m_editedSettings.folderPattern);
                 ImGui::Spacing();
                 if (!example.empty()) {
-                    ImGui::Text("Example (today): %s", example.c_str());
+                    ImGui::Text(tr("settings.example.today", "Example (today): %s"), example.c_str());
                 } else {
-                    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.3f, 1.0f), "Example (today): Invalid pattern");
+                    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.3f, 1.0f), "%s", tr("settings.example.invalid", "Example (today): Invalid pattern"));
                 }
 
                 ImGui::Spacing();
-                ImGui::Text("Presets:");
-                if (ImGui::Button("Year/Month/Day")) {
+                ImGui::Text("%s", tr("settings.presets", "Presets:"));
+                if (ImGui::Button(tr("settings.preset.ymd", "Year/Month/Day"))) {
                     m_editedSettings.folderPattern = "%Y/%m/%d";
                     m_isDirty = true;
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("Year/Month")) {
+                if (ImGui::Button(tr("settings.preset.ym", "Year/Month"))) {
                     m_editedSettings.folderPattern = "%Y/%m";
                     m_isDirty = true;
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("Year/Full Date")) {
+                if (ImGui::Button(tr("settings.preset.yfull", "Year/Full Date"))) {
                     m_editedSettings.folderPattern = "%Y/%Y-%m-%d";
                     m_isDirty = true;
                 }
@@ -212,33 +215,47 @@ void SettingsWindow::render() {
                 ImGui::Spacing();
                 ImGui::Separator();
                 ImGui::Spacing();
-                ImGui::Text("Filename Template:");
+                ImGui::Text("%s", tr("settings.filename_template", "Filename Template:"));
                 char filenameTemplateBuf[256];
                 std::strncpy(filenameTemplateBuf, m_editedSettings.filenameTemplate.c_str(), sizeof(filenameTemplateBuf));
                 if (ImGui::InputText("##FilenameTemplate", filenameTemplateBuf, sizeof(filenameTemplateBuf))) {
                     m_editedSettings.filenameTemplate = filenameTemplateBuf;
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("Available: {original_filename}, {original_name}, {ext}, {yyyy}, {MM}, {dd}, {HH}, {mm}, {ss}");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.filename_template", "Available: {original_filename}, {original_name}, {ext}, {yyyy}, {MM}, {dd}, {HH}, {mm}, {ss}"));
 
-                if (ImGui::Button("Use Original Filename")) {
+                if (ImGui::Button(tr("settings.preset.original", "Use Original Filename"))) {
                     m_editedSettings.filenameTemplate = "{original_filename}";
                     m_isDirty = true;
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("Date + Original Name")) {
+                if (ImGui::Button(tr("settings.preset.date_name", "Date + Original Name"))) {
                     m_editedSettings.filenameTemplate = "{yyyy}{MM}{dd}_{original_name}.{ext}";
                     m_isDirty = true;
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("Timestamp")) {
+                if (ImGui::Button(tr("settings.preset.timestamp", "Timestamp"))) {
                     m_editedSettings.filenameTemplate = "{yyyy}{MM}{dd}_{HH}{mm}{ss}.{ext}";
                     m_isDirty = true;
                 }
                 ImGui::EndTabItem();
             }
 
-            if (ImGui::BeginTabItem("Engine")) {
+            if (ImGui::BeginTabItem(tr("settings.tab.engine", "Engine"))) {
+                ImGui::Text("%s", tr("settings.language", "Language"));
+                int languageIndex = i18n::getLanguage() == i18n::Language::German ? 1 : 0;
+                const char* languageItems[] = {
+                    tr("settings.language.english", "English"),
+                    tr("settings.language.german", "German")
+                };
+                if (ImGui::Combo("##UiLanguage", &languageIndex, languageItems, 2)) {
+                    const auto selected = languageIndex == 1 ? i18n::Language::German : i18n::Language::English;
+                    i18n::setLanguage(selected);
+                    m_editedSettings.uiLanguage = i18n::languageCode(selected);
+                    m_isDirty = true;
+                }
+                ImGui::Separator();
+
                 if (ImGui::BeginTable("EngineSettings", 2, ImGuiTableFlags_SizingStretchProp)) {
                 ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 150.0f);
                 ImGui::TableSetupColumn("Control", ImGuiTableColumnFlags_WidthStretch);
@@ -246,61 +263,70 @@ void SettingsWindow::render() {
                 // Op Mode
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
-                ImGui::Text("Operation Mode:");
+                ImGui::Text("%s", tr("settings.operation_mode", "Operation Mode:"));
                 ImGui::TableSetColumnIndex(1);
                 int opMode = static_cast<int>(m_editedSettings.operationMode);
-                const char* opModes[] = { "Copy (Safe)", "Move (Efficient)" };
+                const char* opModes[] = { tr("settings.op.copy", "Copy (Safe)"), tr("settings.op.move", "Move (Efficient)") };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##OpMode", &opMode, opModes, 2)) {
                     m_editedSettings.operationMode = static_cast<engine::OperationMode>(opMode);
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("Copy: Keep original files.\nMove: Transfer files to new location (deletes originals).");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.opmode", "Copy: Keep original files.\nMove: Transfer files to new location (deletes originals)."));
                 ImGui::PopItemWidth();
 
                 // Verif Level
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
-                ImGui::Text("Verification:");
+                ImGui::Text("%s", tr("settings.verification", "Verification:"));
                 ImGui::TableSetColumnIndex(1);
                 int verLevel = static_cast<int>(m_editedSettings.verificationLevel);
-                const char* verLevels[] = { "None (Fastest)", "Size Only", "Partial Hash", "Full Hash (Safest)" };
+                const char* verLevels[] = {
+                    tr("settings.ver.none", "None (Fastest)"),
+                    tr("settings.ver.size", "Size Only"),
+                    tr("settings.ver.partial", "Partial Hash"),
+                    tr("settings.ver.full", "Full Hash (Safest)")
+                };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##VerLevel", &verLevel, verLevels, 4)) {
                     m_editedSettings.verificationLevel = static_cast<engine::VerificationLevel>(verLevel);
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("None: No check.\nSizeOnly: Check file size.\nPartial: Check first 1MB hash.\nFull: Check entire file hash.");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.verification", "None: No check.\nSizeOnly: Check file size.\nPartial: Check first 1MB hash.\nFull: Check entire file hash."));
                 ImGui::PopItemWidth();
 
                 // Duplicate Action
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
-                ImGui::Text("Duplicate Handling:");
+                ImGui::Text("%s", tr("settings.duplicate", "Duplicate Handling:"));
                 ImGui::TableSetColumnIndex(1);
                 int dupAction = static_cast<int>(m_editedSettings.duplicateAction);
-                const char* dupActions[] = { "Skip (Safest)", "Overwrite (Dangerous)", "Rename (e.g. file (1).jpg)" };
+                const char* dupActions[] = {
+                    tr("settings.dup.skip", "Skip (Safest)"),
+                    tr("settings.dup.overwrite", "Overwrite (Dangerous)"),
+                    tr("settings.dup.rename", "Rename (e.g. file (1).jpg)")
+                };
                 ImGui::PushItemWidth(-FLT_MIN);
                 if (ImGui::Combo("##DupAction", &dupAction, dupActions, 3)) {
                     m_editedSettings.duplicateAction = static_cast<engine::DuplicateAction>(dupAction);
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("What to do if a file already exists in the target directory.");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.duplicate", "What to do if a file already exists in the target directory."));
                 ImGui::PopItemWidth();
 
                 ImGui::EndTable();
             }
 
                 ImGui::Spacing();
-                if (ImGui::Checkbox("Ask for each duplicate", &m_editedSettings.askOnDuplicate)) m_isDirty = true;
-                ImGui::SetItemTooltip("Show a dialog for every duplicate encountered to choose manually.");
+                if (ImGui::Checkbox(tr("settings.ask_duplicate", "Ask for each duplicate"), &m_editedSettings.askOnDuplicate)) m_isDirty = true;
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.ask_duplicate", "Show a dialog for every duplicate encountered to choose manually."));
 
-                if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
-                ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
+                if (ImGui::Checkbox(tr("settings.dry_run", "Dry Run (Simulation Mode)"), &m_editedSettings.dryRun)) m_isDirty = true;
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.dry_run", "Simulate the process without actually moving or copying any files."));
 
                 ImGui::Spacing();
-                if (ImGui::Checkbox("Enable Format Conversion", &m_editedSettings.enableFormatConversion)) m_isDirty = true;
-                ImGui::SetItemTooltip("Convert copied media into configured output formats after verified transfer.");
+                if (ImGui::Checkbox(tr("settings.enable_conversion", "Enable Format Conversion"), &m_editedSettings.enableFormatConversion)) m_isDirty = true;
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.enable_conversion", "Convert copied media into configured output formats after verified transfer."));
 
                 ImGui::BeginDisabled(!m_editedSettings.enableFormatConversion);
                 const char* imageFormats[] = {"jpg", "png", "webp", "heic", "tiff"};
@@ -311,7 +337,7 @@ void SettingsWindow::render() {
                         break;
                     }
                 }
-                if (ImGui::Combo("Image Output Format", &imageIdx, imageFormats, 5)) {
+                if (ImGui::Combo(tr("settings.image_output", "Image Output Format"), &imageIdx, imageFormats, 5)) {
                     m_editedSettings.imageOutputFormat = imageFormats[imageIdx];
                     m_isDirty = true;
                 }
@@ -324,27 +350,59 @@ void SettingsWindow::render() {
                         break;
                     }
                 }
-                if (ImGui::Combo("Video Output Format", &videoIdx, videoFormats, 3)) {
+                if (ImGui::Combo(tr("settings.video_output", "Video Output Format"), &videoIdx, videoFormats, 3)) {
                     m_editedSettings.videoOutputFormat = videoFormats[videoIdx];
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("Video conversion uses FFmpeg with H.264/AAC defaults.");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.video_output", "Video conversion uses FFmpeg with H.264/AAC defaults."));
                 ImGui::EndDisabled();
+                ImGui::EndTabItem();
+            }
 
-                ImGui::Spacing();
-                ImGui::Separator();
-                ImGui::Spacing();
+            if (ImGui::BeginTabItem(tr("settings.tab.plugins", "Plugins"))) {
+                if (ImGui::Checkbox(tr("settings.enable_plugins", "Enable Plugin System"), &m_editedSettings.enablePlugins)) m_isDirty = true;
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.enable_plugins", "Loads external plugins for filtering, target override, and optional plugin windows."));
 
-                if (ImGui::Checkbox("Enable Plugin System", &m_editedSettings.enablePlugins)) m_isDirty = true;
-                ImGui::SetItemTooltip("Loads external plugins from a directory to customize filtering and target paths.");
+                if (ImGui::Checkbox(tr("settings.allow_plugin_windows", "Allow Plugin Windows"), &m_editedSettings.allowPluginWindows)) m_isDirty = true;
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.allow_plugin_windows", "Allows plugins to render custom ImGui windows in the app."));
 
                 char pluginDirBuf[1024];
                 std::strncpy(pluginDirBuf, m_editedSettings.pluginsDirectory.string().c_str(), sizeof(pluginDirBuf));
-                if (ImGui::InputText("Plugin Directory", pluginDirBuf, sizeof(pluginDirBuf))) {
+                if (ImGui::InputText(tr("settings.plugin_directory", "Plugin Directory"), pluginDirBuf, sizeof(pluginDirBuf))) {
                     m_editedSettings.pluginsDirectory = pluginDirBuf;
                     m_isDirty = true;
                 }
-                ImGui::SetItemTooltip("Directory scanned at run start for plugin libraries (.dylib/.so/.dll).");
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.plugin_directory", "Directory scanned for plugin libraries (.dylib/.so/.dll)."));
+
+                if (ImGui::Button(tr("settings.create_plugin_dir", "Create Plugin Directory"))) {
+                    try {
+                        std::filesystem::create_directories(m_editedSettings.pluginsDirectory);
+                    } catch (...) {}
+                }
+                ImGui::SameLine();
+                if (ImGui::Button(tr("settings.open_plugin_dir", "Open Plugin Directory"))) {
+                    const std::string absolute = std::filesystem::absolute(m_editedSettings.pluginsDirectory).string();
+#ifdef _WIN32
+                    std::system(("start \"\" \"" + absolute + "\"").c_str());
+#elif __APPLE__
+                    std::system(("open \"" + absolute + "\"").c_str());
+#else
+                    std::system(("xdg-open \"" + absolute + "\"").c_str());
+#endif
+                }
+                ImGui::SameLine();
+                if (ImGui::Button(tr("settings.reload_plugins_now", "Reload Plugins Now"))) {
+                    m_editedSettings.pluginReloadToken += 1;
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.reload_plugins_now", "Triggers immediate plugin reload after saving settings."));
+
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::TextWrapped("%s", tr("settings.workflow", "User-friendly workflow:"));
+                ImGui::BulletText("%s", tr("settings.workflow.1", "1) Set plugin directory"));
+                ImGui::BulletText("%s", tr("settings.workflow.2", "2) Add plugin files in Plugins window"));
+                ImGui::BulletText("%s", tr("settings.workflow.3", "3) Click Reload Plugins Now"));
                 ImGui::EndTabItem();
             }
 
@@ -354,19 +412,20 @@ void SettingsWindow::render() {
         ImGui::Separator();
         ImGui::Spacing();
 
-        if (ImGui::Button("SAVE ALL SETTINGS", ImVec2(150, 40))) {
+        if (ImGui::Button(tr("settings.save_all", "SAVE ALL SETTINGS"), ImVec2(150, 40))) {
             config.setSettings(m_editedSettings);
             config.save();
             m_isDirty = false;
         }
-        ImGui::SetItemTooltip("Apply and persist these settings to disk.");
+        ImGui::SetItemTooltip("%s", tr("settings.tooltip.save", "Apply and persist these settings to disk."));
 
         ImGui::SameLine();
-        if (ImGui::Button("DISCARD CHANGES", ImVec2(150, 40))) {
+        if (ImGui::Button(tr("settings.discard", "DISCARD CHANGES"), ImVec2(150, 40))) {
             m_editedSettings = config.getSettings();
+            i18n::setLanguage(i18n::languageFromCode(m_editedSettings.uiLanguage));
             m_isDirty = false;
         }
-        ImGui::SetItemTooltip("Discard changes and reload last saved settings.");
+        ImGui::SetItemTooltip("%s", tr("settings.tooltip.discard", "Discard changes and reload last saved settings."));
     }
     ImGui::End();
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.2.0")
+set(PHOLIO_VERSION "1.5.0")
 
 project(Pholio LANGUAGES CXX)
 
@@ -90,6 +90,10 @@ if(APPLE)
         src/ui/ChangelogWindow.hpp
         src/ui/ReportWindow.cpp
         src/ui/ReportWindow.hpp
+        src/ui/PluginWindow.cpp
+        src/ui/PluginWindow.hpp
+        src/ui/I18n.cpp
+        src/ui/I18n.hpp
         src/ui/SettingsWindow.cpp
         src/ui/SettingsWindow.hpp
         src/ui/LogWindow.cpp
@@ -144,6 +148,10 @@ else()
         src/ui/ChangelogWindow.hpp
         src/ui/ReportWindow.cpp
         src/ui/ReportWindow.hpp
+        src/ui/PluginWindow.cpp
+        src/ui/PluginWindow.hpp
+        src/ui/I18n.cpp
+        src/ui/I18n.hpp
         src/ui/SettingsWindow.cpp
         src/ui/SettingsWindow.hpp
         src/ui/LogWindow.cpp
@@ -186,3 +194,23 @@ target_include_directories(Pholio PRIVATE
 
 # Output build system status
 message(STATUS "Pholio version ${PHOLIO_VERSION} build system initialized")
+
+option(PHOLIO_BUILD_SAMPLE_PLUGINS "Build sample plugins" ON)
+if(PHOLIO_BUILD_SAMPLE_PLUGINS)
+    add_library(PholioPluginSkipSmall MODULE src/plugins/samples/SkipSmallFilesPlugin.cpp)
+    add_library(PholioPluginDatePrefix MODULE src/plugins/samples/DatePrefixPlugin.cpp)
+    add_library(PholioPluginVideosOnly MODULE src/plugins/samples/VideosOnlyPlugin.cpp)
+    add_library(PholioPluginHelloWindow MODULE src/plugins/samples/HelloWindowPlugin.cpp)
+
+    foreach(pluginTarget IN ITEMS PholioPluginSkipSmall PholioPluginDatePrefix PholioPluginVideosOnly PholioPluginHelloWindow)
+        target_include_directories(${pluginTarget} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)
+        set_target_properties(${pluginTarget} PROPERTIES
+            CXX_STANDARD 20
+            CXX_STANDARD_REQUIRED ON
+            PREFIX ""
+            OUTPUT_NAME "${pluginTarget}"
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/sample-plugins"
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/sample-plugins"
+        )
+    endforeach()
+endif()

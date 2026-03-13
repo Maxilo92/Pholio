@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <string>
+#include <vector>
 #include <nlohmann/json.hpp>
 #include "../engine/Sorter.hpp"
 #include "../engine/Verifier.hpp"
@@ -61,6 +62,9 @@ struct AppSettings {
     std::string videoOutputFormat = "mp4";
     bool enablePlugins = false;
     std::filesystem::path pluginsDirectory = "plugins";
+    std::vector<std::string> disabledPlugins;
+    bool allowPluginWindows = true;
+    int pluginReloadToken = 0;
     engine::MigrationMode migrationMode = engine::MigrationMode::Merge;
     std::string lastVersion = "0.0.0";
     std::string folderPattern = "%Y/%m-%B/%d";
@@ -70,11 +74,13 @@ struct AppSettings {
     bool showProgress = false;
     bool showLogs = true;
     bool showReport = false;
+    bool showPlugins = false;
+    std::string uiLanguage = "en";
     std::string pendingUpdateVersion;
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, disabledPlugins, allowPluginWindows, pluginReloadToken, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, showPlugins, uiLanguage, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {

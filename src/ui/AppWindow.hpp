@@ -9,9 +9,12 @@
 #include "AboutWindow.hpp"
 #include "ChangelogWindow.hpp"
 #include "ReportWindow.hpp"
+#include "PluginWindow.hpp"
+#include "plugins/PluginManager.hpp"
 #include "../engine/Worker.hpp"
 #include <memory>
 #include <string>
+#include <filesystem>
 
 #ifdef __APPLE__
 #define STR_CTRL "Cmd"
@@ -47,6 +50,8 @@ private:
     std::unique_ptr<AboutWindow> m_aboutWindow;
     std::unique_ptr<ChangelogWindow> m_changelogWindow;
     std::unique_ptr<ReportWindow> m_reportWindow;
+    std::unique_ptr<PluginWindow> m_pluginWindow;
+    std::unique_ptr<plugins::PluginManager> m_uiPluginManager;
 
     bool m_showDashboard = true;
     bool m_showSettings = false;
@@ -57,6 +62,7 @@ private:
     bool m_showAbout = false;
     bool m_showChangelog = false;
     bool m_showReport = false;
+    bool m_showPlugins = false;
     bool m_firstRun = false;
 
     bool m_shouldRestart = false;
@@ -64,6 +70,10 @@ private:
     bool m_shouldClose = false;
     bool m_showCloseDuringSortingPopup = false;
     std::string m_updateActionMessage;
+    bool m_uiPluginsEnabled = false;
+    bool m_uiPluginWindowsAllowed = true;
+    std::filesystem::path m_uiPluginsDirectory;
+    int m_uiPluginReloadToken = 0;
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }

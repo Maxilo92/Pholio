@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-03-13
+
+### Added
+- **Per-Plugin Activation:** Plugins can now be enabled/disabled individually and the state is persisted in settings (`disabledPlugins`).
+
+### Changed
+- **Plugin Runtime Behavior:** Disabled plugins are skipped in processing, cannot be activated from menus, and do not render plugin windows.
+- **Plugin Management UI:** Added per-plugin toggle controls in `Plugins -> Manage` with immediate persistence.
+- **I18n Coverage:** Localized Plugin window controls/messages for German/English and added corresponding menu status labels.
+- **Versioning:** Bumped semantic version to `1.5.0`.
+
+## [1.4.0] - 2026-03-13
+
+### Added
+- **Internationalization Core:** Added a central UI i18n module with runtime language switching (`en`/`de`) and safe English fallback for missing keys.
+- **Language Preference:** Added persistent `uiLanguage` setting in app config and integrated it into settings save/load flow.
+
+### Changed
+- **Localized App Shell:** Main menus, update UI, status bar and close-during-sort prompts now render in German or English.
+- **Localized Settings:** Settings window tabs, labels, tooltips, presets and plugin-related controls now support German/English UI text.
+- **Roadmap Progress:** Marked the "Internationalisierung (I18n)" roadmap item as completed.
+- **Versioning:** Bumped semantic version to `1.4.0`.
+
+## [1.3.0] - 2026-03-13
+
+### Added
+- **Plugin Metadata:** Plugins can now optionally export `pholio_plugin_version` and `pholio_plugin_author`, displayed in UI menus/info.
+- **Plugins Menubar Entries:** Loaded plugins now appear directly under `Plugins` in the menubar with per-plugin actions.
+
+### Changed
+- **Plugin UX:** Clicking a plugin menu entry opens its window/config if available; plugins without UI now present friendly metadata info.
+- **Versioning:** Bumped semantic version to `1.3.0`.
+
 ## [1.2.0] - 2026-03-13
 
 ### Added

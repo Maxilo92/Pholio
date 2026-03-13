@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-constexpr int PHOLIO_PLUGIN_API_VERSION = 1;
+constexpr int PHOLIO_PLUGIN_API_VERSION = 2;
 
 enum class PholioPluginMediaType : int {
     Unknown = 0,
@@ -28,4 +28,17 @@ struct PholioPluginDecision {
 
 using PholioPluginApiVersionFn = int (*)();
 using PholioPluginNameFn = const char* (*)();
+using PholioPluginVersionFn = const char* (*)();
+using PholioPluginAuthorFn = const char* (*)();
 using PholioPluginProcessFn = bool (*)(const PholioPluginTask*, PholioPluginDecision*);
+
+struct PholioPluginUiApi {
+    bool (*beginWindow)(const char* title, bool* open);
+    void (*endWindow)();
+    void (*text)(const char* text);
+    void (*textWrapped)(const char* text);
+    void (*separator)();
+    bool (*button)(const char* label);
+};
+
+using PholioPluginRenderWindowFn = void (*)(const PholioPluginUiApi*, bool* open);

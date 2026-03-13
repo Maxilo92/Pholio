@@ -25,7 +25,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [x] **Format-Konvertierung:** Vollständige Integration von Magick++ und FFmpeg für On-the-fly Konvertierung.
 - [x] **Erweitertes Duplikat-Management:** Visueller Vergleich von Duplikaten vor dem Überschreiben.
 - [x] **Custom Templates:** Flexiblere Namensschemata durch Benutzer-definierte Variablen.
-- [ ] **Internationalisierung (I18n):** Unterstützung für mehrere Sprachen (Deutsch/Englisch initial).
+- [x] **Internationalisierung (I18n):** Unterstützung für mehrere Sprachen (Deutsch/Englisch initial).
 - [ ] **UI/UX Refinement:** Themes (Dark/Light Mode), verbesserte Icons und Layout-Presets.
 - [ ] **Fehler-Reporting:** Automatisierter Export von Absturzberichten und Diagnose-Logs.
 - [ ] **Windows Support:** Portierung und Validierung des Build-Systems für Windows (MSVC).

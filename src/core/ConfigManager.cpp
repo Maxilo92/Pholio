@@ -37,6 +37,9 @@ void ConfigManager::load() {
         if (j.contains("videoOutputFormat")) m_settings.videoOutputFormat = j.at("videoOutputFormat").get<std::string>();
         if (j.contains("enablePlugins")) m_settings.enablePlugins = j.at("enablePlugins").get<bool>();
         if (j.contains("pluginsDirectory")) m_settings.pluginsDirectory = j.at("pluginsDirectory").get<std::filesystem::path>();
+        if (j.contains("disabledPlugins")) m_settings.disabledPlugins = j.at("disabledPlugins").get<std::vector<std::string>>();
+        if (j.contains("allowPluginWindows")) m_settings.allowPluginWindows = j.at("allowPluginWindows").get<bool>();
+        if (j.contains("pluginReloadToken")) m_settings.pluginReloadToken = j.at("pluginReloadToken").get<int>();
         if (j.contains("migrationMode")) m_settings.migrationMode = j.at("migrationMode").get<engine::MigrationMode>();
         if (j.contains("lastVersion")) m_settings.lastVersion = j.at("lastVersion").get<std::string>();
         if (j.contains("folderPattern")) m_settings.folderPattern = j.at("folderPattern").get<std::string>();
@@ -46,6 +49,8 @@ void ConfigManager::load() {
         if (j.contains("showProgress")) m_settings.showProgress = j.at("showProgress").get<bool>();
         if (j.contains("showLogs")) m_settings.showLogs = j.at("showLogs").get<bool>();
         if (j.contains("showReport")) m_settings.showReport = j.at("showReport").get<bool>();
+        if (j.contains("showPlugins")) m_settings.showPlugins = j.at("showPlugins").get<bool>();
+        if (j.contains("uiLanguage")) m_settings.uiLanguage = j.at("uiLanguage").get<std::string>();
         if (j.contains("pendingUpdateVersion")) m_settings.pendingUpdateVersion = j.at("pendingUpdateVersion").get<std::string>();
         if (j.contains("pendingUpdateAssetUrl")) m_settings.pendingUpdateAssetUrl = j.at("pendingUpdateAssetUrl").get<std::string>();
         if (j.contains("pendingUpdateAssetName")) m_settings.pendingUpdateAssetName = j.at("pendingUpdateAssetName").get<std::string>();

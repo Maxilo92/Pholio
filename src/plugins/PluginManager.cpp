@@ -1,4 +1,6 @@
 #include "PluginManager.hpp"
+#include <imgui.h>
+#include <algorithm>
 #include <chrono>
 #include <cstring>
 
@@ -11,6 +13,39 @@
 namespace plugins {
 
 namespace {
+bool uiBeginWindow(const char* title, bool* open) {
+    return ImGui::Begin(title ? title : "Plugin Window", open);
+}
+
+void uiEndWindow() {
+    ImGui::End();
+}
+
+void uiText(const char* text) {
+    ImGui::Text("%s", text ? text : "");
+}
+
+void uiTextWrapped(const char* text) {
+    ImGui::TextWrapped("%s", text ? text : "");
+}
+
+void uiSeparator() {
+    ImGui::Separator();
+}
+
+bool uiButton(const char* label) {
+    return ImGui::Button(label ? label : "Button");
+}
+
+const PholioPluginUiApi kUiApi = {
+    &uiBeginWindow,
+    &uiEndWindow,
+    &uiText,
+    &uiTextWrapped,
+    &uiSeparator,
+    &uiButton
+};
+
 void* loadLibrary(const std::filesystem::path& path) {
 #ifdef _WIN32
     return reinterpret_cast<void*>(LoadLibraryA(path.string().c_str()));
@@ -73,9 +108,12 @@ void PluginManager::loadFromDirectory(const std::filesystem::path& directory) {
 
         auto* apiVersion = reinterpret_cast<PholioPluginApiVersionFn>(loadSymbol(handle, "pholio_plugin_api_version"));
         auto* nameFn = reinterpret_cast<PholioPluginNameFn>(loadSymbol(handle, "pholio_plugin_name"));
+        auto* versionFn = reinterpret_cast<PholioPluginVersionFn>(loadSymbol(handle, "pholio_plugin_version"));
+        auto* authorFn = reinterpret_cast<PholioPluginAuthorFn>(loadSymbol(handle, "pholio_plugin_author"));
         auto* processFn = reinterpret_cast<PholioPluginProcessFn>(loadSymbol(handle, "pholio_plugin_process"));
+        auto* renderWindowFn = reinterpret_cast<PholioPluginRenderWindowFn>(loadSymbol(handle, "pholio_plugin_render_window"));
 
-        if (!apiVersion || !nameFn || !processFn) {
+        if (!apiVersion || !nameFn || (!processFn && !renderWindowFn)) {
             warn("PluginManager: plugin missing required symbols: " + entry.path().filename().string());
             closeLibrary(handle);
             continue;
@@ -90,8 +128,12 @@ void PluginManager::loadFromDirectory(const std::filesystem::path& directory) {
         LoadedPlugin plugin;
         plugin.path = entry.path();
         plugin.name = nameFn() ? std::string(nameFn()) : entry.path().stem().string();
+        plugin.version = versionFn && versionFn() ? std::string(versionFn()) : "unknown";
+        plugin.author = authorFn && authorFn() ? std::string(authorFn()) : "unknown";
         plugin.handle = handle;
         plugin.process = processFn;
+        plugin.renderWindow = renderWindowFn;
+        plugin.enabled = m_disabledPluginNames.find(plugin.name) == m_disabledPluginNames.end();
         m_plugins.push_back(std::move(plugin));
         loadedCount++;
     }
@@ -135,6 +177,12 @@ bool PluginManager::apply(engine::MediaTask& task,
     }
 
     for (const auto& plugin : m_plugins) {
+        if (!plugin.enabled) {
+            continue;
+        }
+        if (!plugin.process) {
+            continue;
+        }
         PholioPluginDecision decision{};
         decision.skipFile = 0;
         decision.skipReason[0] = '\0';
@@ -166,15 +214,139 @@ bool PluginManager::apply(engine::MediaTask& task,
     return true;
 }
 
+void PluginManager::renderWindows() {
+    for (auto& plugin : m_plugins) {
+        if (!plugin.enabled) {
+            continue;
+        }
+        if (!plugin.renderWindow) {
+            continue;
+        }
+        try {
+            plugin.renderWindow(&kUiApi, &plugin.windowOpen);
+        } catch (...) {
+            warn("PluginManager: plugin UI rendering failed: " + plugin.name);
+            plugin.windowOpen = false;
+        }
+    }
+}
+
+std::vector<PluginManager::PluginWindowState> PluginManager::getPluginWindowStates() const {
+    std::vector<PluginWindowState> states;
+    states.reserve(m_plugins.size());
+    for (const auto& plugin : m_plugins) {
+        if (!plugin.renderWindow) {
+            continue;
+        }
+        states.push_back(PluginWindowState{plugin.name, plugin.enabled, plugin.windowOpen});
+    }
+    return states;
+}
+
+bool PluginManager::reopenPluginWindow(const std::string& pluginName) {
+    for (auto& plugin : m_plugins) {
+        if (!plugin.renderWindow) {
+            continue;
+        }
+        if (plugin.name == pluginName) {
+            plugin.windowOpen = true;
+            return true;
+        }
+    }
+    return false;
+}
+
+std::vector<PluginManager::PluginDescriptor> PluginManager::getPluginDescriptors() const {
+    std::vector<PluginDescriptor> descriptors;
+    descriptors.reserve(m_plugins.size());
+    for (const auto& plugin : m_plugins) {
+        descriptors.push_back(PluginDescriptor{
+            plugin.name,
+            plugin.version,
+            plugin.author,
+            plugin.enabled,
+            plugin.renderWindow != nullptr
+        });
+    }
+    return descriptors;
+}
+
+bool PluginManager::activatePlugin(const std::string& pluginName, std::string& message) {
+    for (auto& plugin : m_plugins) {
+        if (plugin.name != pluginName) {
+            continue;
+        }
+        if (!plugin.enabled) {
+            message = "Plugin is disabled: " + plugin.name;
+            return false;
+        }
+        if (plugin.renderWindow) {
+            plugin.windowOpen = true;
+            message = "Opened plugin window: " + plugin.name;
+            return true;
+        }
+        message = "Plugin info - Name: " + plugin.name + ", Version: " + plugin.version + ", Author: " + plugin.author;
+        return false;
+    }
+    message = "Plugin not found: " + pluginName;
+    return false;
+}
+
 bool PluginManager::hasPlugins() const {
     return !m_plugins.empty();
+}
+
+bool PluginManager::setPluginEnabled(const std::string& pluginName, bool enabled) {
+    bool found = false;
+    if (enabled) {
+        m_disabledPluginNames.erase(pluginName);
+    } else {
+        m_disabledPluginNames.insert(pluginName);
+    }
+
+    for (auto& plugin : m_plugins) {
+        if (plugin.name != pluginName) {
+            continue;
+        }
+        plugin.enabled = enabled;
+        if (!enabled) {
+            plugin.windowOpen = false;
+        }
+        found = true;
+    }
+    return found;
+}
+
+bool PluginManager::isPluginEnabled(const std::string& pluginName) const {
+    return m_disabledPluginNames.find(pluginName) == m_disabledPluginNames.end();
+}
+
+void PluginManager::setDisabledPlugins(const std::vector<std::string>& disabledPlugins) {
+    m_disabledPluginNames.clear();
+    for (const auto& name : disabledPlugins) {
+        if (!name.empty()) {
+            m_disabledPluginNames.insert(name);
+        }
+    }
+    for (auto& plugin : m_plugins) {
+        plugin.enabled = m_disabledPluginNames.find(plugin.name) == m_disabledPluginNames.end();
+        if (!plugin.enabled) {
+            plugin.windowOpen = false;
+        }
+    }
+}
+
+std::vector<std::string> PluginManager::getDisabledPlugins() const {
+    std::vector<std::string> disabled(m_disabledPluginNames.begin(), m_disabledPluginNames.end());
+    std::sort(disabled.begin(), disabled.end());
+    return disabled;
 }
 
 bool PluginManager::hasSupportedExtension(const std::filesystem::path& path) {
 #ifdef _WIN32
     return path.extension() == ".dll";
 #elif __APPLE__
-    return path.extension() == ".dylib";
+    return path.extension() == ".dylib" || path.extension() == ".so";
 #else
     return path.extension() == ".so";
 #endif
