@@ -12,7 +12,8 @@ fi
 
 while true; do
     echo "Starting Pholio..."
-    "$BINARY"
+    export PHOLIO_RESTART_VIA_EXIT_CODE=1
+    "$BINARY" "$@"
     EXIT_CODE=$?
     
     if [ $EXIT_CODE -eq 42 ]; then

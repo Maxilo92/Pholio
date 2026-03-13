@@ -1,6 +1,7 @@
 #include "AppWindow.hpp"
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <chrono>
 #include <iostream>
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
@@ -83,8 +84,11 @@ void AppWindow::update() {
     bool cmd_down = io.KeyCtrl;
 #endif
 
-    // Use IsKeyPressed with repeat=false or check for releases to avoid accidental triggers
-    if (cmd_down) {
+    static const auto shortcutsEnabledAt = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+    const bool shortcutsEnabled = std::chrono::steady_clock::now() >= shortcutsEnabledAt;
+
+    // Defer global shortcuts briefly after startup to avoid phantom modifier/key events.
+    if (cmd_down && shortcutsEnabled) {
         if (ImGui::IsKeyPressed(ImGuiKey_D, false)) { m_showDashboard = !m_showDashboard; saveWindowState(); }
         if (ImGui::IsKeyPressed(ImGuiKey_S, false)) { m_showSettings = !m_showSettings; saveWindowState(); }
         if (ImGui::IsKeyPressed(ImGuiKey_R, false)) {

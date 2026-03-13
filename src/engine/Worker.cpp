@@ -100,7 +100,7 @@ void Worker::run() {
 
         // 2. Initial Scan to calculate required space
         setStatus("Scanning...");
-        Scanner scanner(settings.sourcePath, m_logWindow, settings.excludedExtensions);
+        Scanner scanner(settings.sourcePath, m_logWindow);
         auto tasks = scanner.scan();
 
         m_totalFiles = static_cast<int>(tasks.size());
@@ -151,7 +151,7 @@ void Worker::run() {
         uint64_t batchBytes = 0;
 
         // Determine concurrency
-        int numThreads = std::max(1, settings.maxConcurrentTasks);
+        int numThreads = 1;
         if (numThreads > 1) {
             m_logWindow.info("Using parallel processing with " + std::to_string(numThreads) + " threads.");
         }

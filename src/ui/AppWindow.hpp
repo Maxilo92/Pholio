@@ -65,6 +65,7 @@ public:
     bool shouldRestart() const { return m_shouldRestart; }
     bool shouldRebuild() const { return m_shouldRebuild; }
     bool shouldClose() const { return m_shouldClose; }
+    void clearFlags() { m_shouldRestart = m_shouldRebuild = m_shouldClose = false; }
 };
 
 } // namespace ui

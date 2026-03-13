@@ -112,10 +112,29 @@ def main():
     # 5. Execute if requested
     if args.start:
         print("\nStarting Pholio...")
-        if sys.platform == "darwin" and (build_dir / "Pholio.app").exists():
-            run_command(["open", str(build_dir / "Pholio.app")])
-        else:
-            run_command([str(binary_path)])
+        if not binary_path.exists():
+            print(f"Error: Executable not found: {binary_path}")
+            sys.exit(1)
+
+        env = os.environ.copy()
+        env["PHOLIO_RESTART_VIA_EXIT_CODE"] = "1"
+
+        try:
+            with open(os.devnull, "rb") as devnull_in, open(os.devnull, "ab") as devnull_out:
+                subprocess.Popen(
+                    [str(binary_path)],
+                    cwd=str(project_root),
+                    env=env,
+                    start_new_session=True,
+                    stdin=devnull_in,
+                    stdout=devnull_out,
+                    stderr=devnull_out,
+                    close_fds=True
+                )
+            print(f"Started: {binary_path}")
+        except Exception as e:
+            print(f"Failed to start app: {e}")
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -4,16 +4,37 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
+#include <cstdlib>
+#include <chrono>
+#include <filesystem>
+#include <string>
 #include "core/ConfigManager.hpp"
 #include "core/Config.hpp"
 #include "core/CrashHandler.hpp"
 #include "ui/AppWindow.hpp"
 
+static std::string shellQuote(const std::string& value) {
+    std::string out = "'";
+    for (char c : value) {
+        if (c == '\'') out += "'\\''";
+        else out += c;
+    }
+    out += "'";
+    return out;
+}
+
+static bool relaunchDetached(const std::string& execPath) {
+    if (execPath.empty()) return false;
+    std::string cmd = "nohup " + shellQuote(execPath) + " > /tmp/pholio_relaunch.log 2>&1 < /dev/null &";
+    return std::system(cmd.c_str()) == 0;
+}
+
 static void glfw_error_callback(int error, const char* description) {
     std::cerr << "Glfw Error " << error << ": " << description << std::endl;
 }
 
-int main(int, char**) {
+int main(int argc, char** argv) {
+    (void)argc;
     core::CrashHandler::init(core::ConfigManager::getInstance().getCrashesDirectory());
 
     try {
@@ -72,8 +93,22 @@ int main(int, char**) {
         std::cout << "Application initialized. GUI Ready." << std::endl;
 
         int exitCode = 0;
-        while (!glfwWindowShouldClose(window)) {
+        auto startTime = std::chrono::steady_clock::now();
+        int framesSinceStart = 0;
+        while (true) {
             glfwPollEvents();
+
+            auto elapsedSeconds = std::chrono::duration_cast<std::chrono::milliseconds>(
+                                      std::chrono::steady_clock::now() - startTime)
+                                      .count() / 1000.0f;
+            const bool isInitializing = elapsedSeconds < 1.0f;
+            if (glfwWindowShouldClose(window)) {
+                if (isInitializing) {
+                    glfwSetWindowShouldClose(window, GLFW_FALSE);
+                } else {
+                    break;
+                }
+            }
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -82,13 +117,18 @@ int main(int, char**) {
             appWindow.update();
             appWindow.render();
 
-            if (appWindow.shouldRestart()) {
-                exitCode = appWindow.shouldRebuild() ? 43 : 42;
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
-            }
+            if (framesSinceStart < 10) {
+                appWindow.clearFlags();
+                framesSinceStart++;
+            } else {
+                if (appWindow.shouldRestart()) {
+                    exitCode = appWindow.shouldRebuild() ? 43 : 42;
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+                }
 
-            if (appWindow.shouldClose()) {
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                if (appWindow.shouldClose()) {
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+                }
             }
 
             ImGui::Render();
@@ -111,6 +151,24 @@ int main(int, char**) {
 
         glfwDestroyWindow(window);
         glfwTerminate();
+
+        if (exitCode == 42) {
+            const char* delegatedRestartEnv = std::getenv("PHOLIO_RESTART_VIA_EXIT_CODE");
+            const bool delegateRestartViaExitCode = delegatedRestartEnv != nullptr && std::string(delegatedRestartEnv) == "1";
+            if (delegateRestartViaExitCode) {
+                return 42;
+            }
+
+            std::filesystem::path execPath;
+            if (argv != nullptr && argv[0] != nullptr && std::string(argv[0]).size() > 0) {
+                execPath = std::filesystem::absolute(argv[0]);
+            }
+            if (!relaunchDetached(execPath.string())) {
+                std::cerr << "Failed to relaunch executable: " << execPath.string() << std::endl;
+                return 1;
+            }
+            return 0;
+        }
 
         std::cout << core::PROJECT_NAME << " Finished" << std::endl;
         return exitCode;
