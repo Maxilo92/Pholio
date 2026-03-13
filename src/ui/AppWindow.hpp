@@ -47,6 +47,7 @@ private:
     void checkVersionUpdate();
     void saveWindowState();
     void renderCloseDuringSortingPopup();
+    void startNewSort();
     
     std::unique_ptr<LogWindow> m_logWindow;
     std::unique_ptr<engine::Worker> m_worker;

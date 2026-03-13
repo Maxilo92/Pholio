@@ -297,6 +297,21 @@ void AppWindow::saveWindowState() {
     config.save();
 }
 
+void AppWindow::startNewSort() {
+    if (m_worker->isRunning()) {
+        return;
+    }
+
+    auto& config = core::ConfigManager::getInstance();
+    auto settings = config.getSettings();
+    settings.sourcePath.clear();
+    settings.targetPath.clear();
+    config.setSettings(settings);
+    config.save();
+
+    m_worker->prepareNewSort();
+}
+
 void AppWindow::renderMainDockspace() {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -330,6 +345,12 @@ void AppWindow::renderMainDockspace() {
 
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu(i18n::tr("menu.file", "File"))) {
+            ImGui::BeginDisabled(m_worker->isRunning());
+            if (ImGui::MenuItem(i18n::tr("menu.new_sort", "New Sort"))) {
+                startNewSort();
+            }
+            ImGui::EndDisabled();
+            ImGui::Separator();
             if (ImGui::MenuItem(i18n::tr("menu.restart", "Restart"), STR_CTRL "+R")) m_shouldRestart = true;
             if (ImGui::MenuItem(i18n::tr("menu.exit", "Exit"), STR_CTRL "+Q")) m_shouldClose = true;
             ImGui::EndMenu();

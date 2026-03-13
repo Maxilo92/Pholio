@@ -73,6 +73,7 @@ void DashboardWindow::render() {
     renderErrorPopup();
     renderSummaryPopup();
     renderDuplicatePopup();
+    renderLowDiskSpacePopup();
 
     // Handle deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
@@ -200,6 +201,54 @@ void DashboardWindow::renderDuplicatePopup() {
         m_lastDuplicateSourceLoadedPath.clear();
         m_lastDuplicateTargetLoadedPath.clear();
         m_applyDecisionToRemainingDuplicates = false;
+    }
+}
+
+void DashboardWindow::renderLowDiskSpacePopup() {
+    auto prompt = m_worker.getPendingLowDiskSpacePrompt();
+    if (prompt && !m_lowDiskSpacePopupOpenRequested) {
+        ImGui::OpenPopup("Low Disk Space Warning");
+        m_lowDiskSpacePopupOpenRequested = true;
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Low Disk Space Warning", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        if (!prompt) {
+            m_lowDiskSpacePopupOpenRequested = false;
+            ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+            return;
+        }
+
+        ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.2f, 1.0f), "Not enough free space on target.");
+        ImGui::Spacing();
+        ImGui::TextWrapped("Required: %s", formatBytes(prompt->requiredBytes).c_str());
+        ImGui::TextWrapped("Available: %s", formatBytes(prompt->availableBytes).c_str());
+        ImGui::Spacing();
+
+        if (prompt->moveMode) {
+            ImGui::TextWrapped("Move mode was selected. You can continue at your own risk or cancel.");
+            ImGui::Spacing();
+            if (ImGui::Button("Cancel Sorting", ImVec2(150, 0))) {
+                m_worker.submitLowDiskSpaceDecision(false);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Continue Anyway", ImVec2(170, 0))) {
+                m_worker.submitLowDiskSpaceDecision(true);
+            }
+        } else {
+            ImGui::TextWrapped("Copy mode cannot continue safely with insufficient space.");
+            ImGui::Spacing();
+            if (ImGui::Button("OK", ImVec2(120, 0))) {
+                m_worker.submitLowDiskSpaceDecision(false);
+            }
+        }
+
+        ImGui::EndPopup();
+    } else if (!prompt) {
+        m_lowDiskSpacePopupOpenRequested = false;
     }
 }
 
@@ -368,6 +417,13 @@ void DashboardWindow::renderFolderSelection() {
         core::ConfigManager::getInstance().setSettings(settings);
         core::ConfigManager::getInstance().save();
     }
+
+    ImGui::Spacing();
+    ImGui::BeginDisabled(m_worker.isRunning());
+    if (ImGui::Button("NEW SORT##Files", ImVec2(-1, 0))) {
+        startNewSort();
+    }
+    ImGui::EndDisabled();
 }
 
 void DashboardWindow::renderControls() {
@@ -399,6 +455,19 @@ void DashboardWindow::renderStatus() {
     float progress = m_worker.getProgress();
     std::string status = m_worker.getStatusMessage();
     bool isRunning = m_worker.isRunning();
+    const float rawFilesPerSecond = m_worker.getFilesPerSecond();
+
+    if (!isRunning) {
+        m_smoothedFilesPerSecond = 0.0f;
+    } else if (rawFilesPerSecond > 0.01f) {
+        constexpr float smoothingAlpha = 0.18f;
+        if (m_smoothedFilesPerSecond <= 0.01f) {
+            m_smoothedFilesPerSecond = rawFilesPerSecond;
+        } else {
+            m_smoothedFilesPerSecond = (smoothingAlpha * rawFilesPerSecond) +
+                                       ((1.0f - smoothingAlpha) * m_smoothedFilesPerSecond);
+        }
+    }
 
     ImGui::BeginGroup();
     ImGui::Text("Overall Progress:");
@@ -434,15 +503,15 @@ void DashboardWindow::renderStatus() {
             ImGui::Text("Processing Speed:"); ImGui::NextColumn();
             float bytesPerSec = m_worker.getBytesPerSecond();
             if (bytesPerSec > 1024.0f * 1024.0f * 1024.0f) {
-                ImGui::Text("%.2f files/sec (%.2f GB/s)", m_worker.getFilesPerSecond(), bytesPerSec / (1024.0 * 1024.0 * 1024.0));
+                ImGui::Text("%.2f files/sec (%.2f GB/s)", rawFilesPerSecond, bytesPerSec / (1024.0 * 1024.0 * 1024.0));
             } else {
-                ImGui::Text("%.2f files/sec (%.2f MB/s)", m_worker.getFilesPerSecond(), bytesPerSec / (1024.0 * 1024.0));
+                ImGui::Text("%.2f files/sec (%.2f MB/s)", rawFilesPerSecond, bytesPerSec / (1024.0 * 1024.0));
             }
             ImGui::NextColumn();
 
             int remaining = m_worker.getTotalFiles() - m_worker.getProcessedFiles();
-            if (remaining > 0 && m_worker.getFilesPerSecond() > 0.1f) {
-                int etaSeconds = static_cast<int>(remaining / m_worker.getFilesPerSecond());
+            if (remaining > 0 && m_smoothedFilesPerSecond > 0.1f) {
+                int etaSeconds = static_cast<int>(remaining / m_smoothedFilesPerSecond);
                 ImGui::Text("Estimated Time:"); ImGui::NextColumn();
                 ImGui::Text("%d min %d sec", etaSeconds / 60, etaSeconds % 60); ImGui::NextColumn();
             }
@@ -476,6 +545,27 @@ void DashboardWindow::openFolderInExplorer(const std::filesystem::path& path) {
     std::string command = "xdg-open \"" + path.string() + "\"";
 #endif
     std::system(command.c_str());
+}
+
+void DashboardWindow::startNewSort() {
+    if (m_worker.isRunning()) {
+        return;
+    }
+
+    auto settings = core::ConfigManager::getInstance().getSettings();
+    settings.sourcePath.clear();
+    settings.targetPath.clear();
+    core::ConfigManager::getInstance().setSettings(settings);
+    core::ConfigManager::getInstance().save();
+
+    m_worker.prepareNewSort();
+    m_showErrorPopup = false;
+    m_showSummaryPopup = false;
+    m_workerWasRunning = false;
+    m_lastErrorMessage.clear();
+    m_duplicatePopupOpenRequested = false;
+    m_lowDiskSpacePopupOpenRequested = false;
+    m_applyDecisionToRemainingDuplicates = false;
 }
 
 } // namespace ui

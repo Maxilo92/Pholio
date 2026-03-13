@@ -15,6 +15,9 @@ void PreviewWindow::render(bool* p_open) {
         if (!currentPath.empty() && currentPath != m_lastLoadedPath) {
             if (m_previewTexture.loadFromFile(currentPath)) {
                 m_lastLoadedPath = currentPath;
+            } else {
+                m_previewTexture.release();
+                m_lastLoadedPath = currentPath;
             }
         } else if (currentPath.empty()) {
             m_previewTexture.release();
@@ -41,7 +44,15 @@ void PreviewWindow::render(bool* p_open) {
             ImTextureID texID = (ImTextureID)(intptr_t)m_previewTexture.getID();
             ImGui::Image(texID, ImVec2(displayWidth, displayHeight));
         } else {
-            ImGui::Text("No preview available. Start sorting to see images.");
+            if (currentPath.empty()) {
+                ImGui::Text("No preview available. Start sorting to see images.");
+            } else {
+                ImGui::Text("No preview available for file:");
+                ImGui::TextWrapped("%s", currentPath.filename().string().c_str());
+                ImGui::Spacing();
+                ImGui::TextDisabled("Path:");
+                ImGui::TextWrapped("%s", currentPath.string().c_str());
+            }
         }
     }
     ImGui::End();

@@ -22,6 +22,11 @@ void LogWindow::setupFileLogging(const std::filesystem::path& logDir) {
         std::filesystem::create_directories(logDir);
     }
 
+    if (m_fileStream.is_open()) {
+        m_fileStream.flush();
+        m_fileStream.close();
+    }
+
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
     std::tm tm_buf;

@@ -20,6 +20,11 @@ public:
         std::filesystem::path sourcePath;
         std::filesystem::path targetPath;
     };
+    struct LowDiskSpacePrompt {
+        uint64_t requiredBytes = 0;
+        uint64_t availableBytes = 0;
+        bool moveMode = false;
+    };
 
     explicit Worker(ui::LogWindow& logWindow);
     ~Worker();
@@ -42,13 +47,18 @@ public:
     std::string getStatusMessage() const;
     std::filesystem::path getCurrentImagePath() const;
     std::optional<DuplicatePrompt> getPendingDuplicatePrompt() const;
+    std::optional<LowDiskSpacePrompt> getPendingLowDiskSpacePrompt() const;
     void submitDuplicateDecision(DuplicateAction action, bool applyToRemaining);
+    void submitLowDiskSpaceDecision(bool shouldContinue);
     void requestPause();
     void resumeFromPause();
+    void resetProgress();
+    void prepareNewSort();
 
 private:
     void run();
     DuplicateAction requestDuplicateDecision(const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath);
+    bool requestLowDiskSpaceDecision(uint64_t requiredBytes, uint64_t availableBytes, bool moveMode);
     void waitIfPaused();
     void updatePerformanceMetrics(int processedInBatch, uint64_t bytesInBatch, 
                                   std::chrono::steady_clock::time_point startTime);
@@ -78,6 +88,10 @@ private:
     std::optional<DuplicatePrompt> m_pendingDuplicatePrompt;
     std::optional<DuplicateAction> m_pendingDuplicateDecision;
     std::optional<DuplicateAction> m_duplicateDecisionOverride;
+    mutable std::mutex m_lowDiskSpaceMutex;
+    std::condition_variable m_lowDiskSpaceCv;
+    std::optional<LowDiskSpacePrompt> m_pendingLowDiskSpacePrompt;
+    std::optional<bool> m_pendingLowDiskSpaceDecision;
 
     std::atomic<bool> m_pauseRequested{false};
     std::condition_variable m_pauseCv;

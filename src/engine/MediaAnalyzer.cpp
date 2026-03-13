@@ -8,6 +8,7 @@
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavutil/dict.h>
+#include <libavutil/log.h>
 }
 
 namespace engine {
@@ -15,7 +16,13 @@ namespace engine {
 namespace fs = std::filesystem;
 
 MediaAnalyzer::MediaAnalyzer(ui::LogWindow& logWindow) 
-    : core::Loggable(logWindow) {}
+    : core::Loggable(logWindow) {
+    static const bool ffmpegLogConfigured = []() {
+        av_log_set_level(AV_LOG_ERROR);
+        return true;
+    }();
+    (void)ffmpegLogConfigured;
+}
 
 bool MediaAnalyzer::analyze(MediaMetadata& metadata) {
     bool success = false;

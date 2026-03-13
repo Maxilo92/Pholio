@@ -21,7 +21,9 @@ private:
     void renderErrorPopup();
     void renderSummaryPopup();
     void renderDuplicatePopup();
+    void renderLowDiskSpacePopup();
     void renderDuplicatePreviewPanel(const char* label, const std::filesystem::path& imagePath, Texture& texture, std::filesystem::path& lastLoadedPath);
+    void startNewSort();
     
     std::string browseFolder(const std::string& defaultPath);
     void openFolderInExplorer(const std::filesystem::path& path);
@@ -39,7 +41,9 @@ private:
     std::filesystem::path m_lastDuplicateSourceLoadedPath;
     std::filesystem::path m_lastDuplicateTargetLoadedPath;
     bool m_duplicatePopupOpenRequested = false;
+    bool m_lowDiskSpacePopupOpenRequested = false;
     bool m_applyDecisionToRemainingDuplicates = false;
+    float m_smoothedFilesPerSecond = 0.0f;
 };
 
 } // namespace ui

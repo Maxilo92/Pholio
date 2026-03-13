@@ -87,20 +87,22 @@ void ProgressWindow::render() {
 
     ImGui::Separator();
 
-    // Performance Plots
-    if (ImPlot::BeginPlot("Performance Metrics", ImVec2(-1, 200))) {
-        ImPlot::SetupAxes("Time", "Value", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_AutoFit);
-        ImPlot::SetupAxisLimits(ImAxis_X1, 0, 100, ImGuiCond_Always);
-        
-        std::vector<float> x(100);
-        std::iota(x.begin(), x.end(), 0.0f);
-        
-        std::vector<float> y_fps(m_fpsHistory.begin(), m_fpsHistory.end());
-        std::vector<float> y_mbps(m_mbpsHistory.begin(), m_mbpsHistory.end());
+    std::vector<float> x(100);
+    std::iota(x.begin(), x.end(), 0.0f);
+    std::vector<float> y_fps(m_fpsHistory.begin(), m_fpsHistory.end());
+    std::vector<float> y_mbps(m_mbpsHistory.begin(), m_mbpsHistory.end());
 
+    if (ImPlot::BeginPlot("Files per second", ImVec2(-1, 150))) {
+        ImPlot::SetupAxes("Time", "Files/s", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_AutoFit);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0, 100, ImGuiCond_Always);
         ImPlot::PlotLine("Files/s", x.data(), y_fps.data(), 100);
+        ImPlot::EndPlot();
+    }
+
+    if (ImPlot::BeginPlot("MB per second", ImVec2(-1, 150))) {
+        ImPlot::SetupAxes("Time", "MB/s", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_AutoFit);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0, 100, ImGuiCond_Always);
         ImPlot::PlotLine("MB/s", x.data(), y_mbps.data(), 100);
-        
         ImPlot::EndPlot();
     }
 

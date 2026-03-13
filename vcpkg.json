@@ -27,5 +27,11 @@
     "nlohmann-json",
     "stb",
     "xxhash"
+  ],
+  "overrides": [
+    {
+      "name": "imgui",
+      "version": "1.91.9"
+    }
   ]
 }

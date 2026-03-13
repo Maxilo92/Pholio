@@ -171,6 +171,48 @@ void runRebuildMigration(const core::AppSettings& settings, ui::LogWindow& logWi
                    ", unchanged=" + std::to_string(unchanged) +
                    ", failed=" + std::to_string(failed));
 }
+
+void removeEmptySourceDirectories(const std::filesystem::path& sourceRoot, ui::LogWindow& logWindow, const std::atomic<bool>& shouldStop) {
+    namespace fs = std::filesystem;
+    if (sourceRoot.empty() || !fs::exists(sourceRoot) || !fs::is_directory(sourceRoot)) {
+        return;
+    }
+
+    std::vector<fs::path> directories;
+    std::error_code iterEc;
+    fs::recursive_directory_iterator it(sourceRoot, fs::directory_options::skip_permission_denied, iterEc);
+    fs::recursive_directory_iterator end;
+    while (!iterEc && it != end) {
+        if (shouldStop) {
+            return;
+        }
+        if (it->is_directory()) {
+            directories.push_back(it->path());
+        }
+        it.increment(iterEc);
+    }
+
+    std::sort(directories.begin(), directories.end(), [](const fs::path& a, const fs::path& b) {
+        return a.native().size() > b.native().size();
+    });
+
+    int removedCount = 0;
+    for (const auto& dir : directories) {
+        if (shouldStop) {
+            break;
+        }
+        std::error_code ec;
+        if (fs::is_empty(dir, ec) && !ec) {
+            if (fs::remove(dir, ec) && !ec) {
+                removedCount++;
+            }
+        }
+    }
+
+    if (removedCount > 0) {
+        logWindow.info("Cleanup (Move): removed " + std::to_string(removedCount) + " empty source directories.");
+    }
+}
 } // namespace
 
 Worker::Worker(ui::LogWindow& logWindow) : m_logWindow(logWindow) {}
@@ -204,6 +246,11 @@ void Worker::start() {
         m_pendingDuplicateDecision.reset();
         m_duplicateDecisionOverride.reset();
     }
+    {
+        std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+        m_pendingLowDiskSpacePrompt.reset();
+        m_pendingLowDiskSpaceDecision.reset();
+    }
     
     if (m_thread.joinable()) {
         m_thread.join();
@@ -215,6 +262,7 @@ void Worker::start() {
 void Worker::stop() {
     m_shouldStop = true;
     m_duplicateCv.notify_all();
+    m_lowDiskSpaceCv.notify_all();
     m_pauseCv.notify_all();
     if (m_thread.joinable()) {
         m_thread.join();
@@ -242,6 +290,11 @@ std::optional<Worker::DuplicatePrompt> Worker::getPendingDuplicatePrompt() const
     return m_pendingDuplicatePrompt;
 }
 
+std::optional<Worker::LowDiskSpacePrompt> Worker::getPendingLowDiskSpacePrompt() const {
+    std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+    return m_pendingLowDiskSpacePrompt;
+}
+
 void Worker::submitDuplicateDecision(DuplicateAction action, bool applyToRemaining) {
     {
         std::lock_guard<std::mutex> lock(m_duplicateMutex);
@@ -256,6 +309,17 @@ void Worker::submitDuplicateDecision(DuplicateAction action, bool applyToRemaini
     m_duplicateCv.notify_all();
 }
 
+void Worker::submitLowDiskSpaceDecision(bool shouldContinue) {
+    {
+        std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+        if (!m_pendingLowDiskSpacePrompt.has_value()) {
+            return;
+        }
+        m_pendingLowDiskSpaceDecision = shouldContinue;
+    }
+    m_lowDiskSpaceCv.notify_all();
+}
+
 void Worker::requestPause() {
     m_pauseRequested = true;
 }
@@ -263,6 +327,48 @@ void Worker::requestPause() {
 void Worker::resumeFromPause() {
     m_pauseRequested = false;
     m_pauseCv.notify_all();
+}
+
+void Worker::resetProgress() {
+    if (m_isRunning) {
+        return;
+    }
+
+    m_shouldStop = false;
+    m_pauseRequested = false;
+    m_totalFiles = 0;
+    m_processedFiles = 0;
+    m_successCount = 0;
+    m_errorCount = 0;
+    m_totalBytes = 0;
+    m_processedBytes = 0;
+    m_filesPerSecond = 0.0f;
+    m_bytesPerSecond = 0.0f;
+    m_lastRunDurationSeconds = 0;
+    setStatus("Idle");
+    setCurrentImagePath("");
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        m_pendingDuplicatePrompt.reset();
+        m_pendingDuplicateDecision.reset();
+        m_duplicateDecisionOverride.reset();
+    }
+    {
+        std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+        m_pendingLowDiskSpacePrompt.reset();
+        m_pendingLowDiskSpaceDecision.reset();
+    }
+}
+
+void Worker::prepareNewSort() {
+    if (m_isRunning) {
+        return;
+    }
+
+    resetProgress();
+    m_logWindow.clear();
+    m_logWindow.setupFileLogging(core::ConfigManager::getInstance().getLogDirectory());
+    m_logWindow.info("New sort prepared: source/target reset, progress reset, and new log session started.");
 }
 
 void Worker::setStatus(const std::string& message) {
@@ -364,12 +470,27 @@ void Worker::run() {
         auto spaceInfo = std::filesystem::space(checkPath, space_ec);
         if (!space_ec) {
             if (spaceInfo.available < totalBytes) {
-                m_logWindow.error("Not enough disk space on target! Required: " + 
-                                 std::to_string(totalBytes / (1024 * 1024)) + " MB, Available: " + 
-                                 std::to_string(spaceInfo.available / (1024 * 1024)) + " MB");
-                setStatus("Error: Disk Full");
-                m_isRunning = false;
-                return;
+                const std::string diskSpaceMessage =
+                    "Not enough disk space on target! Required: " +
+                    std::to_string(totalBytes / (1024 * 1024)) + " MB, Available: " +
+                    std::to_string(spaceInfo.available / (1024 * 1024)) + " MB";
+                if (settings.operationMode == OperationMode::Move) {
+                    m_logWindow.warn(diskSpaceMessage);
+                    setStatus("Warning: Low disk space confirmation required");
+                    const bool continueAtOwnRisk = requestLowDiskSpaceDecision(totalBytes, spaceInfo.available, true);
+                    if (!continueAtOwnRisk) {
+                        m_logWindow.error("Processing canceled by user due to low disk space warning.");
+                        setStatus("Error: Disk Full");
+                        m_isRunning = false;
+                        return;
+                    }
+                    m_logWindow.warn("Continuing in MOVE mode despite low disk space warning (user confirmed).");
+                } else {
+                    m_logWindow.error(diskSpaceMessage);
+                    setStatus("Error: Disk Full");
+                    m_isRunning = false;
+                    return;
+                }
             }
         }
 
@@ -509,6 +630,10 @@ void Worker::run() {
         }
 
         if (!m_shouldStop) {
+            if (settings.operationMode == OperationMode::Move && !settings.dryRun) {
+                removeEmptySourceDirectories(settings.sourcePath, m_logWindow, m_shouldStop);
+            }
+
             // Detailed report
             auto endTime = std::chrono::steady_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(endTime - overallStartTime).count();
@@ -566,6 +691,11 @@ void Worker::run() {
         m_pendingDuplicateDecision.reset();
         m_duplicateDecisionOverride.reset();
     }
+    {
+        std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+        m_pendingLowDiskSpacePrompt.reset();
+        m_pendingLowDiskSpaceDecision.reset();
+    }
     m_isRunning = false;
 }
 
@@ -599,6 +729,31 @@ DuplicateAction Worker::requestDuplicateDecision(const std::filesystem::path& so
     const DuplicateAction decision = *m_pendingDuplicateDecision;
     m_pendingDuplicatePrompt.reset();
     m_pendingDuplicateDecision.reset();
+    return decision;
+}
+
+bool Worker::requestLowDiskSpaceDecision(uint64_t requiredBytes, uint64_t availableBytes, bool moveMode) {
+    {
+        std::lock_guard<std::mutex> lock(m_lowDiskSpaceMutex);
+        m_pendingLowDiskSpacePrompt = LowDiskSpacePrompt{requiredBytes, availableBytes, moveMode};
+        m_pendingLowDiskSpaceDecision.reset();
+    }
+    m_lowDiskSpaceCv.notify_all();
+
+    std::unique_lock<std::mutex> lock(m_lowDiskSpaceMutex);
+    m_lowDiskSpaceCv.wait(lock, [this] {
+        return m_pendingLowDiskSpaceDecision.has_value() || m_shouldStop;
+    });
+
+    if (m_shouldStop) {
+        m_pendingLowDiskSpacePrompt.reset();
+        m_pendingLowDiskSpaceDecision.reset();
+        return false;
+    }
+
+    const bool decision = *m_pendingLowDiskSpaceDecision;
+    m_pendingLowDiskSpacePrompt.reset();
+    m_pendingLowDiskSpaceDecision.reset();
     return decision;
 }
 

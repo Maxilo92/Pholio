@@ -40,10 +40,26 @@ def parse_version(v: str):
 
 def app_candidates():
     seen = set()
-    for base in (build_dir, project_root):
+    preferred_roots = (
+        build_dir,
+        project_root / "build-release",
+    )
+
+    for base in preferred_roots:
         if not base.exists():
             continue
         for p in base.rglob("Pholio*.app"):
+            if p.is_dir():
+                resolved = p.resolve()
+                if resolved not in seen:
+                    seen.add(resolved)
+                    yield resolved
+
+    # Fallback: search in project, but ignore package export folders.
+    if project_root.exists():
+        for p in project_root.rglob("Pholio*.app"):
+            if "_CPack_Packages" in p.parts:
+                continue
             if p.is_dir():
                 resolved = p.resolve()
                 if resolved not in seen:
@@ -100,12 +116,30 @@ find_vcpkg() {
     return 1
 }
 
+repair_vcpkg_repo() {
+    local vcpkg_root="$1"
+    local configured_worktree=""
+    configured_worktree="$(git -C "$vcpkg_root" config --get core.worktree 2>/dev/null || true)"
+
+    if [[ "$configured_worktree" == ".git" || "$configured_worktree" == "$vcpkg_root/.git" ]]; then
+        echo "Detected broken vcpkg git worktree: $configured_worktree"
+        echo "Repairing vcpkg git config (core.worktree)..."
+        git -C "$vcpkg_root" config --unset core.worktree 2>/dev/null || true
+    fi
+
+    if git -C "$vcpkg_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        echo "Updating local vcpkg refs..."
+        git -C "$vcpkg_root" fetch --all --tags --prune >/dev/null 2>&1 || true
+    fi
+}
+
 build_app() {
     local vcpkg_root
     if ! vcpkg_root="$(find_vcpkg)"; then
         echo "Error: vcpkg not found. Set VCPKG_ROOT or install at ~/vcpkg."
         return 1
     fi
+    repair_vcpkg_repo "$vcpkg_root"
 
     local toolchain_file="$vcpkg_root/scripts/buildsystems/vcpkg.cmake"
     local -a cmake_configure=(
@@ -125,9 +159,90 @@ build_app() {
     fi
 
     echo "Configuring project..."
-    "${cmake_configure[@]}"
+    if ! "${cmake_configure[@]}"; then
+        return 1
+    fi
     echo "Building project..."
-    cmake --build "$BUILD_DIR" --config "$CONFIG" --parallel
+    if ! cmake --build "$BUILD_DIR" --config "$CONFIG" --parallel; then
+        return 1
+    fi
+}
+
+read_expected_version() {
+    local version_file="$PROJECT_ROOT/VERSION"
+    if [[ -f "$version_file" ]]; then
+        tr -d '[:space:]' < "$version_file"
+    fi
+}
+
+read_binary_version() {
+    local binary_path="$1"
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        return 0
+    fi
+
+    python3 - "$binary_path" <<'PY'
+import sys
+import plistlib
+from pathlib import Path
+
+binary = Path(sys.argv[1]).resolve()
+parts = list(binary.parts)
+try:
+    idx = parts.index("Contents")
+except ValueError:
+    print("")
+    raise SystemExit(0)
+
+app_root = Path(*parts[:idx])
+info = app_root / "Contents" / "Info.plist"
+if not info.is_file():
+    print("")
+    raise SystemExit(0)
+
+try:
+    with info.open("rb") as f:
+        plist = plistlib.load(f)
+    version = str(plist.get("CFBundleShortVersionString") or plist.get("CFBundleVersion") or "")
+    print(version.strip())
+except Exception:
+    print("")
+PY
+}
+
+ensure_expected_version() {
+    local expected_version
+    expected_version="$(read_expected_version)"
+    if [[ -z "$expected_version" ]]; then
+        return 0
+    fi
+
+    local resolved_binary
+    resolved_binary="$(resolve_binary)"
+    if [[ ! -f "$resolved_binary" ]]; then
+        return 0
+    fi
+
+    local actual_version
+    actual_version="$(read_binary_version "$resolved_binary")"
+    if [[ -n "$actual_version" && "$actual_version" != "$expected_version" ]]; then
+        echo "Detected local app version $actual_version, expected $expected_version from VERSION."
+        echo "Attempting rebuild to sync local binary version..."
+        if ! build_app; then
+            echo "Error: Rebuild failed; refusing to launch outdated version $actual_version."
+            echo "Fix vcpkg first (e.g. git -C \"\$HOME/vcpkg\" fetch --all --tags --prune) and rerun."
+            return 1
+        fi
+
+        resolved_binary="$(resolve_binary)"
+        actual_version="$(read_binary_version "$resolved_binary")"
+        if [[ -n "$actual_version" && "$actual_version" != "$expected_version" ]]; then
+            echo "Error: Local binary is still version $actual_version after rebuild, expected $expected_version."
+            return 1
+        fi
+    fi
+
+    return 0
 }
 
 if [ ! -f "$(resolve_binary)" ]; then
@@ -137,6 +252,10 @@ fi
 
 if [ ! -f "$(resolve_binary)" ]; then
     echo "Error: Executable not found even after build."
+    exit 1
+fi
+
+if ! ensure_expected_version; then
     exit 1
 fi
 
@@ -158,6 +277,9 @@ while true; do
     elif [ $EXIT_CODE -eq 43 ]; then
         echo "Rebuild and restart requested (Exit Code 43). Rebuilding..."
         build_app
+        if ! ensure_expected_version; then
+            exit 1
+        fi
         BINARY="$(resolve_binary)"
         if [ ! -f "$BINARY" ]; then
             echo "Build completed but executable is still missing."
