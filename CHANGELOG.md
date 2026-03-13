@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-03-13
+
+### Added
+- **Structure Migration Modes:** Added full "Umbau / Merge / Weiterführen" behavior with existing-target pattern detection and optional restructuring of already archived files.
+- **Format Conversion Pipeline:** Added on-the-fly conversion options (image/video) with configurable output formats and safe fallback behavior when conversion tools are unavailable.
+- **Custom Filename Templates:** Added user-defined filename templates with placeholders (e.g. date/time, original name, extension) and filename sanitization.
+
+### Changed
+- **Roadmap Progress:** Marked completed roadmap entries for structure migration, format conversion, duplicate comparison, and custom templates.
+- **Versioning:** Bumped application version to stable semantic version `1.1.0`.
+
 ## [1.0.30] - 2026-03-13
 
 ### Added

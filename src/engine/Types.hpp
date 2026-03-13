@@ -20,6 +20,12 @@ enum class DuplicateAction {
     Rename
 };
 
+enum class MigrationMode {
+    Rebuild,
+    Merge,
+    ContinueExisting
+};
+
 struct MediaMetadata {
     std::filesystem::path path;
     MediaType type = MediaType::Unknown;

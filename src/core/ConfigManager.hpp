@@ -37,6 +37,12 @@ namespace engine {
         {DuplicateAction::Overwrite, "Overwrite"},
         {DuplicateAction::Rename, "Rename"},
     })
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(MigrationMode, {
+        {MigrationMode::Rebuild, "Rebuild"},
+        {MigrationMode::Merge, "Merge"},
+        {MigrationMode::ContinueExisting, "ContinueExisting"},
+    })
 }
 
 namespace core {
@@ -50,8 +56,13 @@ struct AppSettings {
     bool askOnDuplicate = true;
     bool dryRun = false;
     bool showPreview = true;
+    bool enableFormatConversion = false;
+    std::string imageOutputFormat = "jpg";
+    std::string videoOutputFormat = "mp4";
+    engine::MigrationMode migrationMode = engine::MigrationMode::Merge;
     std::string lastVersion = "0.0.0";
     std::string folderPattern = "%Y/%m-%B/%d";
+    std::string filenameTemplate = "{original_filename}";
     bool showDashboard = true;
     bool showSettings = false;
     bool showProgress = false;
@@ -61,7 +72,7 @@ struct AppSettings {
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {

@@ -1,4 +1,5 @@
 #include "Sorter.hpp"
+#include "Converter.hpp"
 #include <filesystem>
 #include <exiv2/exiv2.hpp>
 #include <iomanip>
@@ -6,17 +7,23 @@
 #include <fstream>
 #include <utility>
 #include <nlohmann/json.hpp>
+#include <algorithm>
+#include <cctype>
 
 namespace engine {
 
 Sorter::Sorter(ui::LogWindow& logWindow, VerificationLevel level, DuplicateAction dupAction, bool askOnDuplicate,
-               DuplicateDecisionCallback duplicateDecisionCallback, bool dryRun)
+               DuplicateDecisionCallback duplicateDecisionCallback, bool dryRun,
+               bool enableFormatConversion, std::string imageOutputFormat, std::string videoOutputFormat)
     : core::Loggable(logWindow),
       m_level(level),
       m_dupAction(dupAction),
       m_askOnDuplicate(askOnDuplicate),
       m_duplicateDecisionCallback(std::move(duplicateDecisionCallback)),
-      m_dryRun(dryRun) {}
+      m_dryRun(dryRun),
+      m_enableFormatConversion(enableFormatConversion),
+      m_imageOutputFormat(std::move(imageOutputFormat)),
+      m_videoOutputFormat(std::move(videoOutputFormat)) {}
 
 bool Sorter::process(MediaTask& task, OperationMode mode) {
     namespace fs = std::filesystem;
@@ -109,6 +116,11 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
             task.statusMessage = "Media verified, but sidecar operation failed.";
             warn("Sorter: Sidecar handling failed for " + task.metadata.path.filename().string());
         }
+    }
+
+    // 5b. Optional format conversion after a verified transfer.
+    if (!convertIfNeeded(task)) {
+        warn("Sorter: Conversion failed, keeping verified original target file for " + task.targetPath.filename().string());
     }
 
     // 6. Delete Source(s) if Move mode
@@ -222,6 +234,69 @@ bool Sorter::handleSidecar(const MediaTask& task, OperationMode mode) {
     if (mode == OperationMode::Move) {
         fs::remove(sourceSidecar, ec);
     }
+    return true;
+}
+
+bool Sorter::convertIfNeeded(MediaTask& task) {
+    namespace fs = std::filesystem;
+    if (!m_enableFormatConversion) {
+        return true;
+    }
+
+    std::string desiredFormat = (task.metadata.type == MediaType::Image) ? m_imageOutputFormat : m_videoOutputFormat;
+    std::transform(desiredFormat.begin(), desiredFormat.end(), desiredFormat.begin(), [](unsigned char c) { return std::tolower(c); });
+    if (desiredFormat.empty()) {
+        return true;
+    }
+    if (desiredFormat.front() == '.') {
+        desiredFormat.erase(desiredFormat.begin());
+    }
+
+    std::string currentExt = task.targetPath.extension().string();
+    std::transform(currentExt.begin(), currentExt.end(), currentExt.begin(), [](unsigned char c) { return std::tolower(c); });
+    if (currentExt == "." + desiredFormat) {
+        return true;
+    }
+
+    const fs::path convertedBasePath = task.targetPath.parent_path() / (task.targetPath.stem().string() + "." + desiredFormat);
+    fs::path convertedPath = convertedBasePath;
+    if (fs::exists(convertedPath)) {
+        if (m_dupAction == DuplicateAction::Skip) {
+            warn("Sorter: Converted target already exists, skipping conversion for " + task.targetPath.filename().string());
+            return true;
+        }
+        if (m_dupAction == DuplicateAction::Rename) {
+            int counter = 1;
+            while (fs::exists(convertedPath)) {
+                convertedPath = task.targetPath.parent_path() /
+                                (task.targetPath.stem().string() + " (" + std::to_string(counter++) + ")." + desiredFormat);
+            }
+        } else {
+            std::error_code removeEc;
+            fs::remove(convertedPath, removeEc);
+        }
+    }
+
+    const bool toolAvailable = (task.metadata.type == MediaType::Image) ? Converter::isImageToolAvailable() : Converter::isVideoToolAvailable();
+    if (!toolAvailable) {
+        warn("Sorter: Conversion tool not available. Install " + std::string(task.metadata.type == MediaType::Image ? "ImageMagick (magick)" : "FFmpeg (ffmpeg)") + " to enable this conversion.");
+        return true;
+    }
+
+    const bool converted = (task.metadata.type == MediaType::Image)
+        ? Converter::convertImage(task.targetPath, convertedPath)
+        : Converter::convertVideo(task.targetPath, convertedPath);
+
+    if (!converted || !fs::exists(convertedPath) || fs::file_size(convertedPath) == 0) {
+        std::error_code cleanupEc;
+        fs::remove(convertedPath, cleanupEc);
+        return false;
+    }
+
+    std::error_code cleanupEc;
+    fs::remove(task.targetPath, cleanupEc);
+    task.targetPath = convertedPath;
+    info("Sorter: Converted output format for " + task.metadata.path.filename().string() + " -> " + task.targetPath.extension().string());
     return true;
 }
 

@@ -19,7 +19,10 @@ public:
 
     explicit Sorter(ui::LogWindow& logWindow, VerificationLevel level = VerificationLevel::Full, 
                     DuplicateAction dupAction = DuplicateAction::Skip, bool askOnDuplicate = false,
-                    DuplicateDecisionCallback duplicateDecisionCallback = {}, bool dryRun = false);
+                    DuplicateDecisionCallback duplicateDecisionCallback = {}, bool dryRun = false,
+                    bool enableFormatConversion = false,
+                    std::string imageOutputFormat = "jpg",
+                    std::string videoOutputFormat = "mp4");
 
     /**
      * @brief Processes a media task: copies or moves the file to the target path,
@@ -37,9 +40,13 @@ private:
     bool m_askOnDuplicate;
     DuplicateDecisionCallback m_duplicateDecisionCallback;
     bool m_dryRun;
+    bool m_enableFormatConversion;
+    std::string m_imageOutputFormat;
+    std::string m_videoOutputFormat;
 
     bool handleSidecar(const MediaTask& task, OperationMode mode);
     bool mergeSupplementalMetadata(const MediaTask& task);
+    bool convertIfNeeded(MediaTask& task);
 };
 
 } // namespace engine

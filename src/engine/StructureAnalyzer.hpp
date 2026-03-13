@@ -7,7 +7,9 @@ namespace engine {
 
 class StructureAnalyzer {
 public:
-    explicit StructureAnalyzer(std::filesystem::path baseDestPath, std::string folderPattern = "%Y/%m-%B/%d");
+    explicit StructureAnalyzer(std::filesystem::path baseDestPath,
+                               std::string folderPattern = "%Y/%m-%B/%d",
+                               std::string filenameTemplate = "{original_filename}");
 
     /**
      * @brief Generates a target path for a media file based on its creation time.
@@ -23,6 +25,7 @@ public:
 private:
     std::filesystem::path m_baseDestPath;
     std::string m_folderPattern;
+    std::string m_filenameTemplate;
 };
 
 } // namespace engine

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.0.30")
+set(PHOLIO_VERSION "1.1.0")
 
 project(Pholio LANGUAGES CXX)
 
@@ -61,6 +61,7 @@ if(APPLE)
         src/engine/Scanner.cpp
         src/engine/MediaAnalyzer.cpp
         src/engine/StructureAnalyzer.cpp
+        src/engine/Converter.cpp
         src/engine/Verifier.cpp
         src/engine/Sorter.cpp
         src/engine/Worker.cpp
@@ -111,6 +112,7 @@ else()
         src/engine/Scanner.cpp
         src/engine/MediaAnalyzer.cpp
         src/engine/StructureAnalyzer.cpp
+        src/engine/Converter.cpp
         src/engine/Verifier.cpp
         src/engine/Sorter.cpp
         src/engine/Worker.cpp

@@ -165,6 +165,25 @@ void SettingsWindow::render() {
                 }
                 ImGui::SetItemTooltip("Use strftime codes.\n%%Y=Year  %%m=Month  %%d=Day  %%B=Month Name");
 
+                ImGui::Spacing();
+                ImGui::Text("Migration Strategy:");
+                int migrationMode = static_cast<int>(m_editedSettings.migrationMode);
+                const char* migrationModes[] = {
+                    "Umbau (bestehende Struktur in neues Muster migrieren)",
+                    "Merge (erkannte Zielstruktur weiterverwenden)",
+                    "Weiterfuehren (erkannte Zielstruktur uebernehmen)"
+                };
+                ImGui::PushItemWidth(-FLT_MIN);
+                if (ImGui::Combo("##MigrationMode", &migrationMode, migrationModes, 3)) {
+                    m_editedSettings.migrationMode = static_cast<engine::MigrationMode>(migrationMode);
+                    m_isDirty = true;
+                }
+                ImGui::PopItemWidth();
+                ImGui::SetItemTooltip(
+                    "Umbau: Bestehende Dateien im Ziel werden ins konfigurierte Muster verschoben.\n"
+                    "Merge: Neue Dateien nutzen die erkannte Zielstruktur, falls vorhanden.\n"
+                    "Weiterfuehren: Wie Merge, uebernimmt erkannte Struktur zusaetzlich als neues Standardmuster.");
+
                 const std::string example = buildPatternExample(m_editedSettings.folderPattern);
                 ImGui::Spacing();
                 if (!example.empty()) {
@@ -187,6 +206,33 @@ void SettingsWindow::render() {
                 ImGui::SameLine();
                 if (ImGui::Button("Year/Full Date")) {
                     m_editedSettings.folderPattern = "%Y/%Y-%m-%d";
+                    m_isDirty = true;
+                }
+
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Spacing();
+                ImGui::Text("Filename Template:");
+                char filenameTemplateBuf[256];
+                std::strncpy(filenameTemplateBuf, m_editedSettings.filenameTemplate.c_str(), sizeof(filenameTemplateBuf));
+                if (ImGui::InputText("##FilenameTemplate", filenameTemplateBuf, sizeof(filenameTemplateBuf))) {
+                    m_editedSettings.filenameTemplate = filenameTemplateBuf;
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("Available: {original_filename}, {original_name}, {ext}, {yyyy}, {MM}, {dd}, {HH}, {mm}, {ss}");
+
+                if (ImGui::Button("Use Original Filename")) {
+                    m_editedSettings.filenameTemplate = "{original_filename}";
+                    m_isDirty = true;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Date + Original Name")) {
+                    m_editedSettings.filenameTemplate = "{yyyy}{MM}{dd}_{original_name}.{ext}";
+                    m_isDirty = true;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Timestamp")) {
+                    m_editedSettings.filenameTemplate = "{yyyy}{MM}{dd}_{HH}{mm}{ss}.{ext}";
                     m_isDirty = true;
                 }
                 ImGui::EndTabItem();
@@ -251,6 +297,39 @@ void SettingsWindow::render() {
 
                 if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
                 ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
+
+                ImGui::Spacing();
+                if (ImGui::Checkbox("Enable Format Conversion", &m_editedSettings.enableFormatConversion)) m_isDirty = true;
+                ImGui::SetItemTooltip("Convert copied media into configured output formats after verified transfer.");
+
+                ImGui::BeginDisabled(!m_editedSettings.enableFormatConversion);
+                const char* imageFormats[] = {"jpg", "png", "webp", "heic", "tiff"};
+                int imageIdx = 0;
+                for (int i = 0; i < 5; ++i) {
+                    if (m_editedSettings.imageOutputFormat == imageFormats[i]) {
+                        imageIdx = i;
+                        break;
+                    }
+                }
+                if (ImGui::Combo("Image Output Format", &imageIdx, imageFormats, 5)) {
+                    m_editedSettings.imageOutputFormat = imageFormats[imageIdx];
+                    m_isDirty = true;
+                }
+
+                const char* videoFormats[] = {"mp4", "mov", "mkv"};
+                int videoIdx = 0;
+                for (int i = 0; i < 3; ++i) {
+                    if (m_editedSettings.videoOutputFormat == videoFormats[i]) {
+                        videoIdx = i;
+                        break;
+                    }
+                }
+                if (ImGui::Combo("Video Output Format", &videoIdx, videoFormats, 3)) {
+                    m_editedSettings.videoOutputFormat = videoFormats[videoIdx];
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("Video conversion uses FFmpeg with H.264/AAC defaults.");
+                ImGui::EndDisabled();
                 ImGui::EndTabItem();
             }
 

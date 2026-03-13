@@ -32,8 +32,13 @@ void ConfigManager::load() {
         if (j.contains("askOnDuplicate")) m_settings.askOnDuplicate = j.at("askOnDuplicate").get<bool>();
         if (j.contains("dryRun")) m_settings.dryRun = j.at("dryRun").get<bool>();
         if (j.contains("showPreview")) m_settings.showPreview = j.at("showPreview").get<bool>();
+        if (j.contains("enableFormatConversion")) m_settings.enableFormatConversion = j.at("enableFormatConversion").get<bool>();
+        if (j.contains("imageOutputFormat")) m_settings.imageOutputFormat = j.at("imageOutputFormat").get<std::string>();
+        if (j.contains("videoOutputFormat")) m_settings.videoOutputFormat = j.at("videoOutputFormat").get<std::string>();
+        if (j.contains("migrationMode")) m_settings.migrationMode = j.at("migrationMode").get<engine::MigrationMode>();
         if (j.contains("lastVersion")) m_settings.lastVersion = j.at("lastVersion").get<std::string>();
         if (j.contains("folderPattern")) m_settings.folderPattern = j.at("folderPattern").get<std::string>();
+        if (j.contains("filenameTemplate")) m_settings.filenameTemplate = j.at("filenameTemplate").get<std::string>();
         if (j.contains("showDashboard")) m_settings.showDashboard = j.at("showDashboard").get<bool>();
         if (j.contains("showSettings")) m_settings.showSettings = j.at("showSettings").get<bool>();
         if (j.contains("showProgress")) m_settings.showProgress = j.at("showProgress").get<bool>();

@@ -14,7 +14,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [x] **Metriken:** Echtzeit-Statistiken (MB/s, FPS) mit ImPlot Visualisierung.
 - [x] **Sicherheit:** Checksummen-Verifizierung (MD5/XXHash) und "No-Loss Policy".
 - [x] **Plattformen:** Grundlegender Support für macOS und Linux.
-- [ ] **Struktur-Migration:** Finale Implementierung der "Umbau/Merge/Weiterführen" Logik.
+- [x] **Struktur-Migration:** Finale Implementierung der "Umbau/Merge/Weiterführen" Logik.
 - [x] **Dry Run:** Simulation des Sortiervorgangs ohne tatsächliche Schreibvorgänge.
 
 ---
@@ -22,9 +22,9 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 ## 🧪 Phase 2: Beta - Feature-Vervollständigung & Polishing
 *Fokus: Erweiterung des Funktionsumfangs und Verbesserung der Benutzererfahrung.*
 
-- [ ] **Format-Konvertierung:** Vollständige Integration von Magick++ und FFmpeg für On-the-fly Konvertierung.
-- [ ] **Erweitertes Duplikat-Management:** Visueller Vergleich von Duplikaten vor dem Überschreiben.
-- [ ] **Custom Templates:** Flexiblere Namensschemata durch Benutzer-definierte Variablen.
+- [x] **Format-Konvertierung:** Vollständige Integration von Magick++ und FFmpeg für On-the-fly Konvertierung.
+- [x] **Erweitertes Duplikat-Management:** Visueller Vergleich von Duplikaten vor dem Überschreiben.
+- [x] **Custom Templates:** Flexiblere Namensschemata durch Benutzer-definierte Variablen.
 - [ ] **Internationalisierung (I18n):** Unterstützung für mehrere Sprachen (Deutsch/Englisch initial).
 - [ ] **UI/UX Refinement:** Themes (Dark/Light Mode), verbesserte Icons und Layout-Presets.
 - [ ] **Fehler-Reporting:** Automatisierter Export von Absturzberichten und Diagnose-Logs.

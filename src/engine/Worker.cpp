@@ -7,8 +7,170 @@
 #include <iostream>
 #include <chrono>
 #include <future>
+#include <unordered_map>
+#include <algorithm>
 
 namespace engine {
+
+namespace {
+namespace fs = std::filesystem;
+
+std::string replaceAll(std::string value, const std::string& from, const std::string& to) {
+    if (from.empty()) {
+        return value;
+    }
+    size_t startPos = 0;
+    while ((startPos = value.find(from, startPos)) != std::string::npos) {
+        value.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
+    return value;
+}
+
+std::optional<std::string> buildPatternCandidate(const fs::path& relativeParentPath, const std::tm& tmBuf) {
+    const std::string relativeParent = relativeParentPath.generic_string();
+    if (relativeParent.empty() || relativeParent == ".") {
+        return std::nullopt;
+    }
+
+    char yearBuf[5] = {};
+    char monthBuf[3] = {};
+    char dayBuf[3] = {};
+    char monthFullBuf[32] = {};
+    char monthShortBuf[8] = {};
+
+    std::strftime(yearBuf, sizeof(yearBuf), "%Y", &tmBuf);
+    std::strftime(monthBuf, sizeof(monthBuf), "%m", &tmBuf);
+    std::strftime(dayBuf, sizeof(dayBuf), "%d", &tmBuf);
+    std::strftime(monthFullBuf, sizeof(monthFullBuf), "%B", &tmBuf);
+    std::strftime(monthShortBuf, sizeof(monthShortBuf), "%b", &tmBuf);
+
+    std::string candidate = relativeParent;
+    candidate = replaceAll(candidate, monthFullBuf, "%B");
+    candidate = replaceAll(candidate, monthShortBuf, "%b");
+    candidate = replaceAll(candidate, yearBuf, "%Y");
+    candidate = replaceAll(candidate, monthBuf, "%m");
+    candidate = replaceAll(candidate, dayBuf, "%d");
+
+    if (candidate.find('%') == std::string::npos) {
+        return std::nullopt;
+    }
+
+    return candidate;
+}
+
+std::optional<std::string> detectExistingPattern(const fs::path& targetPath, ui::LogWindow& logWindow) {
+    if (targetPath.empty() || !fs::exists(targetPath) || !fs::is_directory(targetPath)) {
+        return std::nullopt;
+    }
+
+    MediaAnalyzer analyzer(logWindow);
+    std::unordered_map<std::string, int> patternVotes;
+    int analyzedFiles = 0;
+
+    for (const auto& entry : fs::recursive_directory_iterator(targetPath)) {
+        if (!entry.is_regular_file() || !Scanner::isMedia(entry.path())) {
+            continue;
+        }
+        if (++analyzedFiles > 400) {
+            break;
+        }
+
+        MediaMetadata metadata;
+        metadata.path = entry.path();
+        metadata.fileSize = entry.file_size();
+        metadata.type = Scanner::isImage(entry.path()) ? MediaType::Image : MediaType::Video;
+        analyzer.analyze(metadata);
+
+        std::error_code relEc;
+        fs::path relParent = fs::relative(entry.path().parent_path(), targetPath, relEc);
+        if (relEc || relParent.empty()) {
+            continue;
+        }
+
+        auto timestamp = std::chrono::system_clock::to_time_t(metadata.creationTime);
+        std::tm tmBuf{};
+#ifdef _WIN32
+        localtime_s(&tmBuf, &timestamp);
+#else
+        localtime_r(&timestamp, &tmBuf);
+#endif
+        auto candidate = buildPatternCandidate(relParent, tmBuf);
+        if (!candidate) {
+            continue;
+        }
+        patternVotes[*candidate]++;
+    }
+
+    if (patternVotes.empty()) {
+        return std::nullopt;
+    }
+
+    const auto winner = std::max_element(patternVotes.begin(), patternVotes.end(), [](const auto& a, const auto& b) {
+        return a.second < b.second;
+    });
+
+    if (winner == patternVotes.end() || winner->second < 2) {
+        return std::nullopt;
+    }
+
+    logWindow.info("Detected existing target structure pattern: " + winner->first);
+    return winner->first;
+}
+
+void runRebuildMigration(const core::AppSettings& settings, ui::LogWindow& logWindow, std::atomic<bool>& shouldStop) {
+    if (settings.targetPath.empty() || !fs::exists(settings.targetPath) || !fs::is_directory(settings.targetPath)) {
+        return;
+    }
+
+    logWindow.info("Migration mode 'Umbau': scanning existing target files for restructure.");
+    Scanner scanner(settings.targetPath, logWindow);
+    auto existingTasks = scanner.scan();
+    if (existingTasks.empty()) {
+        logWindow.info("Migration mode 'Umbau': no existing media found in target.");
+        return;
+    }
+
+    MediaAnalyzer analyzer(logWindow);
+    StructureAnalyzer targetAnalyzer(settings.targetPath, settings.folderPattern, settings.filenameTemplate);
+    Sorter migrationSorter(logWindow, settings.verificationLevel, settings.duplicateAction, false, {}, settings.dryRun);
+
+    int migrated = 0;
+    int unchanged = 0;
+    int failed = 0;
+
+    for (auto& task : existingTasks) {
+        if (shouldStop) {
+            break;
+        }
+
+        if (!analyzer.analyze(task.metadata)) {
+            failed++;
+            continue;
+        }
+
+        task.targetPath = targetAnalyzer.generatePath(task.metadata);
+
+        std::error_code eqEc;
+        const bool samePath = fs::equivalent(task.metadata.path, task.targetPath, eqEc) ||
+                              fs::weakly_canonical(task.metadata.path, eqEc) == fs::weakly_canonical(task.targetPath, eqEc);
+        if (samePath) {
+            unchanged++;
+            continue;
+        }
+
+        if (migrationSorter.process(task, OperationMode::Move)) {
+            migrated++;
+        } else {
+            failed++;
+        }
+    }
+
+    logWindow.info("Migration summary (Umbau): migrated=" + std::to_string(migrated) +
+                   ", unchanged=" + std::to_string(unchanged) +
+                   ", failed=" + std::to_string(failed));
+}
+} // namespace
 
 Worker::Worker(ui::LogWindow& logWindow) : m_logWindow(logWindow) {}
 
@@ -115,7 +277,7 @@ void Worker::setCurrentImagePath(const std::filesystem::path& path) {
 void Worker::run() {
     auto overallStartTime = std::chrono::steady_clock::now();
     try {
-        const auto& settings = core::ConfigManager::getInstance().getSettings();
+        auto settings = core::ConfigManager::getInstance().getSettings();
         
         m_logWindow.info("Starting background worker process...");
         m_logWindow.info("Source: " + settings.sourcePath.string());
@@ -136,7 +298,38 @@ void Worker::run() {
             return;
         }
 
-        // 2. Initial Scan to calculate required space
+        // 2. Resolve migration strategy and active folder pattern
+        std::optional<std::string> detectedPattern = detectExistingPattern(settings.targetPath, m_logWindow);
+        std::string activeFolderPattern = settings.folderPattern;
+
+        if (settings.migrationMode == MigrationMode::Rebuild) {
+            runRebuildMigration(settings, m_logWindow, m_shouldStop);
+        } else if (settings.migrationMode == MigrationMode::Merge) {
+            if (detectedPattern) {
+                activeFolderPattern = *detectedPattern;
+                m_logWindow.info("Migration mode 'Merge': using detected target pattern for incoming files.");
+            } else {
+                m_logWindow.info("Migration mode 'Merge': no existing pattern detected, using configured pattern.");
+            }
+        } else if (settings.migrationMode == MigrationMode::ContinueExisting) {
+            if (detectedPattern) {
+                activeFolderPattern = *detectedPattern;
+                settings.folderPattern = *detectedPattern;
+                core::ConfigManager::getInstance().setSettings(settings);
+                core::ConfigManager::getInstance().save();
+                m_logWindow.info("Migration mode 'Weiterfuehren': adopted detected pattern as new default.");
+            } else {
+                m_logWindow.info("Migration mode 'Weiterfuehren': no existing pattern detected, using configured pattern.");
+            }
+        }
+
+        if (m_shouldStop) {
+            setStatus("Stopped");
+            m_isRunning = false;
+            return;
+        }
+
+        // 3. Initial Scan to calculate required space
         setStatus("Scanning...");
         Scanner scanner(settings.sourcePath, m_logWindow);
         auto tasks = scanner.scan();
@@ -158,7 +351,7 @@ void Worker::run() {
             return;
         }
 
-        // 3. Check Disk Space
+        // 4. Check Disk Space
         // We check the parent path if target doesn't exist yet
         std::filesystem::path checkPath = settings.targetPath;
         while (!checkPath.empty() && !std::filesystem::exists(checkPath)) {
@@ -179,9 +372,9 @@ void Worker::run() {
             }
         }
 
-        // 4. Start Processing
+        // 5. Start Processing
         MediaAnalyzer analyzer(m_logWindow);
-        StructureAnalyzer structAnalyzer(settings.targetPath, settings.folderPattern);
+        StructureAnalyzer structAnalyzer(settings.targetPath, activeFolderPattern, settings.filenameTemplate);
         Sorter sorter(
             m_logWindow,
             settings.verificationLevel,
@@ -190,7 +383,10 @@ void Worker::run() {
             [this](const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
                 return requestDuplicateDecision(sourcePath, targetPath);
             },
-            settings.dryRun);
+            settings.dryRun,
+            settings.enableFormatConversion,
+            settings.imageOutputFormat,
+            settings.videoOutputFormat);
 
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;
