@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-13
+
+### Added
+- **Plugin System Baseline:** Added a plugin API (`pholio_plugin_*` symbols), dynamic plugin loading from a configurable directory, and safe per-file plugin decisions (skip / target override).
+- **Pipeline Hooking:** Integrated plugin execution into the sorting pipeline after target path generation and before copy/move.
+- **Plugin Settings:** Added plugin enable/disable switch and plugin directory configuration in the Engine settings.
+
+### Changed
+- **Roadmap Progress:** Marked the "Plugin-System" roadmap item as completed.
+- **Versioning:** Bumped semantic version to `1.2.0`.
+
 ## [1.1.0] - 2026-03-13
 
 ### Added

@@ -3,6 +3,7 @@
 #include "MediaAnalyzer.hpp"
 #include "StructureAnalyzer.hpp"
 #include "Sorter.hpp"
+#include "plugins/PluginManager.hpp"
 #include "core/ConfigManager.hpp"
 #include <iostream>
 #include <chrono>
@@ -387,6 +388,13 @@ void Worker::run() {
             settings.enableFormatConversion,
             settings.imageOutputFormat,
             settings.videoOutputFormat);
+        plugins::PluginManager pluginManager(m_logWindow);
+        if (settings.enablePlugins) {
+            pluginManager.loadFromDirectory(settings.pluginsDirectory);
+            if (!pluginManager.hasPlugins()) {
+                m_logWindow.warn("Plugin system enabled, but no compatible plugins were loaded.");
+            }
+        }
 
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;
@@ -413,6 +421,17 @@ void Worker::run() {
             
             if (analyzer.analyze(task.metadata)) {
                 task.targetPath = structAnalyzer.generatePath(task.metadata);
+                if (settings.enablePlugins) {
+                    std::string skipReason;
+                    if (!pluginManager.apply(task, settings.targetPath, task.targetPath, skipReason)) {
+                        task.statusMessage = "Skipped by plugin: " + skipReason;
+                        m_logWindow.info(task.statusMessage + " [" + task.metadata.path.filename().string() + "]");
+                        m_successCount++;
+                        m_processedFiles++;
+                        m_processedBytes += task.metadata.fileSize;
+                        return;
+                    }
+                }
                 
                 if (numThreads == 1) {
                     setStatus("Sorting: " + task.metadata.path.filename().string());

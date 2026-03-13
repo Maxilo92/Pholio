@@ -330,6 +330,21 @@ void SettingsWindow::render() {
                 }
                 ImGui::SetItemTooltip("Video conversion uses FFmpeg with H.264/AAC defaults.");
                 ImGui::EndDisabled();
+
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Spacing();
+
+                if (ImGui::Checkbox("Enable Plugin System", &m_editedSettings.enablePlugins)) m_isDirty = true;
+                ImGui::SetItemTooltip("Loads external plugins from a directory to customize filtering and target paths.");
+
+                char pluginDirBuf[1024];
+                std::strncpy(pluginDirBuf, m_editedSettings.pluginsDirectory.string().c_str(), sizeof(pluginDirBuf));
+                if (ImGui::InputText("Plugin Directory", pluginDirBuf, sizeof(pluginDirBuf))) {
+                    m_editedSettings.pluginsDirectory = pluginDirBuf;
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("Directory scanned at run start for plugin libraries (.dylib/.so/.dll).");
                 ImGui::EndTabItem();
             }
 

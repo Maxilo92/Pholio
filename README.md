@@ -32,6 +32,22 @@ This is the **development branch** for Pholio C++. Here you will find the latest
    ./run.sh
    ```
 
+## Plugin System (Baseline)
+
+Pholio can load runtime plugins from the configured plugin directory (`Settings -> Engine`).
+
+- macOS: `.dylib`
+- Linux: `.so`
+- Windows: `.dll`
+
+Each plugin must export:
+
+- `int pholio_plugin_api_version();` (must return `1`)
+- `const char* pholio_plugin_name();`
+- `bool pholio_plugin_process(const PholioPluginTask*, PholioPluginDecision*);`
+
+The C ABI structs are defined in `src/plugins/PluginAPI.hpp`.
+
 ## Contributing
 1. Fork the repo.
 2. Create your feature branch (`git checkout -b feature/amazing-feature`).

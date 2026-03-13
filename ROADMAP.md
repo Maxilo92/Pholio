@@ -48,7 +48,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 *Fokus: Intelligente Funktionen und Ökosystem-Erweiterung.*
 
 - [ ] **Gesichtserkennung:** Datenschutz-konforme Erkennung von Personen (lokale Verarbeitung).
-- [ ] **Plugin-System:** API für Community-basierte Sortierlogiken und Filter.
+- [x] **Plugin-System:** API für Community-basierte Sortierlogiken und Filter.
 - [ ] **Archiv-Validierung:** Regelmäßiger Hintergrund-Check der Archiv-Integrität (Bit-Rot Protection).
 
 ---

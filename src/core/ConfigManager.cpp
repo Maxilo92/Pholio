@@ -35,6 +35,8 @@ void ConfigManager::load() {
         if (j.contains("enableFormatConversion")) m_settings.enableFormatConversion = j.at("enableFormatConversion").get<bool>();
         if (j.contains("imageOutputFormat")) m_settings.imageOutputFormat = j.at("imageOutputFormat").get<std::string>();
         if (j.contains("videoOutputFormat")) m_settings.videoOutputFormat = j.at("videoOutputFormat").get<std::string>();
+        if (j.contains("enablePlugins")) m_settings.enablePlugins = j.at("enablePlugins").get<bool>();
+        if (j.contains("pluginsDirectory")) m_settings.pluginsDirectory = j.at("pluginsDirectory").get<std::filesystem::path>();
         if (j.contains("migrationMode")) m_settings.migrationMode = j.at("migrationMode").get<engine::MigrationMode>();
         if (j.contains("lastVersion")) m_settings.lastVersion = j.at("lastVersion").get<std::string>();
         if (j.contains("folderPattern")) m_settings.folderPattern = j.at("folderPattern").get<std::string>();

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.1.0")
+set(PHOLIO_VERSION "1.2.0")
 
 project(Pholio LANGUAGES CXX)
 
@@ -66,6 +66,9 @@ if(APPLE)
         src/engine/Sorter.cpp
         src/engine/Worker.cpp
         src/engine/Worker.hpp
+        src/plugins/PluginManager.cpp
+        src/plugins/PluginManager.hpp
+        src/plugins/PluginAPI.hpp
         src/core/ConfigManager.cpp
         src/core/ConfigManager.hpp
         src/core/Loggable.hpp
@@ -117,6 +120,9 @@ else()
         src/engine/Sorter.cpp
         src/engine/Worker.cpp
         src/engine/Worker.hpp
+        src/plugins/PluginManager.cpp
+        src/plugins/PluginManager.hpp
+        src/plugins/PluginAPI.hpp
         src/core/ConfigManager.cpp
         src/core/ConfigManager.hpp
         src/core/Loggable.hpp
@@ -163,6 +169,7 @@ target_link_libraries(Pholio PRIVATE
     nfd::nfd
     nlohmann_json::nlohmann_json
     xxHash::xxhash
+    ${CMAKE_DL_LIBS}
 )
 
 # stb is header-only

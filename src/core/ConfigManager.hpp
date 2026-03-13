@@ -59,6 +59,8 @@ struct AppSettings {
     bool enableFormatConversion = false;
     std::string imageOutputFormat = "jpg";
     std::string videoOutputFormat = "mp4";
+    bool enablePlugins = false;
+    std::filesystem::path pluginsDirectory = "plugins";
     engine::MigrationMode migrationMode = engine::MigrationMode::Merge;
     std::string lastVersion = "0.0.0";
     std::string folderPattern = "%Y/%m-%B/%d";
@@ -72,7 +74,7 @@ struct AppSettings {
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {
