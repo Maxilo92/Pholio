@@ -202,7 +202,32 @@ const std::unordered_map<std::string, const char*> kGerman = {
     {"plugin.state.open", "(offen)"},
     {"plugin.window.reopen", "Erneut oeffnen"},
     {"plugin.window.reopened", "Plugin-Fenster erneut geoeffnet: "},
-    {"plugin.window.reopen_fail", "Plugin-Fenster konnte nicht erneut geoeffnet werden: "}
+    {"plugin.window.reopen_fail", "Plugin-Fenster konnte nicht erneut geoeffnet werden: "},
+    {"report.window.title", "Problem / Feature melden"},
+    {"report.window.intro", "Hilf uns, Pholio zu verbessern! Nutze dieses Formular, um Fehler zu melden oder neue Features vorzuschlagen."},
+    {"report.type.label", "Typ"},
+    {"report.type.bug", "Fehler"},
+    {"report.type.feature", "Feature-Wunsch"},
+    {"report.type.feedback", "Allgemeines Feedback"},
+    {"report.priority.label", "Prioritaet"},
+    {"report.priority.low", "Niedrig"},
+    {"report.priority.medium", "Mittel"},
+    {"report.priority.high", "Hoch"},
+    {"report.title", "Titel"},
+    {"report.description", "Beschreibung"},
+    {"report.email", "Deine E-Mail (optional)"},
+    {"report.email.tooltip", "Wir kontaktieren dich ggf., falls wir mehr Informationen benoetigen."},
+    {"report.submit", "BERICHT SENDEN"},
+    {"report.cancel", "Abbrechen"},
+    {"report.export", "DIAGNOSE EXPORTIEREN"},
+    {"report.export.ok", "Diagnose exportiert nach: "},
+    {"report.export.fail", "Diagnose-Export fehlgeschlagen: "},
+    {"report.open_reports", "Reports-Ordner oeffnen"},
+    {"report.open_reports.fail", "Reports-Ordner konnte nicht geoeffnet werden."},
+    {"report.success.title", "Erfolg"},
+    {"report.success.body", "Dein Bericht wurde lokal gespeichert. Danke!"},
+    {"report.ok", "OK"},
+    {"report.validation", "Bitte Titel und Beschreibung ausfuellen."}
 };
 
 } // namespace

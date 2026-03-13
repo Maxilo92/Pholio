@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2026-03-13
+
+### Added
+- **Diagnostics Export:** Added automated diagnostics bundle export (logs, crash reports, settings, metadata) via `ReportManager::exportDiagnosticsBundle`.
+- **Report UI Actions:** Added `EXPORT DIAGNOSTICS` and `Open Reports Folder` actions to the report window.
+
+### Changed
+- **Report Localization:** Localized report window fields/messages for German/English.
+- **Roadmap Progress:** Marked the "Fehler-Reporting" roadmap item as completed.
+- **Versioning:** Bumped semantic version to `1.7.0`.
+
 ## [1.6.0] - 2026-03-13
 
 ### Added

@@ -27,7 +27,7 @@ Dieses Dokument beschreibt die geplanten Entwicklungsphasen und Meilensteine fü
 - [x] **Custom Templates:** Flexiblere Namensschemata durch Benutzer-definierte Variablen.
 - [x] **Internationalisierung (I18n):** Unterstützung für mehrere Sprachen (Deutsch/Englisch initial).
 - [x] **UI/UX Refinement:** Themes (Dark/Light Mode), verbesserte Icons und Layout-Presets.
-- [ ] **Fehler-Reporting:** Automatisierter Export von Absturzberichten und Diagnose-Logs.
+- [x] **Fehler-Reporting:** Automatisierter Export von Absturzberichten und Diagnose-Logs.
 - [ ] **Windows Support:** Portierung und Validierung des Build-Systems für Windows (MSVC).
 
 ---

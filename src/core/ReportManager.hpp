@@ -34,6 +34,7 @@ struct Report {
 class ReportManager {
 public:
     static bool saveReport(const Report& report);
+    static bool exportDiagnosticsBundle(std::filesystem::path& outBundlePath, std::string& outError);
     
 private:
     static std::string reportTypeToString(ReportType type);

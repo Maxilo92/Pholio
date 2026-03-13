@@ -19,6 +19,8 @@ private:
     
     bool m_showSuccess = false;
     bool m_showError = false;
+    bool m_showDiagError = false;
+    std::string m_diagStatus;
     
     void reset();
 };
