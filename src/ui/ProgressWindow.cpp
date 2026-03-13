@@ -3,6 +3,7 @@
 #include <implot.h>
 #include <string>
 #include <numeric>
+#include <algorithm>
 
 namespace ui {
 
@@ -13,6 +14,13 @@ ProgressWindow::ProgressWindow(engine::Worker& worker) : m_worker(worker) {
 
 void ProgressWindow::updateHistory(float dt) {
     m_timeElapsed += dt;
+    const bool isRunning = m_worker.isRunning();
+
+    if (m_workerWasRunning && !isRunning) {
+        std::fill(m_fpsHistory.begin(), m_fpsHistory.end(), 0.0f);
+        std::fill(m_mbpsHistory.begin(), m_mbpsHistory.end(), 0.0f);
+    }
+    m_workerWasRunning = isRunning;
     
     // Only update history every 0.1s
     static float timer = 0.0f;

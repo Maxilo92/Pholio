@@ -29,9 +29,17 @@ void Worker::start() {
     m_totalBytes = 0;
     m_filesPerSecond = 0;
     m_bytesPerSecond = 0;
+    m_lastRunDurationSeconds = 0;
+    m_pauseRequested = false;
     {
         std::lock_guard<std::mutex> lock(m_statusMutex);
         m_currentImagePath = "";
+    }
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        m_pendingDuplicatePrompt.reset();
+        m_pendingDuplicateDecision.reset();
+        m_duplicateDecisionOverride.reset();
     }
     
     if (m_thread.joinable()) {
@@ -43,6 +51,8 @@ void Worker::start() {
 
 void Worker::stop() {
     m_shouldStop = true;
+    m_duplicateCv.notify_all();
+    m_pauseCv.notify_all();
     if (m_thread.joinable()) {
         m_thread.join();
     }
@@ -62,6 +72,34 @@ std::string Worker::getStatusMessage() const {
 std::filesystem::path Worker::getCurrentImagePath() const {
     std::lock_guard<std::mutex> lock(m_statusMutex);
     return m_currentImagePath;
+}
+
+std::optional<Worker::DuplicatePrompt> Worker::getPendingDuplicatePrompt() const {
+    std::lock_guard<std::mutex> lock(m_duplicateMutex);
+    return m_pendingDuplicatePrompt;
+}
+
+void Worker::submitDuplicateDecision(DuplicateAction action, bool applyToRemaining) {
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        if (!m_pendingDuplicatePrompt.has_value()) {
+            return;
+        }
+        if (applyToRemaining) {
+            m_duplicateDecisionOverride = action;
+        }
+        m_pendingDuplicateDecision = action;
+    }
+    m_duplicateCv.notify_all();
+}
+
+void Worker::requestPause() {
+    m_pauseRequested = true;
+}
+
+void Worker::resumeFromPause() {
+    m_pauseRequested = false;
+    m_pauseCv.notify_all();
 }
 
 void Worker::setStatus(const std::string& message) {
@@ -144,7 +182,15 @@ void Worker::run() {
         // 4. Start Processing
         MediaAnalyzer analyzer(m_logWindow);
         StructureAnalyzer structAnalyzer(settings.targetPath, settings.folderPattern);
-        Sorter sorter(m_logWindow, settings.verificationLevel, settings.duplicateAction, settings.askOnDuplicate);
+        Sorter sorter(
+            m_logWindow,
+            settings.verificationLevel,
+            settings.duplicateAction,
+            settings.askOnDuplicate,
+            [this](const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
+                return requestDuplicateDecision(sourcePath, targetPath);
+            },
+            settings.dryRun);
 
         auto startTime = std::chrono::steady_clock::now();
         int batchProcessed = 0;
@@ -157,6 +203,7 @@ void Worker::run() {
         }
 
         auto processTask = [&](MediaTask& task) {
+            waitIfPaused();
             if (m_shouldStop) return;
 
             // In parallel mode, we don't update status for every file to avoid flickering
@@ -198,6 +245,7 @@ void Worker::run() {
 
         if (numThreads == 1) {
             for (auto& task : tasks) {
+                waitIfPaused();
                 if (m_shouldStop) break;
                 processTask(task);
                 
@@ -214,6 +262,7 @@ void Worker::run() {
             // Parallel processing with a window of 'numThreads'
             std::vector<std::future<void>> futures;
             for (auto& task : tasks) {
+                waitIfPaused();
                 if (m_shouldStop) break;
                 
                 futures.push_back(std::async(std::launch::async, [&]() { processTask(task); }));
@@ -291,7 +340,61 @@ void Worker::run() {
         setCurrentImagePath("");
     }
 
+    auto finalEndTime = std::chrono::steady_clock::now();
+    m_lastRunDurationSeconds = std::chrono::duration_cast<std::chrono::seconds>(finalEndTime - overallStartTime).count();
+    m_filesPerSecond = 0.0f;
+    m_bytesPerSecond = 0.0f;
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        m_pendingDuplicatePrompt.reset();
+        m_pendingDuplicateDecision.reset();
+        m_duplicateDecisionOverride.reset();
+    }
     m_isRunning = false;
+}
+
+DuplicateAction Worker::requestDuplicateDecision(const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath) {
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        if (m_duplicateDecisionOverride.has_value()) {
+            return *m_duplicateDecisionOverride;
+        }
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(m_duplicateMutex);
+        m_pendingDuplicatePrompt = DuplicatePrompt{sourcePath, targetPath};
+        m_pendingDuplicateDecision.reset();
+    }
+    setStatus("Duplicate decision required: " + sourcePath.filename().string());
+    m_duplicateCv.notify_all();
+
+    std::unique_lock<std::mutex> lock(m_duplicateMutex);
+    m_duplicateCv.wait(lock, [this] {
+        return m_pendingDuplicateDecision.has_value() || m_shouldStop;
+    });
+
+    if (m_shouldStop) {
+        m_pendingDuplicatePrompt.reset();
+        m_pendingDuplicateDecision.reset();
+        return DuplicateAction::Skip;
+    }
+
+    const DuplicateAction decision = *m_pendingDuplicateDecision;
+    m_pendingDuplicatePrompt.reset();
+    m_pendingDuplicateDecision.reset();
+    return decision;
+}
+
+void Worker::waitIfPaused() {
+    if (!m_pauseRequested || m_shouldStop) {
+        return;
+    }
+    setStatus("Paused (waiting for close decision)");
+    std::unique_lock<std::mutex> lock(m_pauseMutex);
+    m_pauseCv.wait(lock, [this] {
+        return !m_pauseRequested || m_shouldStop;
+    });
 }
 
 void Worker::updatePerformanceMetrics(int processedInBatch, uint64_t bytesInBatch, 

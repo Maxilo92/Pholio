@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.30] - 2026-03-13
+
+### Added
+- **Roadmap:** Created ROADMAP.md to track project milestones and future development phases.
+
+### Changed
+- **Release Status:** Switched from alpha to stable release version `1.0.30`.
+- **Duplicate Handling UX:** Added side-by-side duplicate comparison with explicit actions and an "apply to all remaining duplicates" option.
+- **Shutdown Safety:** Closing during sorting now pauses processing until the user chooses to continue or stop-and-exit safely.
+- **Update Notifications:** Update checks now only notify when a release is actually newer than the installed version.
+
 ## [1.0.29-alpha] - 2026-03-13
 
 ### Fixed

@@ -3,8 +3,25 @@
 #include <nfd.hpp>
 #include <cstring>
 #include <string>
+#include <ctime>
 
 namespace ui {
+
+namespace {
+std::string buildPatternExample(const std::string& pattern) {
+    std::time_t now = std::time(nullptr);
+    std::tm tmBuf{};
+#ifdef _WIN32
+    localtime_s(&tmBuf, &now);
+#else
+    localtime_r(&now, &tmBuf);
+#endif
+    char out[512];
+    const size_t written = std::strftime(out, sizeof(out), pattern.c_str(), &tmBuf);
+    if (written == 0) return {};
+    return std::string(out, written);
+}
+} // namespace
 
 void SettingsWindow::render() {
     auto& config = core::ConfigManager::getInstance();
@@ -17,156 +34,166 @@ void SettingsWindow::render() {
 
     if (ImGui::Begin("Settings")) {
         if (m_isDirty) {
-            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "You have unsaved changes!");
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.0f, 1.0f));
+            ImGui::TextWrapped("You have unsaved changes!");
+            ImGui::PopStyleColor();
             ImGui::Separator();
         }
 
-        if (ImGui::CollapsingHeader("Directories", ImGuiTreeNodeFlags_DefaultOpen)) {
-            if (ImGui::BeginTable("DirectorySettings", 3, ImGuiTableFlags_SizingStretchProp)) {
-                ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f);
-                ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
-                ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed, 80.0f);
+        if (ImGui::BeginTabBar("SettingsTabs")) {
+            if (ImGui::BeginTabItem("Directories")) {
+                if (ImGui::BeginTable("DirectorySettings", 3, ImGuiTableFlags_SizingStretchProp)) {
+                    ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f);
+                    ImGui::TableSetupColumn("Path", ImGuiTableColumnFlags_WidthStretch);
+                    ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed, 80.0f);
 
-                // Source
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text("Source Path:");
-                ImGui::TableSetColumnIndex(1);
-                char sourceBuf[1024];
-                std::strncpy(sourceBuf, m_editedSettings.sourcePath.string().c_str(), sizeof(sourceBuf));
-                ImGui::PushItemWidth(-FLT_MIN);
-                if (ImGui::InputText("##SourceSet", sourceBuf, sizeof(sourceBuf))) {
-                    m_editedSettings.sourcePath = sourceBuf;
-                    m_isDirty = true;
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::Text("Source Path:");
+                    ImGui::TableSetColumnIndex(1);
+                    char sourceBuf[1024];
+                    std::strncpy(sourceBuf, m_editedSettings.sourcePath.string().c_str(), sizeof(sourceBuf));
+                    ImGui::PushItemWidth(-FLT_MIN);
+                    if (ImGui::InputText("##SourceSet", sourceBuf, sizeof(sourceBuf))) {
+                        m_editedSettings.sourcePath = sourceBuf;
+                        m_isDirty = true;
+                    }
+                    ImGui::SetItemTooltip("The directory where your unorganized photos and videos are located.");
+                    ImGui::PopItemWidth();
+                    ImGui::TableSetColumnIndex(2);
+                    if (ImGui::Button("Browse...##SourceSet")) m_shouldBrowseSource = true;
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::Text("Target Path:");
+                    ImGui::TableSetColumnIndex(1);
+                    char targetBuf[1024];
+                    std::strncpy(targetBuf, m_editedSettings.targetPath.string().c_str(), sizeof(targetBuf));
+                    ImGui::PushItemWidth(-FLT_MIN);
+                    if (ImGui::InputText("##TargetSet", targetBuf, sizeof(targetBuf))) {
+                        m_editedSettings.targetPath = targetBuf;
+                        m_isDirty = true;
+                    }
+                    ImGui::SetItemTooltip("The root directory where the organized library will be created.");
+                    ImGui::PopItemWidth();
+                    ImGui::TableSetColumnIndex(2);
+                    if (ImGui::Button("Browse...##TargetSet")) m_shouldBrowseTarget = true;
+
+                    ImGui::EndTable();
                 }
-                ImGui::SetItemTooltip("The directory where your unorganized photos and videos are located.");
-                ImGui::PopItemWidth();
-                ImGui::TableSetColumnIndex(2);
-                if (ImGui::Button("Browse...##SourceSet")) m_shouldBrowseSource = true;
 
-                // Target
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text("Target Path:");
-                ImGui::TableSetColumnIndex(1);
-                char targetBuf[1024];
-                std::strncpy(targetBuf, m_editedSettings.targetPath.string().c_str(), sizeof(targetBuf));
-                ImGui::PushItemWidth(-FLT_MIN);
-                if (ImGui::InputText("##TargetSet", targetBuf, sizeof(targetBuf))) {
-                    m_editedSettings.targetPath = targetBuf;
-                    m_isDirty = true;
-                }
-                ImGui::SetItemTooltip("The root directory where the organized library will be created.");
-                ImGui::PopItemWidth();
-                ImGui::TableSetColumnIndex(2);
-                if (ImGui::Button("Browse...##TargetSet")) m_shouldBrowseTarget = true;
-
-                ImGui::EndTable();
-            }
-
-            // Source Size Calculation
-            if (!m_editedSettings.sourcePath.empty() && std::filesystem::exists(m_editedSettings.sourcePath)) {
-                if (m_lastCalculatedSourcePath != m_editedSettings.sourcePath && !m_isCalculatingSourceSize) {
-                    m_isCalculatingSourceSize = true;
-                    m_lastCalculatedSourcePath = m_editedSettings.sourcePath;
-                    m_sourceSizeFuture = std::async(std::launch::async, [path = m_editedSettings.sourcePath]() {
-                        uint64_t totalSize = 0;
-                        try {
-                            for (const auto& entry : std::filesystem::recursive_directory_iterator(path)) {
-                                if (entry.is_regular_file()) {
-                                    totalSize += entry.file_size();
+                if (!m_editedSettings.sourcePath.empty() && std::filesystem::exists(m_editedSettings.sourcePath)) {
+                    if (m_lastCalculatedSourcePath != m_editedSettings.sourcePath && !m_isCalculatingSourceSize) {
+                        m_isCalculatingSourceSize = true;
+                        m_lastCalculatedSourcePath = m_editedSettings.sourcePath;
+                        m_sourceSizeFuture = std::async(std::launch::async, [path = m_editedSettings.sourcePath]() {
+                            uint64_t totalSize = 0;
+                            try {
+                                for (const auto& entry : std::filesystem::recursive_directory_iterator(path)) {
+                                    if (entry.is_regular_file()) {
+                                        totalSize += entry.file_size();
+                                    }
                                 }
-                            }
-                        } catch (...) {}
-                        return totalSize;
-                    });
-                }
-
-                if (m_isCalculatingSourceSize && m_sourceSizeFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
-                    m_sourceSize = m_sourceSizeFuture.get();
-                    m_isCalculatingSourceSize = false;
-                }
-
-                ImGui::Text("Source Size: %.2f GB %s", 
-                    static_cast<double>(m_sourceSize) / (1024.0 * 1024.0 * 1024.0),
-                    m_isCalculatingSourceSize ? "(calculating...)" : "");
-            }
-
-            // Disk Space Warning Bar
-            if (!m_editedSettings.targetPath.empty() && std::filesystem::exists(m_editedSettings.targetPath)) {
-                try {
-                    auto space = std::filesystem::space(m_editedSettings.targetPath);
-                    uint64_t capacity = space.capacity;
-                    uint64_t available = space.available;
-                    uint64_t used = capacity - available;
-                    
-                    float usedRatio = static_cast<float>(used) / static_cast<float>(capacity);
-                    float requiredRatio = static_cast<float>(m_sourceSize) / static_cast<float>(available);
-
-                    ImGui::Spacing();
-                    ImGui::Text("Target Drive Space:");
-                    
-                    ImVec4 color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f); // Green
-                    const char* statusText = "Disk space is healthy.";
-
-                    if (m_sourceSize > available) {
-                        color = ImVec4(1.0f, 0.2f, 0.2f, 1.0f); // Red
-                        statusText = "CRITICAL: Not enough space for source files!";
-                    } else if (requiredRatio > 0.8f || usedRatio > 0.9f) {
-                        color = ImVec4(1.0f, 0.5f, 0.0f, 1.0f); // Orange
-                        statusText = "Warning: Space will be very tight after processing.";
-                    } else if (usedRatio > 0.75f) {
-                        color = ImVec4(1.0f, 0.8f, 0.0f, 1.0f); // Yellow
-                        statusText = "Note: Target drive is more than 75% full.";
+                            } catch (...) {}
+                            return totalSize;
+                        });
                     }
 
-                    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
-                    char buf[128];
-                    std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total (Source needs %.1f GB)", 
-                        static_cast<double>(available) / (1024*1024*1024), 
-                        static_cast<double>(capacity) / (1024*1024*1024),
-                        static_cast<double>(m_sourceSize) / (1024*1024*1024));
-                    ImGui::ProgressBar(usedRatio, ImVec2(-1, 20), buf);
-                    ImGui::PopStyleColor();
-                    ImGui::TextColored(color, "%s", statusText);
-                } catch (...) {
-                    // Ignore errors
+                    if (m_isCalculatingSourceSize && m_sourceSizeFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+                        m_sourceSize = m_sourceSizeFuture.get();
+                        m_isCalculatingSourceSize = false;
+                    }
+
+                    ImGui::Text("Source Size: %.2f GB %s",
+                                static_cast<double>(m_sourceSize) / (1024.0 * 1024.0 * 1024.0),
+                                m_isCalculatingSourceSize ? "(calculating...)" : "");
                 }
-            }
-        }
 
-        if (ImGui::CollapsingHeader("Organization", ImGuiTreeNodeFlags_DefaultOpen)) {
-            ImGui::Text("Folder Structure Pattern:");
-            char patternBuf[256];
-            std::strncpy(patternBuf, m_editedSettings.folderPattern.c_str(), sizeof(patternBuf));
-            if (ImGui::InputText("##FolderPattern", patternBuf, sizeof(patternBuf))) {
-                m_editedSettings.folderPattern = patternBuf;
-                m_isDirty = true;
-            }
-            ImGui::SetItemTooltip("Use standard strftime format codes.\n%%Y = Year (2024)\n%%m = Month (01-12)\n%%d = Day (01-31)\n%%B = Month Name (January)");
+                if (!m_editedSettings.targetPath.empty() && std::filesystem::exists(m_editedSettings.targetPath)) {
+                    try {
+                        auto space = std::filesystem::space(m_editedSettings.targetPath);
+                        uint64_t capacity = space.capacity;
+                        uint64_t available = space.available;
+                        uint64_t used = capacity - available;
 
-            ImGui::Text("Presets:");
-            ImGui::SameLine();
-            if (ImGui::Button("Year/Month/Day")) {
-                m_editedSettings.folderPattern = "%Y/%m/%d";
-                m_isDirty = true;
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Year/Month")) {
-                m_editedSettings.folderPattern = "%Y/%m";
-                m_isDirty = true;
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Year/Full Date")) {
-                m_editedSettings.folderPattern = "%Y/%Y-%m-%d";
-                m_isDirty = true;
-            }
-        }
+                        float usedRatio = static_cast<float>(used) / static_cast<float>(capacity);
+                        float requiredRatio = static_cast<float>(m_sourceSize) / static_cast<float>(available);
 
-        if (ImGui::CollapsingHeader("Engine Behavior", ImGuiTreeNodeFlags_DefaultOpen)) {
-            if (ImGui::BeginTable("EngineSettings", 2, ImGuiTableFlags_SizingStretchProp)) {
+                        ImGui::Spacing();
+                        ImGui::Text("Target Drive Space:");
+
+                        ImVec4 color = ImVec4(0.2f, 1.0f, 0.2f, 1.0f);
+                        const char* statusText = "Disk space is healthy.";
+
+                        if (m_sourceSize > available) {
+                            color = ImVec4(1.0f, 0.2f, 0.2f, 1.0f);
+                            statusText = "CRITICAL: Not enough space for source files!";
+                        } else if (requiredRatio > 0.8f || usedRatio > 0.9f) {
+                            color = ImVec4(1.0f, 0.5f, 0.0f, 1.0f);
+                            statusText = "Warning: Space will be very tight after processing.";
+                        } else if (usedRatio > 0.75f) {
+                            color = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
+                            statusText = "Note: Target drive is more than 75% full.";
+                        }
+
+                        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+                        char buf[128];
+                        std::snprintf(buf, sizeof(buf), "%.1f GB free / %.1f GB total (Source needs %.1f GB)",
+                                      static_cast<double>(available) / (1024 * 1024 * 1024),
+                                      static_cast<double>(capacity) / (1024 * 1024 * 1024),
+                                      static_cast<double>(m_sourceSize) / (1024 * 1024 * 1024));
+                        ImGui::ProgressBar(usedRatio, ImVec2(-1, 20), buf);
+                        ImGui::PopStyleColor();
+                        ImGui::PushStyleColor(ImGuiCol_Text, color);
+                        ImGui::TextWrapped("%s", statusText);
+                        ImGui::PopStyleColor();
+                    } catch (...) {
+                    }
+                }
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Folder Structure")) {
+                ImGui::Text("Folder Structure Pattern:");
+                char patternBuf[256];
+                std::strncpy(patternBuf, m_editedSettings.folderPattern.c_str(), sizeof(patternBuf));
+                if (ImGui::InputText("##FolderPattern", patternBuf, sizeof(patternBuf))) {
+                    m_editedSettings.folderPattern = patternBuf;
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("Use strftime codes.\n%%Y=Year  %%m=Month  %%d=Day  %%B=Month Name");
+
+                const std::string example = buildPatternExample(m_editedSettings.folderPattern);
+                ImGui::Spacing();
+                if (!example.empty()) {
+                    ImGui::Text("Example (today): %s", example.c_str());
+                } else {
+                    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.3f, 1.0f), "Example (today): Invalid pattern");
+                }
+
+                ImGui::Spacing();
+                ImGui::Text("Presets:");
+                if (ImGui::Button("Year/Month/Day")) {
+                    m_editedSettings.folderPattern = "%Y/%m/%d";
+                    m_isDirty = true;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Year/Month")) {
+                    m_editedSettings.folderPattern = "%Y/%m";
+                    m_isDirty = true;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Year/Full Date")) {
+                    m_editedSettings.folderPattern = "%Y/%Y-%m-%d";
+                    m_isDirty = true;
+                }
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Engine")) {
+                if (ImGui::BeginTable("EngineSettings", 2, ImGuiTableFlags_SizingStretchProp)) {
                 ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 150.0f);
                 ImGui::TableSetupColumn("Control", ImGuiTableColumnFlags_WidthStretch);
 
@@ -218,15 +245,16 @@ void SettingsWindow::render() {
                 ImGui::EndTable();
             }
 
-            ImGui::Spacing();
-            if (ImGui::Checkbox("Ask for each duplicate", &m_editedSettings.askOnDuplicate)) m_isDirty = true;
-            ImGui::SetItemTooltip("Show a dialog for every duplicate encountered to choose manually.");
+                ImGui::Spacing();
+                if (ImGui::Checkbox("Ask for each duplicate", &m_editedSettings.askOnDuplicate)) m_isDirty = true;
+                ImGui::SetItemTooltip("Show a dialog for every duplicate encountered to choose manually.");
 
-            if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
-            ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
-            
-            if (ImGui::Checkbox("Auto-Start on selection", &m_editedSettings.autoStart)) m_isDirty = true;
-            ImGui::SetItemTooltip("Automatically start the sorting process when a valid source and target are selected.");
+                if (ImGui::Checkbox("Dry Run (Simulation Mode)", &m_editedSettings.dryRun)) m_isDirty = true;
+                ImGui::SetItemTooltip("Simulate the process without actually moving or copying any files.");
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
         }
 
         ImGui::Separator();

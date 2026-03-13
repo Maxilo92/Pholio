@@ -200,7 +200,49 @@ void AppWindow::render() {
         lastReport = m_showReport;
     }
 
+    if (m_shouldClose && m_worker->isRunning()) {
+        m_showCloseDuringSortingPopup = true;
+        m_shouldClose = false;
+        m_worker->requestPause();
+    }
+
+    renderCloseDuringSortingPopup();
     renderStatusBar();
+}
+
+void AppWindow::renderCloseDuringSortingPopup() {
+    if (m_showCloseDuringSortingPopup) {
+        ImGui::OpenPopup("Close While Sorting");
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (m_showCloseDuringSortingPopup && !m_worker->isRunning()) {
+        m_showCloseDuringSortingPopup = false;
+        ImGui::CloseCurrentPopup();
+        return;
+    }
+
+    if (ImGui::BeginPopupModal("Close While Sorting", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::TextWrapped("Sorting is paused. To protect your files, choose whether to continue or stop and close.");
+        ImGui::Spacing();
+        ImGui::TextWrapped("Do you want to continue sorting or stop now and exit?");
+        ImGui::Spacing();
+        if (ImGui::Button("Continue Sorting", ImVec2(160, 0))) {
+            m_worker->resumeFromPause();
+            m_showCloseDuringSortingPopup = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Stop and Exit", ImVec2(160, 0))) {
+            m_worker->stop();
+            m_shouldClose = true;
+            m_showCloseDuringSortingPopup = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 }
 
 void AppWindow::saveWindowState() {

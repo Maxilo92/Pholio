@@ -4,12 +4,19 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <utility>
 #include <nlohmann/json.hpp>
 
 namespace engine {
 
-Sorter::Sorter(ui::LogWindow& logWindow, VerificationLevel level, DuplicateAction dupAction, bool askOnDuplicate) 
-    : core::Loggable(logWindow), m_level(level), m_dupAction(dupAction), m_askOnDuplicate(askOnDuplicate) {}
+Sorter::Sorter(ui::LogWindow& logWindow, VerificationLevel level, DuplicateAction dupAction, bool askOnDuplicate,
+               DuplicateDecisionCallback duplicateDecisionCallback, bool dryRun)
+    : core::Loggable(logWindow),
+      m_level(level),
+      m_dupAction(dupAction),
+      m_askOnDuplicate(askOnDuplicate),
+      m_duplicateDecisionCallback(std::move(duplicateDecisionCallback)),
+      m_dryRun(dryRun) {}
 
 bool Sorter::process(MediaTask& task, OperationMode mode) {
     namespace fs = std::filesystem;
@@ -17,7 +24,7 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
 
     // 1. Create target directory
     fs::path targetDir = task.targetPath.parent_path();
-    if (!fs::exists(targetDir)) {
+    if (!m_dryRun && !fs::exists(targetDir)) {
         if (!fs::create_directories(targetDir, ec)) {
             task.statusMessage = "Failed to create target directory: " + ec.message();
             error("Sorter: Could not create directory: " + targetDir.string() + " Error: " + ec.message());
@@ -28,11 +35,13 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
     // Check for duplicates
     if (fs::exists(task.targetPath)) {
         if (m_askOnDuplicate) {
-            // Note: In a real app we'd trigger a UI callback or modal
-            // For now we treat it as 'Wait for manual interaction' or skip
-            task.statusMessage = "Duplicate found! User interaction required (skipping for now)";
-            warn("Sorter: Duplicate " + task.targetPath.filename().string() + " found. User interaction requested.");
-            return false;
+            if (m_duplicateDecisionCallback) {
+                m_dupAction = m_duplicateDecisionCallback(task.metadata.path, task.targetPath);
+            } else {
+                task.statusMessage = "Duplicate found but no decision handler is available";
+                warn("Sorter: Duplicate " + task.targetPath.filename().string() + " found, but no handler is set.");
+                return false;
+            }
         }
 
         if (m_dupAction == DuplicateAction::Skip) {
@@ -53,6 +62,16 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
             warn("Sorter: Overwriting existing " + task.targetPath.filename().string());
             // No action needed here, copy_file with overwrite_existing will handle it
         }
+    }
+
+    if (m_dryRun) {
+        task.processed = true;
+        task.statusMessage = (mode == OperationMode::Move)
+            ? "Dry Run: would move and verify"
+            : "Dry Run: would copy and verify";
+        info("Sorter: Dry Run simulation for " + task.metadata.path.filename().string() +
+             " -> " + task.targetPath.string());
+        return true;
     }
 
     // 2. Perform Copy

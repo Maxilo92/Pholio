@@ -13,6 +13,7 @@
 #include <filesystem>
 #include <cctype>
 #include <cstdlib>
+#include <regex>
 #include <nlohmann/json.hpp>
 #if defined(__APPLE__)
 #include <mach-o/dyld.h>
@@ -91,6 +92,38 @@ static int scoreAssetName(const std::string& name) {
     return score;
 }
 
+struct ParsedVersion {
+    int major = 0;
+    int minor = 0;
+    int patch = 0;
+    std::string suffix;
+    bool valid = false;
+};
+
+static ParsedVersion parseVersion(const std::string& version) {
+    std::regex semverRegex(R"(^\s*(\d+)\.(\d+)\.(\d+)(?:-([A-Za-z0-9.\-]+))?\s*$)");
+    std::smatch m;
+    if (!std::regex_match(version, m, semverRegex)) return {};
+
+    ParsedVersion out;
+    out.major = std::stoi(m[1].str());
+    out.minor = std::stoi(m[2].str());
+    out.patch = std::stoi(m[3].str());
+    out.suffix = m[4].matched ? m[4].str() : "";
+    out.valid = true;
+    return out;
+}
+
+static int compareVersions(const ParsedVersion& a, const ParsedVersion& b) {
+    if (a.major != b.major) return a.major < b.major ? -1 : 1;
+    if (a.minor != b.minor) return a.minor < b.minor ? -1 : 1;
+    if (a.patch != b.patch) return a.patch < b.patch ? -1 : 1;
+    if (a.suffix == b.suffix) return 0;
+    if (a.suffix.empty()) return 1;
+    if (b.suffix.empty()) return -1;
+    return a.suffix < b.suffix ? -1 : (a.suffix > b.suffix ? 1 : 0);
+}
+
 #if defined(__APPLE__)
 static std::filesystem::path resolveExecutablePath() {
     uint32_t size = 0;
@@ -157,10 +190,12 @@ void UpdateManager::checkForUpdates() {
                 }
 
                 std::string currentVersion = std::string(PROJECT_VERSION);
-                
-                // Better version comparison would be needed for true semver, 
-                // but this works for sequential alpha/beta tags.
-                if (latestVersion != currentVersion) {
+                const ParsedVersion latestParsed = parseVersion(latestVersion);
+                const ParsedVersion currentParsed = parseVersion(currentVersion);
+                const bool isNewer = latestParsed.valid && currentParsed.valid &&
+                                     compareVersions(latestParsed, currentParsed) > 0;
+
+                if (isNewer) {
                     UpdateInfo nextInfo;
                     nextInfo.hasUpdate = true;
                     nextInfo.latestVersion = latestVersion;
@@ -185,6 +220,9 @@ void UpdateManager::checkForUpdates() {
 
                     std::lock_guard<std::mutex> lock(m_updateMutex);
                     m_updateInfo = std::move(nextInfo);
+                } else {
+                    std::lock_guard<std::mutex> lock(m_updateMutex);
+                    m_updateInfo = UpdateInfo{};
                 }
             }
         } catch (const std::exception& e) {

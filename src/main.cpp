@@ -288,7 +288,10 @@ int main(int argc, char** argv) {
             const bool isInitializing = elapsedSeconds < (isRelaunchedInstance ? 30.0f : 1.0f);
             const bool restartAllowed = !isRelaunchedInstance || elapsedSeconds > 10.0f;
             if (glfwWindowShouldClose(window)) {
-                if (isInitializing && !forceCloseRequested) {
+                if (appWindow.isSortingActive()) {
+                    glfwSetWindowShouldClose(window, GLFW_FALSE);
+                    appWindow.requestClose();
+                } else if (isInitializing && !forceCloseRequested) {
                     glfwSetWindowShouldClose(window, GLFW_FALSE);
                 } else {
                     break;

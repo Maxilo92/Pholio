@@ -4,6 +4,7 @@
 #include "Verifier.hpp"
 #include "core/Loggable.hpp"
 #include <filesystem>
+#include <functional>
 
 namespace engine {
 
@@ -14,8 +15,11 @@ enum class OperationMode {
 
 class Sorter : public core::Loggable {
 public:
+    using DuplicateDecisionCallback = std::function<DuplicateAction(const std::filesystem::path&, const std::filesystem::path&)>;
+
     explicit Sorter(ui::LogWindow& logWindow, VerificationLevel level = VerificationLevel::Full, 
-                    DuplicateAction dupAction = DuplicateAction::Skip, bool askOnDuplicate = false);
+                    DuplicateAction dupAction = DuplicateAction::Skip, bool askOnDuplicate = false,
+                    DuplicateDecisionCallback duplicateDecisionCallback = {}, bool dryRun = false);
 
     /**
      * @brief Processes a media task: copies or moves the file to the target path,
@@ -31,6 +35,8 @@ private:
     VerificationLevel m_level;
     DuplicateAction m_dupAction;
     bool m_askOnDuplicate;
+    DuplicateDecisionCallback m_duplicateDecisionCallback;
+    bool m_dryRun;
 
     bool handleSidecar(const MediaTask& task, OperationMode mode);
     bool mergeSupplementalMetadata(const MediaTask& task);

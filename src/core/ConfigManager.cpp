@@ -31,7 +31,6 @@ void ConfigManager::load() {
         if (j.contains("duplicateAction")) m_settings.duplicateAction = j.at("duplicateAction").get<engine::DuplicateAction>();
         if (j.contains("askOnDuplicate")) m_settings.askOnDuplicate = j.at("askOnDuplicate").get<bool>();
         if (j.contains("dryRun")) m_settings.dryRun = j.at("dryRun").get<bool>();
-        if (j.contains("autoStart")) m_settings.autoStart = j.at("autoStart").get<bool>();
         if (j.contains("showPreview")) m_settings.showPreview = j.at("showPreview").get<bool>();
         if (j.contains("lastVersion")) m_settings.lastVersion = j.at("lastVersion").get<std::string>();
         if (j.contains("folderPattern")) m_settings.folderPattern = j.at("folderPattern").get<std::string>();

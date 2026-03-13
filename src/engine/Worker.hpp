@@ -9,11 +9,18 @@
 #include <chrono>
 #include <filesystem>
 #include <mutex>
+#include <optional>
+#include <condition_variable>
 
 namespace engine {
 
 class Worker {
 public:
+    struct DuplicatePrompt {
+        std::filesystem::path sourcePath;
+        std::filesystem::path targetPath;
+    };
+
     explicit Worker(ui::LogWindow& logWindow);
     ~Worker();
 
@@ -30,12 +37,19 @@ public:
     uint64_t getProcessedBytes() const { return m_processedBytes; }
     float getFilesPerSecond() const { return m_filesPerSecond; }
     float getBytesPerSecond() const { return m_bytesPerSecond; }
+    int64_t getLastRunDurationSeconds() const { return m_lastRunDurationSeconds; }
     float getProgress() const;
     std::string getStatusMessage() const;
     std::filesystem::path getCurrentImagePath() const;
+    std::optional<DuplicatePrompt> getPendingDuplicatePrompt() const;
+    void submitDuplicateDecision(DuplicateAction action, bool applyToRemaining);
+    void requestPause();
+    void resumeFromPause();
 
 private:
     void run();
+    DuplicateAction requestDuplicateDecision(const std::filesystem::path& sourcePath, const std::filesystem::path& targetPath);
+    void waitIfPaused();
     void updatePerformanceMetrics(int processedInBatch, uint64_t bytesInBatch, 
                                   std::chrono::steady_clock::time_point startTime);
 
@@ -53,10 +67,21 @@ private:
     
     std::atomic<float> m_filesPerSecond{0.0f};
     std::atomic<float> m_bytesPerSecond{0.0f};
+    std::atomic<int64_t> m_lastRunDurationSeconds{0};
     
     mutable std::mutex m_statusMutex;
     std::string m_statusMessage{"Idle"};
     std::filesystem::path m_currentImagePath;
+
+    mutable std::mutex m_duplicateMutex;
+    std::condition_variable m_duplicateCv;
+    std::optional<DuplicatePrompt> m_pendingDuplicatePrompt;
+    std::optional<DuplicateAction> m_pendingDuplicateDecision;
+    std::optional<DuplicateAction> m_duplicateDecisionOverride;
+
+    std::atomic<bool> m_pauseRequested{false};
+    std::condition_variable m_pauseCv;
+    mutable std::mutex m_pauseMutex;
     
     void setStatus(const std::string& message);
     void setCurrentImagePath(const std::filesystem::path& path);

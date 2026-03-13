@@ -49,7 +49,6 @@ struct AppSettings {
     engine::DuplicateAction duplicateAction = engine::DuplicateAction::Skip;
     bool askOnDuplicate = true;
     bool dryRun = false;
-    bool autoStart = false;
     bool showPreview = true;
     std::string lastVersion = "0.0.0";
     std::string folderPattern = "%Y/%m-%B/%d";
@@ -62,7 +61,7 @@ struct AppSettings {
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, autoStart, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, lastVersion, folderPattern, showDashboard, showSettings, showProgress, showLogs, showReport, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {

@@ -19,6 +19,7 @@ private:
     std::deque<float> m_fpsHistory;
     std::deque<float> m_mbpsHistory;
     float m_timeElapsed = 0.0f;
+    bool m_workerWasRunning = false;
     
     void updateHistory(float dt);
     static std::string formatSize(uint64_t bytes);

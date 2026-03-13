@@ -20,6 +20,8 @@ private:
     void renderStatus();
     void renderErrorPopup();
     void renderSummaryPopup();
+    void renderDuplicatePopup();
+    void renderDuplicatePreviewPanel(const char* label, const std::filesystem::path& imagePath, Texture& texture, std::filesystem::path& lastLoadedPath);
     
     std::string browseFolder(const std::string& defaultPath);
     void openFolderInExplorer(const std::filesystem::path& path);
@@ -31,6 +33,13 @@ private:
     bool m_showErrorPopup = false;
     bool m_showSummaryPopup = false;
     bool m_workerWasRunning = false;
+
+    Texture m_duplicateSourceTexture;
+    Texture m_duplicateTargetTexture;
+    std::filesystem::path m_lastDuplicateSourceLoadedPath;
+    std::filesystem::path m_lastDuplicateTargetLoadedPath;
+    bool m_duplicatePopupOpenRequested = false;
+    bool m_applyDecisionToRemainingDuplicates = false;
 };
 
 } // namespace ui

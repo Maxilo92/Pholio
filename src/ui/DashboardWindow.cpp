@@ -5,8 +5,41 @@
 #include <iostream>
 #include <filesystem>
 #include <cstdlib>
+#include <cstdio>
+#include <sstream>
+#include <cstdint>
 
 namespace ui {
+
+namespace {
+std::string formatBytes(uint64_t bytes) {
+    const char* units[] = {"B", "KB", "MB", "GB", "TB"};
+    int unit = 0;
+    double size = static_cast<double>(bytes);
+    while (size >= 1024.0 && unit < 4) {
+        size /= 1024.0;
+        ++unit;
+    }
+    char buf[64];
+    std::snprintf(buf, sizeof(buf), "%.2f %s", size, units[unit]);
+    return std::string(buf);
+}
+
+std::string formatDuration(int64_t seconds) {
+    const int64_t hrs = seconds / 3600;
+    const int64_t mins = (seconds % 3600) / 60;
+    const int64_t secs = seconds % 60;
+    char buf[64];
+    if (hrs > 0) {
+        std::snprintf(buf, sizeof(buf), "%lldh %lldm %llds",
+                      static_cast<long long>(hrs), static_cast<long long>(mins), static_cast<long long>(secs));
+    } else {
+        std::snprintf(buf, sizeof(buf), "%lldm %llds",
+                      static_cast<long long>(mins), static_cast<long long>(secs));
+    }
+    return std::string(buf);
+}
+} // namespace
 
 DashboardWindow::DashboardWindow(engine::Worker& worker) : m_worker(worker) {
     NFD_Init();
@@ -39,6 +72,7 @@ void DashboardWindow::render() {
 
     renderErrorPopup();
     renderSummaryPopup();
+    renderDuplicatePopup();
 
     // Handle deferred browsing
     if (m_shouldBrowseSource || m_shouldBrowseTarget) {
@@ -65,6 +99,107 @@ void DashboardWindow::render() {
             core::ConfigManager::getInstance().setSettings(currentSettings);
             core::ConfigManager::getInstance().save();
         }
+    }
+}
+
+void DashboardWindow::renderDuplicatePreviewPanel(const char* label, const std::filesystem::path& imagePath, Texture& texture, std::filesystem::path& lastLoadedPath) {
+    ImGui::BeginChild(label, ImVec2(0, 280), true);
+    ImGui::TextWrapped("%s", label);
+    ImGui::Separator();
+    ImGui::TextWrapped("Name: %s", imagePath.filename().string().c_str());
+    ImGui::TextWrapped("Path: %s", imagePath.string().c_str());
+    ImGui::Spacing();
+
+    if (imagePath != lastLoadedPath) {
+        if (texture.loadFromFile(imagePath)) {
+            lastLoadedPath = imagePath;
+        } else {
+            texture.release();
+            lastLoadedPath.clear();
+        }
+    }
+
+    if (texture.isValid()) {
+        const float maxWidth = ImGui::GetContentRegionAvail().x;
+        const float maxHeight = 170.0f;
+        const float texWidth = static_cast<float>(texture.getWidth());
+        const float texHeight = static_cast<float>(texture.getHeight());
+        float displayWidth = maxWidth;
+        float displayHeight = displayWidth * (texHeight / texWidth);
+        if (displayHeight > maxHeight) {
+            displayHeight = maxHeight;
+            displayWidth = displayHeight * (texWidth / texHeight);
+        }
+        ImTextureID texID = (ImTextureID)(intptr_t)texture.getID();
+        ImGui::Image(texID, ImVec2(displayWidth, displayHeight));
+    } else {
+        ImGui::TextWrapped("Preview not available for this file.");
+    }
+
+    ImGui::EndChild();
+}
+
+void DashboardWindow::renderDuplicatePopup() {
+    auto prompt = m_worker.getPendingDuplicatePrompt();
+    if (prompt && !m_duplicatePopupOpenRequested) {
+        ImGui::OpenPopup("Duplicate Found");
+        m_duplicatePopupOpenRequested = true;
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(980.0f, 0.0f), ImGuiCond_Appearing);
+
+    if (ImGui::BeginPopupModal("Duplicate Found", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        if (!prompt) {
+            m_duplicatePopupOpenRequested = false;
+            m_duplicateSourceTexture.release();
+            m_duplicateTargetTexture.release();
+            m_lastDuplicateSourceLoadedPath.clear();
+            m_lastDuplicateTargetLoadedPath.clear();
+            m_applyDecisionToRemainingDuplicates = false;
+            ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+            return;
+        }
+
+        ImGui::TextWrapped("A duplicate was found in the target location. Compare both files and choose how to proceed.");
+        ImGui::Spacing();
+
+        if (ImGui::BeginTable("DuplicateCompareTable", 2, ImGuiTableFlags_SizingStretchSame)) {
+            ImGui::TableNextColumn();
+            renderDuplicatePreviewPanel("Incoming file", prompt->sourcePath, m_duplicateSourceTexture, m_lastDuplicateSourceLoadedPath);
+            ImGui::TableNextColumn();
+            renderDuplicatePreviewPanel("Existing target file", prompt->targetPath, m_duplicateTargetTexture, m_lastDuplicateTargetLoadedPath);
+            ImGui::EndTable();
+        }
+
+        ImGui::Spacing();
+        ImGui::Checkbox("Apply selected action to all remaining duplicates in this run", &m_applyDecisionToRemainingDuplicates);
+        ImGui::Spacing();
+        if (ImGui::Button("Skip", ImVec2(140, 0))) {
+            m_worker.submitDuplicateDecision(engine::DuplicateAction::Skip, m_applyDecisionToRemainingDuplicates);
+            m_applyDecisionToRemainingDuplicates = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Rename Incoming", ImVec2(160, 0))) {
+            m_worker.submitDuplicateDecision(engine::DuplicateAction::Rename, m_applyDecisionToRemainingDuplicates);
+            m_applyDecisionToRemainingDuplicates = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Overwrite Existing", ImVec2(170, 0))) {
+            m_worker.submitDuplicateDecision(engine::DuplicateAction::Overwrite, m_applyDecisionToRemainingDuplicates);
+            m_applyDecisionToRemainingDuplicates = false;
+        }
+
+        ImGui::EndPopup();
+    } else if (!prompt) {
+        m_duplicatePopupOpenRequested = false;
+        m_duplicateSourceTexture.release();
+        m_duplicateTargetTexture.release();
+        m_lastDuplicateSourceLoadedPath.clear();
+        m_lastDuplicateTargetLoadedPath.clear();
+        m_applyDecisionToRemainingDuplicates = false;
     }
 }
 
@@ -99,27 +234,52 @@ void DashboardWindow::renderSummaryPopup() {
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
     if (ImGui::BeginPopupModal("Process Finished", &m_showSummaryPopup, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("The media organization process has finished.");
+        ImGui::TextWrapped("The media organization process has finished.");
         ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
 
         if (ImGui::BeginTable("SummaryTable", 2)) {
+            const int total = m_worker.getTotalFiles();
+            const int success = m_worker.getSuccessCount();
+            const int errors = m_worker.getErrorCount();
+            const uint64_t bytes = m_worker.getProcessedBytes();
+            const int64_t durationSec = m_worker.getLastRunDurationSeconds();
+            const float successRate = total > 0 ? (100.0f * static_cast<float>(success) / static_cast<float>(total)) : 0.0f;
+            const float avgFilesPerSec = durationSec > 0 ? static_cast<float>(m_worker.getProcessedFiles()) / static_cast<float>(durationSec) : 0.0f;
+            const float avgMBPerSec = durationSec > 0 ? (static_cast<float>(bytes) / (1024.0f * 1024.0f)) / static_cast<float>(durationSec) : 0.0f;
+
             ImGui::TableNextRow();
             ImGui::TableSetColumnIndex(0); ImGui::Text("Total Files:");
-            ImGui::TableSetColumnIndex(1); ImGui::Text("%d", m_worker.getTotalFiles());
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%d", total);
 
             ImGui::TableNextRow();
             ImGui::TableSetColumnIndex(0); ImGui::Text("Successful:");
-            ImGui::TableSetColumnIndex(1); ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "%d", m_worker.getSuccessCount());
+            ImGui::TableSetColumnIndex(1); ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "%d", success);
 
             ImGui::TableNextRow();
             ImGui::TableSetColumnIndex(0); ImGui::Text("Failed/Skipped:");
             ImGui::TableSetColumnIndex(1); 
-            if (m_worker.getErrorCount() > 0)
-                ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f), "%d", m_worker.getErrorCount());
+            if (errors > 0)
+                ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f), "%d", errors);
             else
-                ImGui::Text("%d", m_worker.getErrorCount());
+                ImGui::Text("%d", errors);
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Success Rate:");
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%.1f%%", successRate);
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Data Processed:");
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%s", formatBytes(bytes).c_str());
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Duration:");
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%s", formatDuration(durationSec).c_str());
+
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0); ImGui::Text("Avg Speed:");
+            ImGui::TableSetColumnIndex(1); ImGui::Text("%.2f files/s (%.2f MB/s)", avgFilesPerSec, avgMBPerSec);
 
             ImGui::EndTable();
         }

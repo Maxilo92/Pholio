@@ -35,6 +35,7 @@ private:
     void setupStyle();
     void checkVersionUpdate();
     void saveWindowState();
+    void renderCloseDuringSortingPopup();
     
     std::unique_ptr<LogWindow> m_logWindow;
     std::unique_ptr<engine::Worker> m_worker;
@@ -61,12 +62,15 @@ private:
     bool m_shouldRestart = false;
     bool m_shouldRebuild = false;
     bool m_shouldClose = false;
+    bool m_showCloseDuringSortingPopup = false;
     std::string m_updateActionMessage;
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }
     bool shouldRebuild() const { return m_shouldRebuild; }
     bool shouldClose() const { return m_shouldClose; }
+    bool isSortingActive() const { return m_worker->isRunning(); }
+    void requestClose() { m_shouldClose = true; }
     void clearFlags() { m_shouldRestart = m_shouldRebuild = m_shouldClose = false; }
 };
 
