@@ -11,7 +11,7 @@ Die CI-Pipeline fuer Release-Pakete ist in `.github/workflows/release-packaging.
 
 - **macOS:** DMG (`cpack -G DragNDrop`)
 - **Windows:** MSI (`cpack -G WIX`)
-- **Linux:** TGZ-Paket (`cpack -G TGZ`) als Linux-Release-Artefakt
+- **Linux:** DEB-Paket (`cpack -G DEB`)
 
 ## Technische Basis
 
@@ -19,9 +19,9 @@ Die CI-Pipeline fuer Release-Pakete ist in `.github/workflows/release-packaging.
 - Plattform-spezifische CPack-Generatoren:
   - `DragNDrop` auf macOS
   - `WIX` auf Windows
-  - `TGZ` auf Linux
+  - `DEB` auf Linux
 
 ## Nächste Ausbaustufe
 
-- Linux-Paket auf AppImage/Flatpak erweitern.
+- Linux-Paket optional zusaetzlich als AppImage/Flatpak bereitstellen.
 - Signierte Artefakte aus der Packaging-Pipeline direkt in den Signing-Workflow uebergeben.
