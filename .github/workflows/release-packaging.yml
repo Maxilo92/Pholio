@@ -115,7 +115,10 @@ jobs:
       - name: Install Linux build prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config libavformat-dev libavcodec-dev libavutil-dev
+          sudo apt-get install -y \
+            nasm ninja-build pkg-config \
+            libavformat-dev libavcodec-dev libavutil-dev \
+            libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 
       - name: Clean build directory
         run: rm -rf build

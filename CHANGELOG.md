@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.13] - 2026-03-15
+
+### Fixed
+- **Release Packaging CI (Linux):** Fehlende X11-Entwicklungsbibliotheken fuer `glfw3` im vcpkg-Build werden jetzt im Linux-Job vorinstalliert (`libx11-dev`, `libxrandr-dev`, `libxinerama-dev`, `libxcursor-dev`, `libxi-dev`).
+- **FFmpeg Linking (macOS/Linux):** CMake verlinkt FFmpeg nun ueber `PkgConfig::`-Imported-Targets statt nackter `-lav*`-Namen, damit `pkg-config`-Libpfade im Linkschritt korrekt uebernommen werden.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.13`.
+
 ## [1.12.12] - 2026-03-15
 
 ### Fixed
