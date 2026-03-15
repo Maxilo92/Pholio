@@ -20,6 +20,11 @@ jobs:
         with:
           vcpkgJsonGlob: vcpkg.json
 
+      - name: Install macOS build prerequisites
+        run: |
+          brew update
+          brew install pkg-config ffmpeg
+
       - name: Clean build directory
         run: rm -rf build
 
@@ -110,7 +115,7 @@ jobs:
       - name: Install Linux build prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm
+          sudo apt-get install -y nasm pkg-config libavformat-dev libavcodec-dev libavutil-dev
 
       - name: Clean build directory
         run: rm -rf build

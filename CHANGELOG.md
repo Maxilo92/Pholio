@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.12] - 2026-03-15
+
+### Fixed
+- **Release Packaging CI (macOS/Linux):** Fehlende FFmpeg/PkgConfig-Abhaengigkeiten in den Release-Jobs werden jetzt vor dem Configure-Schritt installiert, damit `libavformat` in CMake korrekt gefunden wird.
+  - macOS: `brew install pkg-config ffmpeg`
+  - Linux: `apt install pkg-config libavformat-dev libavcodec-dev libavutil-dev`
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.12`.
+
 ## [1.12.11] - 2026-03-15
 
 ### Fixed
