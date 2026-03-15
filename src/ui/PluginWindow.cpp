@@ -147,9 +147,39 @@ void PluginWindow::renderManageSection() {
     auto tr = [](const char* key, const char* fallback) { return i18n::tr(key, fallback); };
     auto& config = core::ConfigManager::getInstance();
     auto settings = config.getSettings();
+    auto renderHint = [&](const char* key, const char* fallback) {
+        ImGui::SameLine();
+        ImGui::TextDisabled("(?)");
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal)) {
+            ImGui::SetTooltip("%s", tr(key, fallback));
+        }
+    };
+
+    ImGui::TextWrapped("%s", tr("plugin.manage.guide",
+                                "Guided workflow: 1) Prepare plugin folder 2) Add library files 3) Reload plugins 4) Enable and open plugin windows."));
+    ImGui::Spacing();
 
     ImGui::Text("%s", tr("plugin.manage.configured_dir", "Configured plugin directory:"));
+    renderHint("plugin.manage.configured_dir.hint",
+               "This is where .dylib/.so/.dll plugin files are loaded from.");
     ImGui::TextWrapped("%s", settings.pluginsDirectory.string().c_str());
+    ImGui::Spacing();
+
+    if (ImGui::Button(tr("plugin.manage.auto_setup", "Auto Setup (Recommended)"))) {
+        try {
+            std::filesystem::create_directories(settings.pluginsDirectory);
+            const bool opened = openPath(settings.pluginsDirectory, false);
+            requestPluginReload();
+            m_statusMessage = opened
+                ? tr("plugin.manage.auto_setup.ok", "Plugin folder prepared, opened, and plugin reload requested.")
+                : tr("plugin.manage.auto_setup.partial", "Plugin folder prepared and reload requested, but folder could not be opened.");
+        } catch (const std::exception& e) {
+            m_statusMessage = std::string(tr("plugin.manage.auto_setup.fail", "Auto setup failed: ")) + e.what();
+        }
+    }
+    renderHint("plugin.manage.auto_setup.hint",
+               "Automates folder creation, opening the folder, and triggering plugin reload.");
+
     ImGui::Spacing();
 
     if (ImGui::Button(tr("plugin.manage.open_folder", "Open Folder"))) {
@@ -175,6 +205,35 @@ void PluginWindow::renderManageSection() {
         m_statusMessage = tr("plugin.manage.reload_requested", "Plugin reload requested.");
     }
 
+    int detectedCount = 0;
+    if (std::filesystem::exists(settings.pluginsDirectory) && std::filesystem::is_directory(settings.pluginsDirectory)) {
+        for (const auto& entry : std::filesystem::directory_iterator(settings.pluginsDirectory)) {
+            if (entry.is_regular_file() && hasPluginExtension(entry.path())) {
+                detectedCount++;
+            }
+        }
+    }
+
+    const auto descriptors = m_pluginManager ? m_pluginManager->getPluginDescriptors() : std::vector<plugins::PluginManager::PluginDescriptor>{};
+    int enabledCount = 0;
+    int windowCapableCount = 0;
+    for (const auto& descriptor : descriptors) {
+        if (descriptor.enabled) {
+            enabledCount++;
+        }
+        if (descriptor.hasWindow) {
+            windowCapableCount++;
+        }
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Text("%s", tr("plugin.manage.summary", "Manager summary:"));
+    ImGui::BulletText("%s %d", tr("plugin.manage.summary.detected", "Detected libraries:"), detectedCount);
+    ImGui::BulletText("%s %d", tr("plugin.manage.summary.loaded", "Loaded plugins:"), static_cast<int>(descriptors.size()));
+    ImGui::BulletText("%s %d", tr("plugin.manage.summary.enabled", "Enabled plugins:"), enabledCount);
+    ImGui::BulletText("%s %d", tr("plugin.manage.summary.windows", "Plugins with windows:"), windowCapableCount);
+
     ImGui::Separator();
     ImGui::Text("%s", tr("plugin.manage.detected_libs", "Detected plugin libraries:"));
 
@@ -195,16 +254,38 @@ void PluginWindow::renderManageSection() {
     ImGui::Spacing();
     ImGui::Separator();
     ImGui::Text("%s", tr("plugin.manage.loaded_plugins", "Loaded plugins (toggle):"));
+    renderHint("plugin.manage.loaded_plugins.hint",
+               "Use checkboxes to enable or disable plugins quickly. Disabled plugins are persisted in settings.");
     if (!m_pluginManager) {
         ImGui::TextDisabled("%s", tr("plugin.manage.manager_missing", "Plugin manager not available."));
         return;
     }
 
-    const auto descriptors = m_pluginManager->getPluginDescriptors();
     if (descriptors.empty()) {
         ImGui::TextDisabled("%s", tr("plugin.manage.no_loaded_plugins", "No loaded plugins."));
     } else {
+        if (ImGui::Button(tr("plugin.manage.enable_all", "Enable All"))) {
+            const int changed = setAllLoadedPluginsEnabled(true);
+            m_statusMessage = std::string(tr("plugin.manage.enable_all.ok", "Enabled plugins: ")) + std::to_string(changed);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(tr("plugin.manage.disable_all", "Disable All"))) {
+            const int changed = setAllLoadedPluginsEnabled(false);
+            m_statusMessage = std::string(tr("plugin.manage.disable_all.ok", "Disabled plugins: ")) + std::to_string(changed);
+        }
+        ImGui::Spacing();
+
+        char filterBuf[256];
+        std::strncpy(filterBuf, m_manageFilter.c_str(), sizeof(filterBuf));
+        if (ImGui::InputText(tr("plugin.manage.filter", "Filter plugins"), filterBuf, sizeof(filterBuf))) {
+            m_manageFilter = filterBuf;
+        }
+
         for (const auto& descriptor : descriptors) {
+            if (!m_manageFilter.empty() && descriptor.name.find(m_manageFilter) == std::string::npos) {
+                continue;
+            }
+
             bool enabled = descriptor.enabled;
             const std::string checkboxId = "##plugin_enabled_" + descriptor.name;
             if (ImGui::Checkbox(checkboxId.c_str(), &enabled)) {
@@ -222,6 +303,14 @@ void PluginWindow::renderManageSection() {
             ImGui::Text("%s", descriptor.name.c_str());
             ImGui::SameLine();
             ImGui::TextDisabled("%s", descriptor.enabled ? tr("plugin.state.enabled", "(enabled)") : tr("plugin.state.disabled", "(disabled)"));
+            ImGui::BulletText("%s %s | %s %s",
+                              tr("plugin.manage.meta.version", "Version:"),
+                              descriptor.version.c_str(),
+                              tr("plugin.manage.meta.author", "Author:"),
+                              descriptor.author.c_str());
+            ImGui::BulletText("%s %s",
+                              tr("plugin.manage.meta.window", "Window support:"),
+                              descriptor.hasWindow ? tr("plugin.manage.meta.window.yes", "yes") : tr("plugin.manage.meta.window.no", "no"));
         }
     }
 
@@ -294,6 +383,24 @@ bool PluginWindow::persistPluginEnabledState(const std::string& pluginName, bool
     config.setSettings(settings);
     config.save();
     return true;
+}
+
+int PluginWindow::setAllLoadedPluginsEnabled(bool enabled) {
+    if (!m_pluginManager) {
+        return 0;
+    }
+
+    int changed = 0;
+    for (const auto& descriptor : m_pluginManager->getPluginDescriptors()) {
+        if (descriptor.enabled == enabled) {
+            continue;
+        }
+        if (m_pluginManager->setPluginEnabled(descriptor.name, enabled) &&
+            persistPluginEnabledState(descriptor.name, enabled)) {
+            changed++;
+        }
+    }
+    return changed;
 }
 
 } // namespace ui

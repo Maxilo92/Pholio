@@ -5,6 +5,7 @@
 #include "LogWindow.hpp"
 #include "DashboardWindow.hpp"
 #include "PreviewWindow.hpp"
+#include "GalleryWindow.hpp"
 #include "DebugWindow.hpp"
 #include "AboutWindow.hpp"
 #include "ChangelogWindow.hpp"
@@ -16,6 +17,7 @@
 #include <memory>
 #include <string>
 #include <filesystem>
+#include <chrono>
 
 #ifdef __APPLE__
 #define STR_CTRL "Cmd"
@@ -55,6 +57,7 @@ private:
     std::unique_ptr<ProgressWindow> m_progressWindow;
     std::unique_ptr<DashboardWindow> m_dashboardWindow;
     std::unique_ptr<PreviewWindow> m_previewWindow;
+    std::unique_ptr<GalleryWindow> m_galleryWindow;
     std::unique_ptr<DebugWindow> m_debugWindow;
     std::unique_ptr<AboutWindow> m_aboutWindow;
     std::unique_ptr<ChangelogWindow> m_changelogWindow;
@@ -67,6 +70,7 @@ private:
     bool m_showProgress = false;
     bool m_showLogs = true;
     bool m_showPreview = true;
+    bool m_showGallery = false;
     bool m_showDebug = false;
     bool m_showAbout = false;
     bool m_showChangelog = false;
@@ -85,6 +89,8 @@ private:
     int m_uiPluginReloadToken = 0;
     std::string m_uiTheme = "dark";
     int m_pendingLayoutPreset = -1;
+    int m_lastAutoUpdateIntervalSeconds = -1;
+    std::chrono::steady_clock::time_point m_nextAutoUpdateCheck{};
 
 public:
     bool shouldRestart() const { return m_shouldRestart; }

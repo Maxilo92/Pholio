@@ -102,8 +102,10 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
     }
 
     // 4. Merge Supplemental Metadata if available
+    bool supplementalMetadataMerged = false;
     if (task.metadata.supplementalMetadataPath) {
         if (mergeSupplementalMetadata(task)) {
+            supplementalMetadataMerged = true;
             info("Merged supplemental metadata into: " + task.targetPath.filename().string());
         } else {
             warn("Failed to merge supplemental metadata for: " + task.targetPath.filename().string());
@@ -129,7 +131,7 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
             task.statusMessage = "Verified but failed to remove source: " + ec.message();
             warn("Sorter: Could not remove source file: " + task.metadata.path.string() + " Error: " + ec.message());
         }
-        if (task.metadata.supplementalMetadataPath) {
+        if (supplementalMetadataMerged && task.metadata.supplementalMetadataPath) {
             if (!fs::remove(*task.metadata.supplementalMetadataPath, ec)) {
                 warn("Sorter: Could not remove supplemental metadata source: " + task.metadata.supplementalMetadataPath->string() + " Error: " + ec.message());
             }
@@ -138,7 +140,7 @@ bool Sorter::process(MediaTask& task, OperationMode mode) {
 
     task.processed = true;
     if (task.statusMessage.empty() || task.statusMessage.find("Verified but") == std::string::npos) {
-        std::string mergeSuffix = task.metadata.supplementalMetadataPath ? " (Merged)" : "";
+        std::string mergeSuffix = supplementalMetadataMerged ? " (Merged)" : "";
         task.statusMessage = (mode == OperationMode::Move) ? "Moved and verified" + mergeSuffix : "Copied and verified" + mergeSuffix;
     }
     

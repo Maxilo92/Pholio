@@ -335,6 +335,15 @@ void SettingsWindow::render() {
                 if (ImGui::Checkbox(tr("settings.dry_run", "Dry Run (Simulation Mode)"), &m_editedSettings.dryRun)) m_isDirty = true;
                 ImGui::SetItemTooltip("%s", tr("settings.tooltip.dry_run", "Simulate the process without actually moving or copying any files."));
 
+                int updateIntervalSeconds = m_editedSettings.autoUpdateCheckIntervalSeconds;
+                if (ImGui::InputInt(tr("settings.update_check_interval", "Update Check Interval (seconds)"), &updateIntervalSeconds, 5, 30)) {
+                    if (updateIntervalSeconds < 0) updateIntervalSeconds = 0;
+                    if (updateIntervalSeconds > 86400) updateIntervalSeconds = 86400;
+                    m_editedSettings.autoUpdateCheckIntervalSeconds = updateIntervalSeconds;
+                    m_isDirty = true;
+                }
+                ImGui::SetItemTooltip("%s", tr("settings.tooltip.update_check_interval", "How often Pholio checks for updates in the background. 0 disables automatic checks."));
+
                 ImGui::Spacing();
                 if (ImGui::Checkbox(tr("settings.enable_conversion", "Enable Format Conversion"), &m_editedSettings.enableFormatConversion)) m_isDirty = true;
                 ImGui::SetItemTooltip("%s", tr("settings.tooltip.enable_conversion", "Convert copied media into configured output formats after verified transfer."));

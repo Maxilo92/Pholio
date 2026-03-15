@@ -18,6 +18,7 @@ AppWindow::AppWindow()
       m_progressWindow(std::make_unique<ProgressWindow>(*m_worker)),
       m_dashboardWindow(std::make_unique<DashboardWindow>(*m_worker)),
       m_previewWindow(std::make_unique<PreviewWindow>(*m_worker)),
+      m_galleryWindow(std::make_unique<GalleryWindow>()),
       m_debugWindow(std::make_unique<DebugWindow>()),
       m_aboutWindow(std::make_unique<AboutWindow>()),
       m_changelogWindow(std::make_unique<ChangelogWindow>()),
@@ -44,6 +45,7 @@ AppWindow::AppWindow()
     m_showProgress = settings.showProgress;
     m_showLogs = settings.showLogs;
     m_showPreview = settings.showPreview;
+    m_showGallery = settings.showGallery;
     m_showReport = settings.showReport;
     m_showPlugins = settings.showPlugins;
     ui::i18n::setLanguage(ui::i18n::languageFromCode(settings.uiLanguage));
@@ -123,6 +125,26 @@ void AppWindow::update() {
 
 void AppWindow::render() {
     const auto currentSettings = core::ConfigManager::getInstance().getSettings();
+    const int autoUpdateIntervalSeconds = currentSettings.autoUpdateCheckIntervalSeconds < 0
+        ? 0
+        : currentSettings.autoUpdateCheckIntervalSeconds;
+    const auto now = std::chrono::steady_clock::now();
+    if (autoUpdateIntervalSeconds != m_lastAutoUpdateIntervalSeconds) {
+        m_lastAutoUpdateIntervalSeconds = autoUpdateIntervalSeconds;
+        if (autoUpdateIntervalSeconds > 0) {
+            m_nextAutoUpdateCheck = now + std::chrono::seconds(autoUpdateIntervalSeconds);
+        } else {
+            m_nextAutoUpdateCheck = {};
+        }
+    }
+    if (autoUpdateIntervalSeconds > 0 &&
+        m_nextAutoUpdateCheck != std::chrono::steady_clock::time_point{} &&
+        now >= m_nextAutoUpdateCheck &&
+        !core::UpdateManager::getInstance().isChecking()) {
+        core::UpdateManager::getInstance().checkForUpdates();
+        m_nextAutoUpdateCheck = now + std::chrono::seconds(autoUpdateIntervalSeconds);
+    }
+
     i18n::setLanguage(i18n::languageFromCode(currentSettings.uiLanguage));
     if (currentSettings.uiTheme != m_uiTheme) {
         m_uiTheme = currentSettings.uiTheme;
@@ -205,11 +227,18 @@ void AppWindow::render() {
         ImGui::End();
     }
 
+    if (m_showGallery && m_galleryWindow->hasSelection()) {
+        m_previewWindow->setExternalImagePath(m_galleryWindow->getSelectedImagePath());
+    } else {
+        m_previewWindow->clearExternalImagePath();
+    }
+
     if (m_showDashboard) m_dashboardWindow->render();
     if (m_showSettings) m_settingsWindow->render();
     if (m_showProgress) m_progressWindow->render();
     if (m_showLogs) m_logWindow->render();
     if (m_showPreview) m_previewWindow->render(&m_showPreview);
+    if (m_showGallery) m_galleryWindow->render(&m_showGallery, m_showPreview, &m_showPreview);
     if (m_showDebug) m_debugWindow->render(&m_showDebug);
     if (m_showAbout) m_aboutWindow->render(&m_showAbout);
     if (m_showChangelog) m_changelogWindow->render(&m_showChangelog);
@@ -222,18 +251,21 @@ void AppWindow::render() {
     static bool lastProgress = m_showProgress;
     static bool lastLogs = m_showLogs;
     static bool lastPreview = m_showPreview;
+    static bool lastGallery = m_showGallery;
     static bool lastReport = m_showReport;
     static bool lastPlugins = m_showPlugins;
 
     if (lastDashboard != m_showDashboard || lastSettings != m_showSettings || 
         lastProgress != m_showProgress || lastLogs != m_showLogs || 
-        lastPreview != m_showPreview || lastReport != m_showReport || lastPlugins != m_showPlugins) {
+        lastPreview != m_showPreview || lastGallery != m_showGallery ||
+        lastReport != m_showReport || lastPlugins != m_showPlugins) {
         saveWindowState();
         lastDashboard = m_showDashboard;
         lastSettings = m_showSettings;
         lastProgress = m_showProgress;
         lastLogs = m_showLogs;
         lastPreview = m_showPreview;
+        lastGallery = m_showGallery;
         lastReport = m_showReport;
         lastPlugins = m_showPlugins;
     }
@@ -291,6 +323,7 @@ void AppWindow::saveWindowState() {
     settings.showProgress = m_showProgress;
     settings.showLogs = m_showLogs;
     settings.showPreview = m_showPreview;
+    settings.showGallery = m_showGallery;
     settings.showReport = m_showReport;
     settings.showPlugins = m_showPlugins;
     config.setSettings(settings);
@@ -358,6 +391,7 @@ void AppWindow::renderMainDockspace() {
         if (ImGui::BeginMenu(i18n::tr("menu.view", "View"))) {
             ImGui::MenuItem(i18n::tr("menu.dashboard.icon", "[D] Dashboard"), nullptr, &m_showDashboard);
             ImGui::MenuItem(i18n::tr("menu.preview.icon", "[P] Image Preview"), nullptr, &m_showPreview);
+            ImGui::MenuItem(i18n::tr("menu.gallery.icon", "[A] Gallery"), nullptr, &m_showGallery);
             ImGui::MenuItem(i18n::tr("menu.settings.icon", "[S] Settings"), nullptr, &m_showSettings);
             ImGui::MenuItem(i18n::tr("menu.progress.icon", "[M] Progress & Performance"), nullptr, &m_showProgress);
             ImGui::MenuItem(i18n::tr("menu.logs.icon", "[L] Logs"), nullptr, &m_showLogs);
@@ -460,6 +494,7 @@ void AppWindow::applyLayoutPreset(LayoutPreset preset, ImGuiID dockspaceId, cons
             dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.25f, nullptr, &dock_main_id);
             ImGui::DockBuilderDockWindow("Dashboard", dock_main_id);
             ImGui::DockBuilderDockWindow("Image Preview", dock_main_id);
+            ImGui::DockBuilderDockWindow("Gallery", dock_main_id);
             ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
             ImGui::DockBuilderDockWindow("Settings", dock_right_id);
             ImGui::DockBuilderDockWindow("Progress & Performance", dock_right_id);
@@ -470,6 +505,7 @@ void AppWindow::applyLayoutPreset(LayoutPreset preset, ImGuiID dockspaceId, cons
             dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.18f, nullptr, &dock_main_id);
             ImGui::DockBuilderDockWindow("Dashboard", dock_main_id);
             ImGui::DockBuilderDockWindow("Image Preview", dock_main_id);
+            ImGui::DockBuilderDockWindow("Gallery", dock_main_id);
             ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
             ImGui::DockBuilderDockWindow("Settings", dock_right_id);
             ImGui::DockBuilderDockWindow("Progress & Performance", dock_right_id);
@@ -479,6 +515,7 @@ void AppWindow::applyLayoutPreset(LayoutPreset preset, ImGuiID dockspaceId, cons
             dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.40f, nullptr, &dock_main_id);
             ImGui::DockBuilderDockWindow("Dashboard", dock_right_id);
             ImGui::DockBuilderDockWindow("Settings", dock_right_id);
+            ImGui::DockBuilderDockWindow("Gallery", dock_main_id);
             ImGui::DockBuilderDockWindow("Progress & Performance", dock_main_id);
             ImGui::DockBuilderDockWindow("Logs", dock_bottom_id);
             ImGui::DockBuilderDockWindow("Internal Debug", dock_bottom_id);

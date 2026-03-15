@@ -7,7 +7,9 @@ namespace engine {
 namespace fs = std::filesystem;
 
 const std::set<std::string> Scanner::s_imageExtensions = {
-    ".jpg", ".jpeg", ".png", ".tiff", ".tif", ".cr2", ".nef", ".arw", ".dng", ".heic", ".webp"
+    ".jpg", ".jpeg", ".png", ".tiff", ".tif", ".heic", ".webp",
+    ".cr2", ".cr3", ".nef", ".nrw", ".arw", ".sr2", ".srw", ".orf", ".rw2", ".raf",
+    ".dng", ".pef", ".erf", ".3fr", ".iiq", ".kdc", ".dcr", ".mrw", ".x3f", ".raw"
 };
 
 const std::set<std::string> Scanner::s_videoExtensions = {

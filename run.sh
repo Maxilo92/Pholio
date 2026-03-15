@@ -142,6 +142,7 @@ build_app() {
     repair_vcpkg_repo "$vcpkg_root"
 
     local toolchain_file="$vcpkg_root/scripts/buildsystems/vcpkg.cmake"
+    local cmake_generator="Unix Makefiles"
     local -a cmake_configure=(
         cmake
         -B "$BUILD_DIR"
@@ -151,7 +152,18 @@ build_app() {
     )
 
     if command -v ninja >/dev/null 2>&1; then
+        cmake_generator="Ninja"
         cmake_configure+=(-G Ninja)
+    fi
+
+    if [[ -f "$BUILD_DIR/CMakeCache.txt" ]]; then
+        local existing_generator
+        existing_generator="$(sed -n 's/^CMAKE_GENERATOR:INTERNAL=//p' "$BUILD_DIR/CMakeCache.txt" | head -n 1)"
+        if [[ -n "$existing_generator" && "$existing_generator" != "$cmake_generator" ]]; then
+            echo "Detected CMake generator mismatch ($existing_generator vs $cmake_generator). Resetting build cache..."
+            rm -f "$BUILD_DIR/CMakeCache.txt"
+            rm -rf "$BUILD_DIR/CMakeFiles"
+        fi
     fi
 
     if [[ "$PROJECT_ROOT" == *" "* ]]; then

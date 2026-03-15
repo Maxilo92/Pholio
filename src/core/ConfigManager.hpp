@@ -57,6 +57,7 @@ struct AppSettings {
     bool askOnDuplicate = true;
     bool dryRun = false;
     bool showPreview = true;
+    bool showGallery = false;
     bool enableFormatConversion = false;
     std::string imageOutputFormat = "jpg";
     std::string videoOutputFormat = "mp4";
@@ -77,11 +78,12 @@ struct AppSettings {
     bool showPlugins = false;
     std::string uiLanguage = "en";
     std::string uiTheme = "dark";
+    int autoUpdateCheckIntervalSeconds = 60;
     std::string pendingUpdateVersion;
     std::string pendingUpdateAssetUrl;
     std::string pendingUpdateAssetName;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, disabledPlugins, allowPluginWindows, pluginReloadToken, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, showPlugins, uiLanguage, uiTheme, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(AppSettings, sourcePath, targetPath, operationMode, verificationLevel, duplicateAction, askOnDuplicate, dryRun, showPreview, showGallery, enableFormatConversion, imageOutputFormat, videoOutputFormat, enablePlugins, pluginsDirectory, disabledPlugins, allowPluginWindows, pluginReloadToken, migrationMode, lastVersion, folderPattern, filenameTemplate, showDashboard, showSettings, showProgress, showLogs, showReport, showPlugins, uiLanguage, uiTheme, autoUpdateCheckIntervalSeconds, pendingUpdateVersion, pendingUpdateAssetUrl, pendingUpdateAssetName)
 };
 
 class ConfigManager {

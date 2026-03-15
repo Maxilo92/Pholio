@@ -32,6 +32,7 @@ void ConfigManager::load() {
         if (j.contains("askOnDuplicate")) m_settings.askOnDuplicate = j.at("askOnDuplicate").get<bool>();
         if (j.contains("dryRun")) m_settings.dryRun = j.at("dryRun").get<bool>();
         if (j.contains("showPreview")) m_settings.showPreview = j.at("showPreview").get<bool>();
+        if (j.contains("showGallery")) m_settings.showGallery = j.at("showGallery").get<bool>();
         if (j.contains("enableFormatConversion")) m_settings.enableFormatConversion = j.at("enableFormatConversion").get<bool>();
         if (j.contains("imageOutputFormat")) m_settings.imageOutputFormat = j.at("imageOutputFormat").get<std::string>();
         if (j.contains("videoOutputFormat")) m_settings.videoOutputFormat = j.at("videoOutputFormat").get<std::string>();
@@ -52,6 +53,7 @@ void ConfigManager::load() {
         if (j.contains("showPlugins")) m_settings.showPlugins = j.at("showPlugins").get<bool>();
         if (j.contains("uiLanguage")) m_settings.uiLanguage = j.at("uiLanguage").get<std::string>();
         if (j.contains("uiTheme")) m_settings.uiTheme = j.at("uiTheme").get<std::string>();
+        if (j.contains("autoUpdateCheckIntervalSeconds")) m_settings.autoUpdateCheckIntervalSeconds = j.at("autoUpdateCheckIntervalSeconds").get<int>();
         if (j.contains("pendingUpdateVersion")) m_settings.pendingUpdateVersion = j.at("pendingUpdateVersion").get<std::string>();
         if (j.contains("pendingUpdateAssetUrl")) m_settings.pendingUpdateAssetUrl = j.at("pendingUpdateAssetUrl").get<std::string>();
         if (j.contains("pendingUpdateAssetName")) m_settings.pendingUpdateAssetName = j.at("pendingUpdateAssetName").get<std::string>();

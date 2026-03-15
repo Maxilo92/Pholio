@@ -23,11 +23,13 @@ private:
     void renderManageSection();
     void requestPluginReload();
     bool persistPluginEnabledState(const std::string& pluginName, bool enabled);
+    int setAllLoadedPluginsEnabled(bool enabled);
     static bool openUrl(const std::string& url);
     static bool openPath(const std::filesystem::path& path, bool ensureExists);
 
     Section m_section = Section::Manage;
     std::string m_searchQuery = "pholio plugin";
+    std::string m_manageFilter;
     std::string m_pluginSourcePath;
     std::string m_statusMessage;
     plugins::PluginManager* m_pluginManager = nullptr;

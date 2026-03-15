@@ -2,6 +2,85 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.11] - 2026-03-15
+
+### Fixed
+- **Galerie-Vorschau Stabilitaet (macOS):** Decoder-Reihenfolge verbessert. Wenn `stb_image` fehlschlaegt, wird jetzt zuerst der native ImageIO-Decoder verwendet (damit auch PNG/HEIC robust funktionieren), danach Exiv2-Preview als weiterer Fallback.
+- **Diagnose:** Bei fehlgeschlagener Vorschau wird der `stb_image`-Fehlergrund ins stderr geloggt.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.11`.
+
+## [1.12.10] - 2026-03-15
+
+### Fixed
+- **Galerie-Vorschau fuer RAW/HEIC:** Wenn `stb_image` Dateien wie `DNG`, `CR2` oder `HEIC` nicht direkt dekodieren kann, nutzt die Vorschau jetzt einen Fallback:
+  - Exiv2 eingebettete Preview (RAW-Dateien),
+  - unter macOS zusaetzlich native ImageIO-Dekodierung (u. a. HEIC).
+- **macOS Linking:** `CoreFoundation`, `CoreGraphics` und `ImageIO` werden fuer den App-Target verlinkt, damit der HEIC-Fallback verlässlich funktioniert.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.10`.
+
+## [1.12.8] - 2026-03-15
+
+### Added
+- **Galerie/Scanner Bildformate:** Erweiterte Unterstuetzung fuer weitere RAW-Bildformate in der Bild-Erkennung (u. a. `CR3`, `NRW`, `SR2`, `SRW`, `ORF`, `RW2`, `RAF`, `PEF`, `ERF`, `3FR`, `IIQ`, `KDC`, `DCR`, `MRW`, `X3F`, `RAW`).
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.8`.
+
+## [1.12.7] - 2026-03-15
+
+### Fixed
+- **run.sh Rebuild-Flow:** Bei CMake-Generator-Konflikten (z. B. `Unix Makefiles` vs `Ninja`) setzt `run.sh` jetzt automatisch nur den Build-Cache (`CMakeCache.txt`, `CMakeFiles/`) zurueck und konfiguriert danach sauber neu, statt den Rebuild abzubrechen.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.7`.
+
+## [1.12.6] - 2026-03-15
+
+### Fixed
+- **CMake/vcpkg Build-Stabilitaet (macOS):** Build-Setup erkennt jetzt automatisch das lokale vcpkg-Toolchain-Skript (`$VCPKG_ROOT` oder `$HOME/vcpkg`) sowie das repository-lokale `vcpkg_installed` und den passenden Triplet (`x64-osx`), damit fehlende Paketkonfigurationen nicht zum Configure-Abbruch fuehren.
+- **PkgConfig unter vcpkg-Toolchain:** Bei Unix-Builds wird fuer FFmpeg-Aufloesung explizit ein funktionierendes System-`pkg-config` gesetzt, um fehlerhafte vcpkg-Tool-Referenzen zu vermeiden.
+- **vcpkg Manifest:** `ffmpeg` wird nur noch auf Windows ueber vcpkg gezogen (`platform: windows`), wodurch macOS nicht mehr an externen ffmpeg-Port-Buildfehlern scheitert.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.6`.
+
+## [1.12.5] - 2026-03-15
+
+### Fixed
+- **Move + Metadata-Merge:** Wenn Supplemental-Metadaten erfolgreich in das Zielbild gemerged wurden, wird die zugehoerige Quell-Metadatendatei im `Move`-Modus jetzt ebenfalls entfernt.
+- **Status-Korrektur:** Der Status-Zusatz `(Merged)` wird nur noch gesetzt, wenn der Merge tatsaechlich erfolgreich war.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.5`.
+
+## [1.12.4] - 2026-03-14
+
+### Changed
+- **Galerie/Preview-Verhalten:** Galerie zeigt jetzt die Liste, waehrend ausgewaehlte Bilder im bestehenden `Image Preview`-Fenster gerendert werden.
+- **UX-Hinweise:** Galerie zeigt klaren Hinweis auf das Ziel-Fenster und bietet einen Button zum Oeffnen der Bildvorschau, falls sie geschlossen ist.
+- **Versioning:** Bumped semantic version to `1.12.4`.
+
+## [1.12.3] - 2026-03-14
+
+### Added
+- **Galerie-Kontextmenü:** Rechtsklick auf Galerie-Einträge öffnet ein Kontextmenü mit Aktionen für Datei öffnen, Ordner öffnen und Pfad kopieren.
+
+### Changed
+- **Versioning:** Bumped semantic version to `1.12.3`.
+
+## [1.12.2] - 2026-03-14
+
+### Added
+- **Galerie-Fenster:** Neues `Gallery`-Fenster zum rekursiven Anzeigen aller Bilder eines gewählten Ordners inklusive beliebig tiefer Unterordner.
+
+### Changed
+- **UI Integration:** Galerie in `View`-Menü, Docking-Layouts und persistente Fenstersichtbarkeit (`showGallery`) integriert.
+- **Versioning:** Bumped semantic version to `1.12.2`.
+
 ## [1.12.0] - 2026-03-13
 
 ### Changed

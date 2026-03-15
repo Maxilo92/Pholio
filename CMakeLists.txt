@@ -1,6 +1,37 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(PHOLIO_VERSION "1.12.0")
+set(PHOLIO_VERSION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
+if(EXISTS "${PHOLIO_VERSION_FILE}")
+    file(READ "${PHOLIO_VERSION_FILE}" PHOLIO_VERSION)
+    string(STRIP "${PHOLIO_VERSION}" PHOLIO_VERSION)
+else()
+    message(FATAL_ERROR "VERSION file not found: ${PHOLIO_VERSION_FILE}")
+endif()
+
+if(NOT PHOLIO_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+    message(FATAL_ERROR "Invalid VERSION '${PHOLIO_VERSION}'. Expected x.y.z")
+endif()
+
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    if(DEFINED ENV{VCPKG_ROOT} AND EXISTS "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+        set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            CACHE STRING "Path to vcpkg toolchain file")
+        message(STATUS "Using vcpkg toolchain from VCPKG_ROOT: ${CMAKE_TOOLCHAIN_FILE}")
+    elseif(DEFINED ENV{HOME} AND EXISTS "$ENV{HOME}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+        set(CMAKE_TOOLCHAIN_FILE "$ENV{HOME}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            CACHE STRING "Path to vcpkg toolchain file")
+        message(STATUS "Using vcpkg toolchain from HOME fallback: ${CMAKE_TOOLCHAIN_FILE}")
+    endif()
+endif()
+
+if(NOT DEFINED VCPKG_INSTALLED_DIR AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed")
+    set(VCPKG_INSTALLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed"
+        CACHE PATH "Use repository-local vcpkg_installed directory")
+endif()
+
+if(NOT DEFINED VCPKG_TARGET_TRIPLET AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-osx")
+    set(VCPKG_TARGET_TRIPLET "x64-osx" CACHE STRING "Default vcpkg target triplet")
+endif()
 
 project(Pholio LANGUAGES CXX)
 
@@ -34,7 +65,10 @@ configure_file(
 )
 
 # Find packages
-find_package(exiv2 CONFIG REQUIRED)
+find_package(Exiv2 CONFIG QUIET)
+if(NOT TARGET Exiv2::exiv2lib)
+    find_package(exiv2 CONFIG REQUIRED)
+endif()
 
 if(WIN32)
     # Prefer vcpkg CMake config targets on Windows/MSVC.
@@ -55,6 +89,12 @@ if(WIN32)
     endif()
 else()
     # Use system FFmpeg (via PkgConfig) on Unix-like platforms.
+    if(CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg")
+        find_program(SYSTEM_PKG_CONFIG_EXECUTABLE NAMES pkg-config pkgconf)
+        if(SYSTEM_PKG_CONFIG_EXECUTABLE)
+            set(PKG_CONFIG_EXECUTABLE "${SYSTEM_PKG_CONFIG_EXECUTABLE}" CACHE FILEPATH "pkg-config executable" FORCE)
+        endif()
+    endif()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(AVFORMAT REQUIRED libavformat)
     pkg_check_modules(AVCODEC REQUIRED libavcodec)
@@ -108,6 +148,8 @@ if(APPLE)
         src/ui/DashboardWindow.hpp
         src/ui/PreviewWindow.cpp
         src/ui/PreviewWindow.hpp
+        src/ui/GalleryWindow.cpp
+        src/ui/GalleryWindow.hpp
         src/ui/AboutWindow.cpp
         src/ui/AboutWindow.hpp
         src/ui/ChangelogWindow.cpp
@@ -166,6 +208,8 @@ else()
         src/ui/DashboardWindow.hpp
         src/ui/PreviewWindow.cpp
         src/ui/PreviewWindow.hpp
+        src/ui/GalleryWindow.cpp
+        src/ui/GalleryWindow.hpp
         src/ui/AboutWindow.cpp
         src/ui/AboutWindow.hpp
         src/ui/ChangelogWindow.cpp
@@ -201,6 +245,14 @@ target_link_libraries(Pholio PRIVATE
     xxHash::xxhash
     ${CMAKE_DL_LIBS}
 )
+
+if(APPLE)
+    target_link_libraries(Pholio PRIVATE
+        "-framework CoreFoundation"
+        "-framework CoreGraphics"
+        "-framework ImageIO"
+    )
+endif()
 
 # stb is header-only
 target_include_directories(Pholio PRIVATE ${Stb_INCLUDE_DIR})

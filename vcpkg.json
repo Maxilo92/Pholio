@@ -20,7 +20,10 @@
         "opengl3-binding"
       ]
     },
-    "ffmpeg",
+    {
+      "name": "ffmpeg",
+      "platform": "windows"
+    },
     "glfw3",
     "implot",
     "nativefiledialog-extended",
